@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EventQR</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/placeholders.css">
+    <link rel="stylesheet" href="../css/qr-checkin.css">
+
+
+
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                <span>EventHub</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="#dashboard" class="menu-item active" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#events" class="menu-item" data-section="events">
+                <i class="fas fa-calendar-check"></i>
+                <span>Sự Kiện</span>
+            </a>
+            <a href="#create-event" class="menu-item" data-section="create-event">
+                <i class="fas fa-plus-circle"></i>
+                <span>Tạo Sự Kiện</span>
+            </a>
+            <a href="#participants" class="menu-item" data-section="participants">
+                <i class="fas fa-users"></i>
+                <span>Người Tham Dự</span>
+            </a>
+            <a href="#qr-checkin" class="menu-item" data-section="qr-checkin">
+                <i class="fas fa-qrcode"></i>
+                <span>QR Check-in</span>
+            </a>
+            <a href="#analytics" class="menu-item" data-section="analytics">
+                <i class="fas fa-chart-bar"></i>
+                <span>Thống Kê</span>
+            </a>
+            <a href="#profile" class="menu-item" data-section="profile">
+                <i class="fas fa-user-cog"></i>
+                <span>Hồ Sơ</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm sự kiện...">
+                </div>
+                <div class="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">16</span>
+                    </button>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar-placeholder" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">Người dùng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section active">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>12</h3>
+                        <p>Sự kiện hoạt động</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>1,245</h3>
+                        <p>Người tham dự</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>856</h3>
+                        <p>Vé đã bán</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>45.2M</h3>
+                        <p>Doanh thu (VND)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="recent-events">
+                    <h2>Sự Kiện Gần Đây</h2>
+                    <div class="events-list">
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">15</span>
+                                <span class="month">Sep</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Hội thảo Công nghệ AI</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> Hội trường A, TP.HCM</p>
+                                <p><i class="fas fa-users"></i> 150 người tham dự</p>
+                            </div>
+                            <div class="event-status">
+                                <span class="status upcoming">Sắp diễn ra</span>
+                            </div>
+                        </div>
+
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">22</span>
+                                <span class="month">Sep</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Workshop Design Thinking</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> Trung tâm Sáng tạo, Hà Nội</p>
+                                <p><i class="fas fa-users"></i> 80 người tham dự</p>
+                            </div>
+                            <div class="event-status">
+                                <span class="status ongoing">Đang diễn ra</span>
+                            </div>
+                        </div>
+
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">05</span>
+                                <span class="month">Sep</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Meetup Startup Vietnam</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> Co-working Space, TP.HCM</p>
+                                <p><i class="fas fa-users"></i> 120 người tham dự</p>
+                            </div>
+                            <div class="event-status">
+                                <span class="status completed">Đã hoàn thành</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h2>Thao Tác Nhanh</h2>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="switchSection('create-event')">
+                            <i class="fas fa-plus"></i>
+                            <span>Tạo Sự Kiện Mới</span>
+                        </button>
+                        <button class="action-btn" onclick="switchSection('participants')">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Thêm Người Tham Dự</span>
+                        </button>
+                        <button class="action-btn" onclick="switchSection('qr-checkin')">
+                            <i class="fas fa-qrcode"></i>
+                            <span>QR Check-in</span>
+                        </button><button class="action-btn" onclick="switchSection('analytics')">
+                            <i class="fas fa-plus"></i>
+                            <span>Xem Báo Cáo & Thống kê</span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events-section" class="content-section">
+            <div class="section-header">
+                <h2>Quản Lý Sự Kiện</h2>
+                <button class="btn btn-primary" onclick="switchSection('create-event')">
+                    <i class="fas fa-plus"></i> Tạo Sự Kiện Mới
+                </button>
+            </div>
+
+            <div class="events-filter">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">Tất cả</button>
+                    <button class="filter-tab" data-filter="upcoming">Sắp diễn ra</button>
+                    <button class="filter-tab" data-filter="ongoing">Đang diễn ra</button>
+                    <button class="filter-tab" data-filter="completed">Đã hoàn thành</button>
+                </div>
+            </div>
+
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-image">
+                        <div class="event-image-placeholder">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="event-overlay">
+                            <button class="btn btn-outline btn-sm">Xem Chi Tiết</button>
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <h3>Hội thảo Công nghệ AI</h3>
+                        <p class="event-date"><i class="fas fa-calendar"></i> 15 Sep 2025, 9:00 AM</p>
+                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> Hội trường A, TP.HCM</p>
+                        <div class="event-stats">
+                            <span><i class="fas fa-users"></i> 150/200</span>
+                            <span><i class="fas fa-ticket-alt"></i> 120 vé</span>
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn btn-outline btn-sm">Chỉnh sửa</button>
+                            <button class="btn btn-primary btn-sm">Chi tiết</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-image">
+                        <div class="event-image-placeholder">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="event-overlay">
+                            <button class="btn btn-outline btn-sm">Xem Chi Tiết</button>
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <h3>Workshop Design Thinking</h3>
+                        <p class="event-date"><i class="fas fa-calendar"></i> 22 Sep 2025, 2:00 PM</p>
+                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> Trung tâm Sáng tạo, Hà Nội</p>
+                        <div class="event-stats">
+                            <span><i class="fas fa-users"></i> 80/100</span>
+                            <span><i class="fas fa-ticket-alt"></i> 65 vé</span>
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn btn-outline btn-sm">Chỉnh sửa</button>
+                            <button class="btn btn-primary btn-sm">Chi tiết</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Create Event Section -->
+        <section id="create-event-section" class="content-section">
+            <h2>Tạo Sự Kiện Mới</h2>
+
+            <form class="create-event-form" id="createEventForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="eventTitle">Tên sự kiện *</label>
+                        <input type="text" id="eventTitle" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventCategory">Danh mục</label>
+                        <select id="eventCategory">
+                            <option value="">Chọn danh mục</option>
+                            <option value="conference">Hội thảo</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="meetup">Meetup</option>
+                            <option value="seminar">Hội nghị</option>
+                            <option value="training">Đào tạo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDate">Ngày tổ chức *</label>
+                        <input type="datetime-local" id="eventDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDuration">Thời lượng (giờ)</label>
+                        <input type="number" id="eventDuration" min="1" max="24" value="2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventLocation">Địa điểm *</label>
+                        <input type="text" id="eventLocation" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxParticipants">Số người tham dự tối đa</label>
+                        <input type="number" id="maxParticipants" min="1" value="100">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDescription">Mô tả sự kiện</label>
+                    <textarea id="eventDescription" rows="4" placeholder="Mô tả chi tiết về sự kiện..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventImage">Hình ảnh sự kiện</label>
+                    <div class="file-upload">
+                        <input type="file" id="eventImage" accept="image/*">
+                        <div class="file-upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Kéo thả hoặc click để chọn hình ảnh</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline">Lưu Nháp</button>
+                    <button type="submit" class="btn btn-primary">Tạo Sự Kiện</button>
+                </div>
+            </form>
+        </section>
+       
+
+        <!-- Participants Section -->
+        <section id="participants-section" class="content-section">
+            <div class="participants-container">
+                <!-- Header -->
+                <div class="participants-header">
+                    <h2><i class="fas fa-users"></i> Quản Lý Người Tham Dự</h2>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Thêm người tham dự
+                    </button>
+                </div>
+        
+                <!-- Toolbar -->
+                <div class="participants-toolbar">
+                    <input type="text" placeholder="Tìm kiếm theo tên hoặc email..." class="search-input">
+                    <select class="filter-select">
+                        <option value="all">Tất cả</option>
+                        <option value="confirmed">Đã xác nhận</option>
+                        <option value="pending">Chờ duyệt</option>
+                        <option value="cancelled">Đã hủy</option>
+                    </select>
+                </div>
+        
+                <!-- Table -->
+                <div class="participants-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ảnh</th>
+                                <th>Họ và tên</th>
+                                <th>Email</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="https://i.pravatar.cc/40?img=1" alt="avatar"></td>
+                                <td>Nguyễn Văn A</td>
+                                <td>vana@email.com</td>
+                                <td><span class="badge badge-confirmed">✔ Đã xác nhận</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="Xem"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon" title="Sửa"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon btn-danger" title="Xóa"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://i.pravatar.cc/40?img=2" alt="avatar"></td>
+                                <td>Trần Thị B</td>
+                                <td>thib@email.com</td>
+                                <td><span class="badge badge-pending">⏳ Chờ duyệt</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="Xem"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon" title="Sửa"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon btn-danger" title="Xóa"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="https://i.pravatar.cc/40?img=3" alt="avatar"></td>
+                                <td>Lê Văn C</td>
+                                <td>levc@email.com</td>
+                                <td><span class="badge badge-cancelled">❌ Đã hủy</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon" title="Xem"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon" title="Sửa"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon btn-danger" title="Xóa"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        
+        <!-- QR Check-in Section -->
+        <section id="qr-checkin-section" class="content-section">
+            <div class="qr-checkin-container">
+                <div class="section-header">
+                    <h2>QR Code Check-in</h2>
+                    <p>Quản lý check-in sự kiện bằng QR code</p>
+                </div>
+
+                <div class="qr-tabs">
+                    <button class="qr-tab active" data-tab="generate">Tạo QR Code</button>
+                    <button class="qr-tab" data-tab="scan">Quét QR Code</button>
+                    <button class="qr-tab" data-tab="history">Lịch Sử Check-in</button>
+                </div>
+
+                <!-- Generate QR Code Tab -->
+                <div id="generate-tab" class="qr-tab-content active">
+                    <div class="qr-generate-section">
+                        <div class="event-selector">
+                            <h3>Chọn Sự Kiện</h3>
+                            <select id="eventSelect" class="event-select">
+                                <option value="">Chọn sự kiện để tạo QR code</option>
+                                <option value="event1">Hội thảo Công nghệ AI - 15 Sep 2025</option>
+                                <option value="event2">Workshop Design Thinking - 22 Sep 2025</option>
+                                <option value="event3">Meetup Startup Vietnam - 30 Sep 2025</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="generateQRCode()">
+                                <i class="fas fa-qrcode"></i> Tạo QR Code
+                            </button>
+                        </div>
+
+                        <div class="qr-display" id="qrDisplay" style="display: none;">
+                            <div class="qr-code-container">
+                                <h4>QR Code Check-in</h4>
+                                <div id="qrcode" class="qr-code"></div>
+                                <div class="qr-info">
+                                    <p><strong>Sự kiện:</strong> <span id="selectedEventName"></span></p>
+                                    <p><strong>Ngày tạo:</strong> <span id="qrCreatedDate"></span></p>
+                                    <p><strong>Mã QR:</strong> <span id="qrCodeValue"></span></p>
+                                </div>
+                                <div class="qr-actions">
+                                    <button class="btn btn-outline" onclick="downloadQRCode()">
+                                        <i class="fas fa-download"></i> Tải xuống
+                                    </button>
+                                    <button class="btn btn-primary" onclick="printQRCode()">
+                                        <i class="fas fa-print"></i> In QR Code
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scan QR Code Tab -->
+                <div id="scan-tab" class="qr-tab-content">
+                    <div class="qr-scan-section">
+                        <div class="scan-methods">
+                            <div class="scan-method">
+                                <h3>Quét bằng Camera</h3>
+                                <div class="camera-scanner">
+                                    <video id="qrVideo" class="qr-video" style="display: none;"></video>
+                                    <div id="qrScanResult" class="scan-result" style="display: none;"></div>
+                                    <div class="scanner-controls">
+                                        <button class="btn btn-primary" onclick="startQRScanner()" id="startScanBtn">
+                                            <i class="fas fa-camera"></i> Bắt đầu quét
+                                        </button>
+                                        <button class="btn btn-outline" onclick="stopQRScanner()" id="stopScanBtn"
+                                            style="display: none;">
+                                            <i class="fas fa-stop"></i> Dừng quét
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scan-method">
+                                <h3>Nhập mã thủ công</h3>
+                                <div class="manual-input">
+                                    <div class="form-group">
+                                        <label for="manualQRCode">Mã QR:</label>
+                                        <input type="text" id="manualQRCode" placeholder="Nhập mã QR code...">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="processManualQRCode()">
+                                        <i class="fas fa-check"></i> Xác nhận Check-in
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkin-form" id="checkinForm" style="display: none;">
+                            <h3>Thông tin Check-in</h3>
+                            <div class="checkin-details">
+                                <div class="form-group">
+                                    <label for="participantName">Tên người tham dự:</label>
+                                    <input type="text" id="participantName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="participantEmail">Email:</label>
+                                    <input type="email" id="participantEmail" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="participantPhone">Số điện thoại:</label>
+                                    <input type="tel" id="participantPhone">
+                                </div>
+                                <div class="event-info">
+                                    <p><strong>Sự kiện:</strong> <span id="checkinEventName"></span></p>
+                                    <p><strong>Thời gian:</strong> <span id="checkinTime"></span></p>
+                                </div>
+                                <div class="checkin-actions">
+                                    <button class="btn btn-primary" onclick="confirmCheckin()">
+                                        <i class="fas fa-check-circle"></i> Xác nhận Check-in
+                                    </button>
+                                    <button class="btn btn-outline" onclick="cancelCheckin()">
+                                        <i class="fas fa-times"></i> Hủy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Check-in History Tab -->
+                <div id="history-tab" class="qr-tab-content">
+                    <div class="checkin-history">
+                        <div class="history-filters">
+                            <div class="filter-group">
+                                <label for="historyEventFilter">Lọc theo sự kiện:</label>
+                                <select id="historyEventFilter">
+                                    <option value="">Tất cả sự kiện</option>
+                                    <option value="event1">Hội thảo Công nghệ AI</option>
+                                    <option value="event2">Workshop Design Thinking</option>
+                                    <option value="event3">Meetup Startup Vietnam</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="historyDateFilter">Lọc theo ngày:</label>
+                                <input type="date" id="historyDateFilter">
+                            </div>
+                            <button class="btn btn-primary" onclick="filterCheckinHistory()">
+                                <i class="fas fa-filter"></i> Lọc
+                            </button>
+                        </div>
+
+                        <div class="history-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="totalCheckins">25</h3>
+                                    <p>Tổng check-in</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="todayCheckins">8</h3>
+                                    <p>Check-in hôm nay</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-calendar-day"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="activeEvents">3</h3>
+                                    <p>Sự kiện đang diễn ra</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="history-table">
+                            <table class="checkin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên</th>
+                                        <th>Email</th>
+                                        <th>Sự kiện</th>
+                                        <th>Thời gian Check-in</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="checkinTableBody">
+                                    <!-- Sample data -->
+                                    <tr>
+                                        <td>Nguyễn Văn A</td>
+                                        <td>nguyenvana@email.com</td>
+                                        <td>Hội thảo Công nghệ AI</td>
+                                        <td>08/09/2025 09:30</td>
+                                        <td><span class="status-badge success">Đã check-in</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline">Chi tiết</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trần Thị B</td>
+                                        <td>tranthib@email.com</td>
+                                        <td>Workshop Design Thinking</td>
+                                        <td>08/09/2025 14:15</td>
+                                        <td><span class="status-badge success">Đã check-in</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline">Chi tiết</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics-section" class="content-section">
+            <div class="analytics-card">
+                <h2>Thống Kê & Báo Cáo</h2>
+
+                <!-- Bộ lọc từ ngày đến ngày -->
+                <div class="date-filter">
+                    <label for="startDate">Từ ngày:</label>
+                    <input type="date" id="startDate">
+
+                    <label for="endDate">Đến ngày:</label>
+                    <input type="date" id="endDate">
+
+                    <button onclick="filterChart()">Lọc</button>
+                </div>
+                <!-- Biểu đồ -->
+                <div class="chart-container">
+                    <canvas id="areaChart"></canvas>
+                </div>
+            </div>
+        </section>
+        <!-- Profile Section -->
+        <section id="profile-section" class="content-section">
+            <div class="profile-container">
+                <!-- Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img src="https://i.pravatar.cc/150?img=32" alt="Avatar" id="profileAvatar">
+                        <button class="btn upload-btn">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="profileName">Hồ Viết Hào</h2>
+                        <p id="profileEmail"><i class="fas fa-envelope"></i> Hoviethao@email.com</p>
+                        <p id="profileRole"><i class="fas fa-user-tag"></i> Quản trị viên</p>
+                    </div>
+                </div>
+        
+                <!-- Body -->
+                <div class="profile-body">
+                    <!-- Thông tin cá nhân -->
+                    <div class="profile-card">
+                        <h3><i class="fas fa-id-card"></i> Thông tin cá nhân</h3>
+                        <form id="profileForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="fullName">Họ và tên</label>
+                                    <input type="text" id="fullName" value="Nguyễn Văn A">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" value="nguyenvana@email.com" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Số điện thoại</label>
+                                    <input type="tel" id="phone" value="0123456789">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dob">Ngày sinh</label>
+                                    <input type="date" id="dob" value="1995-08-15">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Lưu thay đổi
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            // Giả lập xử lý form
+            document.getElementById('profileForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                alert('Thông tin cá nhân đã được cập nhật!');
+            });
+        </script>
+    </div>
+    <!-- QR Code Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('areaChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8'],
+                    datasets: [{
+                        label: 'Người tham dự',
+                        data: [80, 10, 50, 70, 80, 70, 56, 140,],
+                        fill: true,
+                        backgroundColor: 'rgba(54, 162, 235, 0.3)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointBackgroundColor: 'white',
+                        pointBorderColor: 'rgba(54, 162, 235, 1)',
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    family: 'Poppins'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 50
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+
+    <script src="../js/simple-qr.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/qr-checkin.js"></script>
+</body>
+
+</html>
