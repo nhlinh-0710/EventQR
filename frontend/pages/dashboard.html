@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EventQR</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/placeholders.css">
+    <link rel="stylesheet" href="../css/qr-checkin.css">
+    <link rel="stylesheet" href="css/team.css">
+
+
+
+
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                <span>EventHub</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="#dashboard" class="menu-item active" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#events" class="menu-item" data-section="events">
+                <i class="fas fa-calendar-check"></i>
+                <span>Sự Kiện</span>
+            </a>
+            <a href="#create-event" class="menu-item" data-section="create-event">
+                <i class="fas fa-plus-circle"></i>
+                <span>Tạo Sự Kiện</span>
+            </a>
+            <a href="#participants" class="menu-item" data-section="participants">
+                <i class="fas fa-users"></i>
+                <span>Người Tham Dự</span>
+            </a>
+            <a href="#qr-checkin" class="menu-item" data-section="qr-checkin">
+                <i class="fas fa-qrcode"></i>
+                <span>QR Check-in</span>
+            </a>
+            <a href="#analytics" class="menu-item" data-section="analytics">
+                <i class="fas fa-chart-bar"></i>
+                <span>Thống Kê</span>
+            </a>
+            <a href="#profile" class="menu-item" data-section="profile">
+                <i class="fas fa-user-cog"></i>
+                <span>Hồ Sơ</span>
+            </a>
+            <a href="#feedback" class="menu-item" data-section="feedback">
+                <i class="fas fa-comments"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm sự kiện...">
+                </div>
+                <div class="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">16</span>
+                    </button>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar-placeholder" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">Người dùng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section active">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>12</h3>
+                        <p>Sự kiện hoạt động</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>1,245</h3>
+                        <p>Người tham dự</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>856</h3>
+                        <p>Vé đã bán</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>45.2M</h3>
+                        <p>Doanh thu (VND)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="recent-events">
+                    <h2>Sự Kiện Gần Đây</h2>
+                    <div class="events-list">
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">15</span>
+                                <span class="month">Sep</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Hội thảo Công nghệ AI</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> Hội trường A, TP.HCM</p>
+                                <p><i class="fas fa-users"></i> 150 người tham dự</p>
+                            </div>
+                            <div class="event-status">
+                                <span class="status upcoming">Sắp diễn ra</span>
+                            </div>
+                        </div>
+
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">22</span>
+                                <span class="month">Sep</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Workshop Design Thinking</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> Trung tâm Sáng tạo, Hà Nội</p>
+                                <p><i class="fas fa-users"></i> 80 người tham dự</p>
+                            </div>
+                            <div class="event-status">
+                                <span class="status ongoing">Đang diễn ra</span>
+                            </div>
+                        </div>
+
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">05</span>
+                                <span class="month">Sep</span>
+                            </div>
+                            <div class="event-info">
+                                <h4>Meetup Startup Vietnam</h4>
+                                <p><i class="fas fa-map-marker-alt"></i> Co-working Space, TP.HCM</p>
+                                <p><i class="fas fa-users"></i> 120 người tham dự</p>
+                            </div>
+                            <div class="event-status">
+                                <span class="status completed">Đã hoàn thành</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h2>Thao Tác Nhanh</h2>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="switchSection('create-event')">
+                            <i class="fas fa-plus"></i>
+                            <span>Tạo Sự Kiện Mới</span>
+                        </button>
+                        <button class="action-btn" onclick="switchSection('participants')">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Thêm Người Tham Dự</span>
+                        </button>
+                        <button class="action-btn" onclick="switchSection('qr-checkin')">
+                            <i class="fas fa-qrcode"></i>
+                            <span>QR Check-in</span>
+                        </button><button class="action-btn" onclick="switchSection('analytics')">
+                            <i class="fas fa-plus"></i>
+                            <span>Xem Báo Cáo & Thống kê</span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events-section" class="content-section">
+            <div class="section-header">
+                <h2>Quản Lý Sự Kiện</h2>
+                <button class="btn btn-primary" onclick="switchSection('create-event')">
+                    <i class="fas fa-plus"></i> Tạo Sự Kiện Mới
+                </button>
+            </div>
+
+            <div class="events-filter">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">Tất cả</button>
+                    <button class="filter-tab" data-filter="upcoming">Sắp diễn ra</button>
+                    <button class="filter-tab" data-filter="ongoing">Đang diễn ra</button>
+                    <button class="filter-tab" data-filter="completed">Đã hoàn thành</button>
+                </div>
+            </div>
+
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-image">
+                        <div class="event-image-placeholder">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="event-overlay">
+                            <button class="btn btn-outline btn-sm">Xem Chi Tiết</button>
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <h3>Hội thảo Công nghệ AI</h3>
+                        <p class="event-date"><i class="fas fa-calendar"></i> 15 Sep 2025, 9:00 AM</p>
+                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> Hội trường A, TP.HCM</p>
+                        <div class="event-stats">
+                            <span><i class="fas fa-users"></i> 150/200</span>
+                            <span><i class="fas fa-ticket-alt"></i> 120 vé</span>
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn btn-outline btn-sm">Chỉnh sửa</button>
+                            <button class="btn btn-primary btn-sm">Chi tiết</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-image">
+                        <div class="event-image-placeholder">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="event-overlay">
+                            <button class="btn btn-outline btn-sm">Xem Chi Tiết</button>
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <h3>Workshop Design Thinking</h3>
+                        <p class="event-date"><i class="fas fa-calendar"></i> 22 Sep 2025, 2:00 PM</p>
+                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> Trung tâm Sáng tạo, Hà Nội</p>
+                        <div class="event-stats">
+                            <span><i class="fas fa-users"></i> 80/100</span>
+                            <span><i class="fas fa-ticket-alt"></i> 65 vé</span>
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn btn-outline btn-sm">Chỉnh sửa</button>
+                            <button class="btn btn-primary btn-sm">Chi tiết</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Create Event Section -->
+        <section id="create-event-section" class="content-section">
+            <h2>Tạo Sự Kiện Mới</h2>
+
+            <form class="create-event-form" id="createEventForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="eventTitle">Tên sự kiện *</label>
+                        <input type="text" id="eventTitle" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventCategory">Danh mục</label>
+                        <select id="eventCategory">
+                            <option value="">Chọn danh mục</option>
+                            <option value="conference">Hội thảo</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="meetup">Meetup</option>
+                            <option value="seminar">Hội nghị</option>
+                            <option value="training">Đào tạo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDate">Ngày tổ chức *</label>
+                        <input type="datetime-local" id="eventDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDuration">Thời lượng (giờ)</label>
+                        <input type="number" id="eventDuration" min="1" max="24" value="2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventLocation">Địa điểm *</label>
+                        <input type="text" id="eventLocation" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxParticipants">Số người tham dự tối đa</label>
+                        <input type="number" id="maxParticipants" min="1" value="100">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDescription">Mô tả sự kiện</label>
+                    <textarea id="eventDescription" rows="4" placeholder="Mô tả chi tiết về sự kiện..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventImage">Hình ảnh sự kiện</label>
+                    <div class="file-upload">
+                        <input type="file" id="eventImage" accept="image/*">
+                        <div class="file-upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Kéo thả hoặc click để chọn hình ảnh</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline">Lưu Nháp</button>
+                    <button type="submit" class="btn btn-primary">Tạo Sự Kiện</button>
+                </div>
+            </form>
+        </section>
+
+
+        <!-- Participants Section -->
+        <section id="participants-section" class="content-section">
+            <!-- Tiêu đề -->
+            <h2 class="panel-title">Quản Lý Người Tham Dự</h2>
+
+            <div class="panel-topbar">
+                <div class="searchbox">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Tìm người tham gia theo tên hoặc email" />
+                </div>
+                <button class="btn-new">New Attendee</button>
+            </div>
+
+            <!-- KPI -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-title">TỔNG SỐ NGƯỜI THAM DỰ:</div>
+                    <div class="kpi-body"><span class="kpi-number">1,800</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">ĐÃ NHẬN PHÒNG:</div>
+                    <div class="kpi-body"><span class="kpi-number">2,000</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">SỐ PHIÊN ĐÃ THAM GIA:</div>
+                    <div class="kpi-body"><span class="kpi-number">950</span></div>
+                </div>
+                <div class="kpi-card chart">
+                    <div class="trend-chart">
+                        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                            <polyline fill="none" stroke="#2563eb" stroke-width="3"
+                                points="0,35 15,25 30,28 45,18 60,22 75,10 90,15 100,5" />
+                        </svg>
+                    </div>
+                    <small class="kpi-title"><b>Xu hướng tham dự</b></small>
+                </div>
+            </div>
+
+            <!-- Bảng -->
+            <div class="table-wrap">
+                <table class="participants-table">
+                    <thead>
+                        <tr>
+                            <th>HỌ VÀ TÊN</th>
+                            <th>EMAIL</th>
+                            <th>TRẠNG THÁI</th>
+                            <th>VAI TRÒ</th>
+                            <th>HÀNH ĐỘNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Row 1 -->
+                        <tr>
+                            <td class="user"><span class="name">Hồ Viết Hào</span></td>
+                            <td>hoviethao20042005@email.com</td>
+                            <td><span class="status status-blue">CHECKED IN</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <!-- EDIT -->
+                                <span class="action">
+                                    <input id="edit-1" class="modal-toggle" type="checkbox">
+                                    <label for="edit-1" class="btn btn-edit" aria-label="Chỉnh sửa">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog" role="dialog" aria-modal="true">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Hồ Viết Hào">
+                                                <label>Email</label>
+                                                <input type="email" value="hoviethao20042005@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-1" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-1" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <!-- UPDATE -->
+                                <span class="action">
+                                    <input id="update-1" class="modal-toggle" type="checkbox">
+                                    <label for="update-1" class="btn btn-update" aria-label="Cập nhật">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog" role="dialog" aria-modal="true">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option selected>CHECKED IN</option>
+                                                    <option>REGISTERED</option>
+                                                    <option>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-1" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-1" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <!-- DELETE -->
+                                <span class="action">
+                                    <input id="delete-1" class="modal-toggle" type="checkbox">
+                                    <label for="delete-1" class="btn btn-delete" aria-label="Xóa">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog" role="dialog" aria-modal="true">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Hồ Viết Hào</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-1" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-1" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- Row 2 -->
+                        <tr>
+                            <td class="user"><span class="name">Ngô Châu Nhật Linh</span></td>
+                            <td>nhatlinh@email.com</td>
+                            <td><span class="status status-green">REGISTERED</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <span class="action">
+                                    <input id="edit-2" class="modal-toggle" type="checkbox">
+                                    <label for="edit-2" class="btn btn-edit">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Ngô Châu Nhật Linh">
+                                                <label>Email</label>
+                                                <input type="email" value="nhatlinh@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-2" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-2" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="update-2" class="modal-toggle" type="checkbox">
+                                    <label for="update-2" class="btn btn-update">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option>CHECKED IN</option>
+                                                    <option selected>REGISTERED</option>
+                                                    <option>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-2" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-2" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="delete-2" class="modal-toggle" type="checkbox">
+                                    <label for="delete-2" class="btn btn-delete">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Ngô Châu Nhật Linh</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-2" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-2" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- Row 3 -->
+                        <tr>
+                            <td class="user"><span class="name">Nguyễn Minh Duy</span></td>
+                            <td>minhduyg@email.com</td>
+                            <td><span class="status status-blue">CHECKED IN</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <span class="action">
+                                    <input id="edit-3" class="modal-toggle" type="checkbox">
+                                    <label for="edit-3" class="btn btn-edit">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Nguyễn Minh Duy">
+                                                <label>Email</label>
+                                                <input type="email" value="minhduyg@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-3" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-3" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="update-3" class="modal-toggle" type="checkbox">
+                                    <label for="update-3" class="btn btn-update">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option selected>CHECKED IN</option>
+                                                    <option>REGISTERED</option>
+                                                    <option>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-3" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-3" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="delete-3" class="modal-toggle" type="checkbox">
+                                    <label for="delete-3" class="btn btn-delete">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Nguyễn Minh Duy</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-3" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-3" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- Row 4 -->
+                        <tr>
+                            <td class="user"><span class="name">Phạm Văn Huy</span></td>
+                            <td>vanhuy@email.com</td>
+                            <td><span class="status status-yellow">PENDING</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <span class="action">
+                                    <input id="edit-4" class="modal-toggle" type="checkbox">
+                                    <label for="edit-4" class="btn btn-edit">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Phạm Văn Huy">
+                                                <label>Email</label>
+                                                <input type="email" value="vanhuy@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-4" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-4" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="update-4" class="modal-toggle" type="checkbox">
+                                    <label for="update-4" class="btn btn-update">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option>CHECKED IN</option>
+                                                    <option>REGISTERED</option>
+                                                    <option selected>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-4" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-4" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="delete-4" class="modal-toggle" type="checkbox">
+                                    <label for="delete-4" class="btn btn-delete">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Phạm Văn Huy</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-4" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-4" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- Row 5 -->
+                        <tr>
+                            <td class="user"><span class="name">Nguyễn Công Minh</span></td>
+                            <td>congminh@email.com</td>
+                            <td><span class="status status-yellow">PENDING</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <span class="action">
+                                    <input id="edit-5" class="modal-toggle" type="checkbox">
+                                    <label for="edit-5" class="btn btn-edit">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Nguyễn Công Minh">
+                                                <label>Email</label>
+                                                <input type="email" value="congminh@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-5" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-5" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="update-5" class="modal-toggle" type="checkbox">
+                                    <label for="update-5" class="btn btn-update">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option>CHECKED IN</option>
+                                                    <option>REGISTERED</option>
+                                                    <option selected>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-5" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-5" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="delete-5" class="modal-toggle" type="checkbox">
+                                    <label for="delete-5" class="btn btn-delete">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Nguyễn Công Minh</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-5" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-5" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <!-- QR Check-in Section -->
+        <section id="qr-checkin-section" class="content-section">
+            <div class="qr-checkin-container">
+                <div class="section-header">
+                    <h2>QR Code Check-in</h2>
+                    <p>Quản lý check-in sự kiện bằng QR code</p>
+                </div>
+
+                <div class="qr-tabs">
+                    <button class="qr-tab active" data-tab="generate">Tạo QR Code</button>
+                    <button class="qr-tab" data-tab="scan">Quét QR Code</button>
+                    <button class="qr-tab" data-tab="history">Lịch Sử Check-in</button>
+                </div>
+
+                <!-- Generate QR Code Tab -->
+                <div id="generate-tab" class="qr-tab-content active">
+                    <div class="qr-generate-section">
+                        <div class="event-selector">
+                            <h3>Chọn Sự Kiện</h3>
+                            <select id="eventSelect" class="event-select">
+                                <option value="">Chọn sự kiện để tạo QR code</option>
+                                <option value="event1">Hội thảo Công nghệ AI - 15 Sep 2025</option>
+                                <option value="event2">Workshop Design Thinking - 22 Sep 2025</option>
+                                <option value="event3">Meetup Startup Vietnam - 30 Sep 2025</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="generateQRCode()">
+                                <i class="fas fa-qrcode"></i> Tạo QR Code
+                            </button>
+                        </div>
+
+                        <div class="qr-display" id="qrDisplay" style="display: none;">
+                            <div class="qr-code-container">
+                                <h4>QR Code Check-in</h4>
+                                <div id="qrcode" class="qr-code"></div>
+                                <div class="qr-info">
+                                    <p><strong>Sự kiện:</strong> <span id="selectedEventName"></span></p>
+                                    <p><strong>Ngày tạo:</strong> <span id="qrCreatedDate"></span></p>
+                                    <p><strong>Mã QR:</strong> <span id="qrCodeValue"></span></p>
+                                </div>
+                                <div class="qr-actions">
+                                    <button class="btn btn-outline" onclick="downloadQRCode()">
+                                        <i class="fas fa-download"></i> Tải xuống
+                                    </button>
+                                    <button class="btn btn-primary" onclick="printQRCode()">
+                                        <i class="fas fa-print"></i> In QR Code
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scan QR Code Tab -->
+                <div id="scan-tab" class="qr-tab-content">
+                    <div class="qr-scan-section">
+                        <div class="scan-methods">
+                            <div class="scan-method">
+                                <h3>Quét bằng Camera</h3>
+                                <div class="camera-scanner">
+                                    <video id="qrVideo" class="qr-video" style="display: none;"></video>
+                                    <div id="qrScanResult" class="scan-result" style="display: none;"></div>
+                                    <div class="scanner-controls">
+                                        <button class="btn btn-primary" onclick="startQRScanner()" id="startScanBtn">
+                                            <i class="fas fa-camera"></i> Bắt đầu quét
+                                        </button>
+                                        <button class="btn btn-outline" onclick="stopQRScanner()" id="stopScanBtn"
+                                            style="display: none;">
+                                            <i class="fas fa-stop"></i> Dừng quét
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="scan-method">
+                                <h3>Nhập mã thủ công</h3>
+                                <div class="manual-input">
+                                    <div class="form-group">
+                                        <label for="manualQRCode">Mã QR:</label>
+                                        <input type="text" id="manualQRCode" placeholder="Nhập mã QR code...">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="processManualQRCode()">
+                                        <i class="fas fa-check"></i> Xác nhận Check-in
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkin-form" id="checkinForm" style="display: none;">
+                            <h3>Thông tin Check-in</h3>
+                            <div class="checkin-details">
+                                <div class="form-group">
+                                    <label for="participantName">Tên người tham dự:</label>
+                                    <input type="text" id="participantName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="participantEmail">Email:</label>
+                                    <input type="email" id="participantEmail" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="participantPhone">Số điện thoại:</label>
+                                    <input type="tel" id="participantPhone">
+                                </div>
+                                <div class="event-info">
+                                    <p><strong>Sự kiện:</strong> <span id="checkinEventName"></span></p>
+                                    <p><strong>Thời gian:</strong> <span id="checkinTime"></span></p>
+                                </div>
+                                <div class="checkin-actions">
+                                    <button class="btn btn-primary" onclick="confirmCheckin()">
+                                        <i class="fas fa-check-circle"></i> Xác nhận Check-in
+                                    </button>
+                                    <button class="btn btn-outline" onclick="cancelCheckin()">
+                                        <i class="fas fa-times"></i> Hủy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Check-in History Tab -->
+                <div id="history-tab" class="qr-tab-content">
+                    <div class="checkin-history">
+                        <div class="history-filters">
+                            <div class="filter-group">
+                                <label for="historyEventFilter">Lọc theo sự kiện:</label>
+                                <select id="historyEventFilter">
+                                    <option value="">Tất cả sự kiện</option>
+                                    <option value="event1">Hội thảo Công nghệ AI</option>
+                                    <option value="event2">Workshop Design Thinking</option>
+                                    <option value="event3">Meetup Startup Vietnam</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="historyDateFilter">Lọc theo ngày:</label>
+                                <input type="date" id="historyDateFilter">
+                            </div>
+                            <button class="btn btn-primary" onclick="filterCheckinHistory()">
+                                <i class="fas fa-filter"></i> Lọc
+                            </button>
+                        </div>
+
+                        <div class="history-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="totalCheckins">25</h3>
+                                    <p>Tổng check-in</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="todayCheckins">8</h3>
+                                    <p>Check-in hôm nay</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-calendar-day"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="activeEvents">3</h3>
+                                    <p>Sự kiện đang diễn ra</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="history-table">
+                            <table class="checkin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên</th>
+                                        <th>Email</th>
+                                        <th>Sự kiện</th>
+                                        <th>Thời gian Check-in</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="checkinTableBody">
+                                    <!-- Sample data -->
+                                    <tr>
+                                        <td>Nguyễn Văn A</td>
+                                        <td>nguyenvana@email.com</td>
+                                        <td>Hội thảo Công nghệ AI</td>
+                                        <td>08/09/2025 09:30</td>
+                                        <td><span class="status-badge success">Đã check-in</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline">Chi tiết</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trần Thị B</td>
+                                        <td>tranthib@email.com</td>
+                                        <td>Workshop Design Thinking</td>
+                                        <td>08/09/2025 14:15</td>
+                                        <td><span class="status-badge success">Đã check-in</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline">Chi tiết</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics-section" class="content-section">
+            <div class="analytics-card">
+                <h2>Thống Kê & Báo Cáo</h2>
+                <!-- Bộ lọc từ ngày đến ngày -->
+                <div class="date-filter">
+                    <label for="startDate">Từ ngày:</label>
+                    <input type="date" id="startDate">
+                    <label for="endDate">Đến ngày:</label>
+                    <input type="date" id="endDate">
+                    <button onclick="filterChart()">Lọc</button>
+                </div>
+                <!-- Biểu đồ -->
+                <div class="chart-container">
+                    <canvas id="areaChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile-section" class="content-section">
+            <div class="ap-wrap">
+                <!-- Header -->
+                <div class="ap-hero">
+                    <div class="ap-left">
+                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4QAiRXhpZgAATU0AKgAAAAgAAQESAAMAAAABAAAAAAAAAAD/4QoIaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIiB4bWxuczpJcHRjNHhtcEV4dD0iaHR0cDovL2lwdGMub3JnL3N0ZC9JcHRjNHhtcEV4dC8yMDA4LTAyLTI5LyIgdGlmZjpPcmllbnRhdGlvbj0iMCIgSXB0YzR4bXBFeHQ6RGlnaXRhbFNvdXJjZVR5cGU9Imh0dHA6Ly9jdi5pcHRjLm9yZy9uZXdzY29kZXMvZGlnaXRhbHNvdXJjZXR5cGUvdHJhaW5lZEFsZ29yaXRobWljTWVkaWEiLz4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8P3hwYWNrZXQgZW5kPSJ3Ij8+AP/bAEMAFxARFBEOFxQSFBoYFxsiOSUiHx8iRjI1KTlSSFdVUUhQTltmg29bYXxiTlBym3N8h4uSlJJYbaCsn46qg4+Sjf/bAEMB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"
+                            alt="Avatar" class="ap-avatar">
+                    </div>
+                    <div class="ap-right">
+                        <h1 class="ap-name">NHÓM CỦA CHÚNG TÔI</h1>
+                        <p class="ap-title">Software Engineer | Web Developer</p>
+                        <p class="ap-about">
+                            Đam mê phát triển sản phẩm web hiện đại, thân thiện người dùng và mang lại giá trị cho doanh
+                            nghiệp.
+                        </p>
+                        <div class="ap-socials">
+                            <a href="https://www.facebook.com/share/1WBDuKs5wK/?mibextid=wwXIfr" target="_blank"
+                                aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="mailto:Hoviethao@email.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Recent Projects -->
+                <div class="ap-projects">
+                    <h2 class="ap-h2">Dự án gần đây</h2>
+                    <div class="ap-grid">
+                        <article class="ap-card">
+                            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80" alt="">
+                            <div class="ap-meta">
+                                <h3>EventHub Dashboard</h3>
+                                <p>Quản trị sự kiện, realtime & RBAC.</p>
+                            </div>
+                        </article>
+                        <article class="ap-card">
+                            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80" alt="">
+                            <div class="ap-meta">
+                                <h3>Smart Library</h3>
+                                <p>Mượn/trả sách, tìm kiếm nâng cao.</p>
+                            </div>
+                        </article>
+                        <article class="ap-card">
+                            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80" alt="">
+                            <div class="ap-meta">
+                                <h3>ShopEase</h3>
+                                <p>E-commerce tối giản, tối ưu UX.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feedback Section -->
+      
+
+        <script>
+            // Giả lập xử lý form
+            document.getElementById('profileForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                alert('Thông tin cá nhân đã được cập nhật!');
+            });
+        </script>
+    </div>
+    <!-- QR Code Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('areaChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8'],
+                    datasets: [{
+                        label: 'Người tham dự',
+                        data: [80, 10, 50, 70, 80, 70, 56, 140,],
+                        fill: true,
+                        backgroundColor: 'rgba(54, 162, 235, 0.3)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointBackgroundColor: 'white',
+                        pointBorderColor: 'rgba(54, 162, 235, 1)',
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    family: 'Poppins'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 50
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+
+    <script src="../js/simple-qr.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/qr-checkin.js"></script>
+    <script src="../js/feedback.js" defer></script>
+</body>
+
+</html>
+
+
+</body>
+
+</html>
