@@ -43,6 +43,21 @@ function initializeDashboard() {
     
     // Update page title
     updatePageTitle(hash);
+
+    // Nếu đang ở trang sự kiện khi load -> set filter mặc định
+    if (hash === 'events') {
+        setDefaultEventsFilter();
+    }
+
+    // (Tuỳ chọn) Cập nhật phân loại mỗi 60s khi đang ở trang Sự kiện
+    setInterval(() => {
+        const hashNow = window.location.hash.substring(1) || 'dashboard';
+        if (hashNow === 'events') {
+            const current = document.querySelector('#events-section .filter-tab.active')?.dataset.filter || 'upcoming';
+            classifyEvents();
+            applyEventFilter(current);
+        }
+    }, 60000);
 }
 
 // Set up all event listeners
@@ -87,7 +102,7 @@ function setupEventListeners() {
             // Add active class to clicked tab
             this.classList.add('active');
             
-            // Filter events (would implement actual filtering logic here)
+            // Filter events (đã implement thật ở dưới)
             const filter = this.getAttribute('data-filter');
             filterEvents(filter);
         });
@@ -175,6 +190,11 @@ function switchSection(sectionName) {
         targetSection.classList.add('active');
     }
     
+    // Nếu vừa chuyển sang trang Sự kiện -> set filter mặc định
+    if (sectionName === 'events') {
+        setDefaultEventsFilter();
+    }
+
     // Update URL hash
     window.history.pushState(null, null, '#' + sectionName);
 }
@@ -208,12 +228,76 @@ function updatePageTitle(section) {
     }
 }
 
-// Filter events based on status
+/* ---------- EVENTS FILTER HELPERS (được thêm mới) ---------- */
+
+// Lấy start/end từ data-attributes
+function getEventTimes(card) {
+    const start = new Date(card.getAttribute('data-start'));
+    const endRaw = card.getAttribute('data-end');
+    const end = endRaw ? new Date(endRaw) : new Date(start.getTime() + 2 * 60 * 60 * 1000);
+    return { start, end };
+}
+
+// Phân loại: gắn class upcoming / ongoing / completed cho mỗi card
+function classifyEvents() {
+    const section = document.querySelector('#events-section');
+    if (!section) return;
+    const cards = section.querySelectorAll('.event-card');
+    const now = new Date();
+
+    cards.forEach(card => {
+        card.classList.remove('upcoming', 'ongoing', 'completed');
+        const { start, end } = getEventTimes(card);
+        if (isNaN(start.getTime())) return; // thiếu data-start -> bỏ qua (vẫn thấy ở "Tất cả")
+
+        if (now < start) card.classList.add('upcoming');
+        else if (now <= end) card.classList.add('ongoing');
+        else card.classList.add('completed');
+    });
+}
+
+// Ẩn/hiện theo bộ lọc + sắp xếp theo thời gian tăng dần
+function applyEventFilter(filter) {
+    const section = document.querySelector('#events-section');
+    if (!section) return;
+
+    const grid = section.querySelector('.events-grid');
+    const cards = Array.from(section.querySelectorAll('.event-card'));
+
+    cards.forEach(card => {
+        const show = (filter === 'all') ? true : card.classList.contains(filter);
+        card.classList.toggle('hidden', !show);
+    });
+
+    // Sắp xếp các card đang hiển thị theo start
+    const visible = cards.filter(c => !c.classList.contains('hidden'));
+    visible
+        .sort((a, b) => +getEventTimes(a).start - +getEventTimes(b).start)
+        .forEach(c => grid.appendChild(c));
+}
+
+// Đặt mặc định tab "Sắp diễn ra" khi vào trang Sự kiện
+function setDefaultEventsFilter() {
+    const section = document.querySelector('#events-section');
+    if (!section) return;
+
+    const tabs = section.querySelectorAll('.filter-tab');
+    const upcomingBtn = section.querySelector('.filter-tab[data-filter="upcoming"]');
+
+    tabs.forEach(b => b.classList.remove('active'));
+    if (upcomingBtn) {
+        upcomingBtn.classList.add('active');
+        classifyEvents();
+        applyEventFilter('upcoming');
+    } else {
+        applyEventFilter('all');
+    }
+}
+
+// Filter events based on status (đã implement thật)
 function filterEvents(filter) {
-    // This would implement actual event filtering logic
-    console.log('Filtering events by:', filter);
-    
-    // For demo purposes, just show a notification
+    classifyEvents();         // gắn class trạng thái theo thời gian
+    applyEventFilter(filter); // ẩn/hiện theo filter
     showNotification(`Đang lọc sự kiện: ${getFilterName(filter)}`, 'info');
 }
 
@@ -231,13 +315,13 @@ function getFilterName(filter) {
 function handleCreateEvent() {
     // Get form data
     const formData = {
-        title: document.getElementById('eventTitle').value,
-        category: document.getElementById('eventCategory').value,
-        date: document.getElementById('eventDate').value,
-        duration: document.getElementById('eventDuration').value,
-        location: document.getElementById('eventLocation').value,
-        maxParticipants: document.getElementById('maxParticipants').value,
-        description: document.getElementById('eventDescription').value
+        title: document.getElementById('eventTitle')?.value,
+        category: document.getElementById('eventCategory')?.value,
+        date: document.getElementById('eventDate')?.value,
+        duration: document.getElementById('eventDuration')?.value,
+        location: document.getElementById('eventLocation')?.value,
+        maxParticipants: document.getElementById('maxParticipants')?.value,
+        description: document.getElementById('eventDescription')?.value
     };
     
     // Validate required fields
@@ -279,7 +363,7 @@ function handleCreateEvent() {
         showNotification('Sự kiện đã được tạo thành công!', 'success');
         
         // Reset form
-        document.getElementById('createEventForm').reset();
+        document.getElementById('createEventForm')?.reset();
         
         // Switch to events section
         setTimeout(() => {
@@ -296,10 +380,12 @@ function handleFileUpload(file) {
     // Show preview
     const reader = new FileReader();
     reader.onload = function(e) {
-        fileUploadArea.innerHTML = `
-            <img src="${e.target.result}" alt="Preview" style="max-width: 200px; max-height: 150px; border-radius: 8px;">
-            <p>Hình ảnh đã được chọn: ${file.name}</p>
-        `;
+        if (fileUploadArea) {
+            fileUploadArea.innerHTML = `
+                <img src="${e.target.result}" alt="Preview" style="max-width: 200px; max-height: 150px; border-radius: 8px;">
+                <p>Hình ảnh đã được chọn: ${file.name}</p>
+            `;
+        }
     };
     reader.readAsDataURL(file);
     

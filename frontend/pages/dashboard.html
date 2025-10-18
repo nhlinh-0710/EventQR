@@ -6,16 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - EventQR</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+       
+
+     <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/placeholders.css">
     <link rel="stylesheet" href="../css/qr-checkin.css">
-    <link rel="stylesheet" href="css/team.css">
-
-
-
-
+    <link rel="stylesheet" href="..css/team.css">
+    <link rel="stylesheet" href="../css/suggest-events.css">
+    <link rel="stylesheet" href="../css/tickets.css"/>
+   
 
 </head>
 
@@ -41,6 +43,14 @@
                 <i class="fas fa-calendar-check"></i>
                 <span>Sự Kiện</span>
             </a>
+           
+            <li>
+                <a href="#my-tickets">
+                  <i class="fas fa-ticket-alt"></i> Vé của tôi
+                </a>
+              </li>
+              
+
             <a href="#create-event" class="menu-item" data-section="create-event">
                 <i class="fas fa-plus-circle"></i>
                 <span>Tạo Sự Kiện</span>
@@ -219,86 +229,306 @@
             </div>
         </section>
 
-        <!-- Events Section -->
-        <section id="events-section" class="content-section">
-            <div class="section-header">
-                <h2>Quản Lý Sự Kiện</h2>
-                <button class="btn btn-primary" onclick="switchSection('create-event')">
-                    <i class="fas fa-plus"></i> Tạo Sự Kiện Mới
-                </button>
+        <!-- Sự Kiện -->
+       
+<section id="events-section" class="content-section">
+    <div class="section-header">
+      <h2>Quản Lý Sự Kiện</h2>
+      <button class="btn btn-primary" onclick="switchSection('create-event')">
+        <i class="fas fa-plus"></i> Tạo Sự Kiện Mới
+      </button>
+    </div>
+  
+    <div class="events-filter">
+      <div class="filter-tabs">
+        <button class="filter-tab" data-filter="all">Tất cả</button>
+        <button class="filter-tab" data-filter="upcoming">Sắp diễn ra</button>
+        <button class="filter-tab" data-filter="ongoing">Đang diễn ra</button>
+        <button class="filter-tab" data-filter="completed">Đã hoàn thành</button>
+      </div>
+    </div>
+  
+    <div class="events-grid">
+        <!-- 🟢 Sự kiện đang diễn ra -->
+        <div class="event-card"
+             data-start="2025-10-17T08:00"
+             data-end="2025-10-17T23:59">
+          <div class="event-image">
+            <img src="data:image/jpeg;base64,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" alt="Workshop Sáng tạo">
+          </div>
+          <div class="event-content">
+            <h3>Chợ hoa và hội chợ Tết</h3>
+            <p class="event-date"><i class="fas fa-calendar"></i> 17 Oct 2025, 8:00 AM – 11:59 PM</p>
+            <p class="event-location"><i class="fas fa-map-marker-alt"></i> Trung tâm Đổi mới Sáng tạo, Hà Nội</p>
+            <div class="event-stats">
+              <span><i class="fas fa-users"></i> 90/100</span>
+              <span><i class="fas fa-ticket-alt"></i> 60 vé</span>
             </div>
-
-            <div class="events-filter">
-                <div class="filter-tabs">
-                    <button class="filter-tab active" data-filter="all">Tất cả</button>
-                    <button class="filter-tab" data-filter="upcoming">Sắp diễn ra</button>
-                    <button class="filter-tab" data-filter="ongoing">Đang diễn ra</button>
-                    <button class="filter-tab" data-filter="completed">Đã hoàn thành</button>
-                </div>
+            <div class="event-actions">
+              <button class="btn btn-outline btn-sm">Chỉnh sửa</button>
+              <button class="btn btn-primary btn-sm">Chi tiết</button>
             </div>
-
-            <div class="events-grid">
-                <div class="event-card">
-                    <div class="event-image">
-                        <div class="event-image-placeholder">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <div class="event-overlay">
-                            <button class="btn btn-outline btn-sm">Xem Chi Tiết</button>
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <h3>Hội thảo Công nghệ AI</h3>
-                        <p class="event-date"><i class="fas fa-calendar"></i> 15 Sep 2025, 9:00 AM</p>
-                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> Hội trường A, TP.HCM</p>
-                        <div class="event-stats">
-                            <span><i class="fas fa-users"></i> 150/200</span>
-                            <span><i class="fas fa-ticket-alt"></i> 120 vé</span>
-                        </div>
-                        <div class="event-actions">
-                            <button class="btn btn-outline btn-sm">Chỉnh sửa</button>
-                            <button class="btn btn-primary btn-sm">Chi tiết</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="event-card">
-                    <div class="event-image">
-                        <div class="event-image-placeholder">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                        </div>
-                        <div class="event-overlay">
-                            <button class="btn btn-outline btn-sm">Xem Chi Tiết</button>
-                        </div>
-                    </div>
-                    <div class="event-content">
-                        <h3>Workshop Design Thinking</h3>
-                        <p class="event-date"><i class="fas fa-calendar"></i> 22 Sep 2025, 2:00 PM</p>
-                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> Trung tâm Sáng tạo, Hà Nội</p>
-                        <div class="event-stats">
-                            <span><i class="fas fa-users"></i> 80/100</span>
-                            <span><i class="fas fa-ticket-alt"></i> 65 vé</span>
-                        </div>
-                        <div class="event-actions">
-                            <button class="btn btn-outline btn-sm">Chỉnh sửa</button>
-                            <button class="btn btn-primary btn-sm">Chi tiết</button>
-                        </div>
-                    </div>
-                </div>
+          </div>
+        </div>
+      
+        <!-- 🔵 Sự kiện sắp diễn ra -->
+        <div class="event-card"
+             data-start="2025-10-20T09:00"
+             data-end="2025-10-20T17:00">
+          <div class="event-image">
+            <img src="https://bcp.cdnchinhphu.vn/334894974524682240/2023/9/13/1-16945916762521460515801.jpg" alt="Hội thảo AI">
+          </div>
+          <div class="event-content">
+            <h3>Hội Thảo Công Nghệ AI</h3>
+            <p class="event-date"><i class="fas fa-calendar"></i> 20 Oct 2025, 9:00 AM – 5:00 PM</p>
+            <p class="event-location"><i class="fas fa-map-marker-alt"></i> Hội trường A, TP.HCM</p>
+            <div class="event-stats">
+              <span><i class="fas fa-users"></i> 150/200</span>
+              <span><i class="fas fa-ticket-alt"></i> 120 vé</span>
             </div>
-        </section>
+            <div class="event-actions">
+              <button class="btn btn-outline btn-sm">Chỉnh sửa</button>
+              <button class="btn btn-primary btn-sm">Chi tiết</button>
+            </div>
+          </div>
+        </div>
+      
+        <!-- 🔴 Sự kiện đã hoàn thành -->
+        <div class="event-card"
+             data-start="2025-10-10T09:00"
+             data-end="2025-10-10T17:00">
+          <div class="event-image">
+            <img src="data:image/jpeg;base64,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" alt="Buổi nói chuyện kết thúc">
+          </div>
+          <div class="event-content">
+            <h3>Buổi Nói Chuyện Truyền Cảm Hứng</h3>
+            <p class="event-date"><i class="fas fa-calendar"></i> 10 Oct 2025, 9:00 AM – 5:00 PM</p>
+            <p class="event-location"><i class="fas fa-map-marker-alt"></i> Nhà Văn Hóa Sinh Viên, Đà Nẵng</p>
+            <div class="event-stats">
+              <span><i class="fas fa-users"></i> 200/200</span>
+              <span><i class="fas fa-ticket-alt"></i> Hết vé</span>
+            </div>
+            <div class="event-actions">
+              <button class="btn btn-outline btn-sm">Chỉnh sửa</button>
+              <button class="btn btn-primary btn-sm">Chi tiết</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+  </section>
 
+
+
+
+<!-- Vé của tôi CSS -->
+<!-- <section id="my-tickets" class="tickets-section">
+     <!-- Header -->
+     <!-- <header class="tickets-hero">
+        <div class="hero-left">
+          <h1>Vé Của Tôi</h1>
+          <p>Quản lý toàn bộ vé sự kiện của bạn – nhanh, đẹp, đẳng cấp.</p>
+        </div>
+        <div class="hero-right">
+          <div class="stat">
+            <span class="label">Sắp diễn ra</span>
+            <span class="value" id="stat-upcoming">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">Đã dùng</span>
+            <span class="value" id="stat-used">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">Đã hủy</span>
+            <span class="value" id="stat-canceled">0</span>
+          </div>
+        </div>
+      </header> -->
+    
+      <!-- Tools -->
+      <!-- <div class="tickets-toolbar">
+        <div class="tabs" role="tablist" aria-label="Bộ lọc vé">
+          <button class="tab active" data-filter="all" aria-selected="true">Tất cả</button>
+          <button class="tab" data-filter="upcoming">Sắp diễn ra</button>
+          <button class="tab" data-filter="used">Đã dùng</button>
+          <button class="tab" data-filter="canceled">Đã hủy</button>
+        </div>
+    
+        <div class="tools-right">
+          <div class="search">
+            <i class="fas fa-search"></i>
+            <input id="tk-search" type="text" placeholder="Tìm theo tên sự kiện / mã vé / địa điểm…">
+          </div> -->
+    
+          <div class="select">
+            <i class="fas fa-sort-amount-down"></i>
+            <select id="tk-sort">
+              <option value="date_desc">Mới nhất</option>
+              <option value="date_asc">Cũ nhất</option>
+              <option value="name_asc">Tên A → Z</option>
+              <option value="name_desc">Tên Z → A</option>
+            </select>
+          </div>
+    
+          <div class="view-switch" title="Chuyển kiểu hiển thị">
+            <button class="view-btn active" data-view="grid"><i class="fas fa-grid-2"></i></button>
+            <button class="view-btn" data-view="list"><i class="fas fa-list"></i></button>
+          </div>
+        </div>
+      </div> 
+    
+      <!-- Grid/List -->
+      <!-- <div id="tickets-grid" class="grid"> -->
+    
+        <!-- Ticket Card (mẫu 1 – Sắp diễn ra) -->
+        <!-- <article class="ticket-card"
+          data-status="upcoming"
+          data-start="2025-10-20T09:00"
+          data-end="2025-10-20T17:00"
+          data-order="ORD-8C42F1"
+          data-seat="A12"
+          data-price="350000"
+          data-venue="Hội trường A, TP.HCM"
+          data-name="Hội Thảo Công Nghệ AI">
+          <div class="ticket-media">
+            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop"
+                 alt="Hội Thảo Công Nghệ AI">
+            <span class="badge is-upcoming">Sắp diễn ra</span>
+          </div>
+          <div class="ticket-body">
+            <h3 class="title">Hội Thảo Công Nghệ AI</h3>
+            <p class="sub"><i class="fas fa-calendar"></i> <span data-date-range></span></p>
+            <p class="sub"><i class="fas fa-location-dot"></i> Hội trường A, TP.HCM</p>
+            <div class="meta">
+    <span><i class="fas fa-barcode"></i> <b>Mã:</b> ORD-8C42F1</span>
+              <span><i class="fas fa-chair"></i> <b>Ghế:</b> A12</span>
+              <span><i class="fas fa-tag"></i> <b>Giá:</b> <span data-price></span></span>
+            </div>
+            <div class="actions">
+              <button class="btn outline" data-action="wallet"><i class="fas fa-wallet"></i> Add to Wallet</button>
+              <button class="btn" data-action="detail"><i class="fas fa-qrcode"></i> Xem vé</button>
+            </div>
+          </div>
+        </article> -->
+    
+        <!-- Ticket Card (mẫu 2 – Đã dùng) -->
+        <!-- <article class="ticket-card"
+          data-status="used"
+          data-start="2025-10-10T09:00"
+          data-end="2025-10-10T17:00"
+          data-order="ORD-1D92B0"
+          data-seat="B07"
+          data-price="0"
+          data-venue="Nhà Văn Hóa Sinh Viên, Đà Nẵng"
+          data-name="Buổi Nói Chuyện Truyền Cảm Hứng">
+          <div class="ticket-media">
+            <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1200&auto=format&fit=crop"
+                 alt="Buổi Nói Chuyện Truyền Cảm Hứng">
+            <span class="badge is-used">Đã dùng</span>
+          </div>
+          <div class="ticket-body">
+            <h3 class="title">Buổi Nói Chuyện Truyền Cảm Hứng</h3>
+            <p class="sub"><i class="fas fa-calendar"></i> <span data-date-range></span></p>
+            <p class="sub"><i class="fas fa-location-dot"></i> Nhà Văn Hóa Sinh Viên, Đà Nẵng</p>
+            <div class="meta">
+              <span><i class="fas fa-barcode"></i> <b>Mã:</b> ORD-1D92B0</span>
+              <span><i class="fas fa-chair"></i> <b>Ghế:</b> B07</span>
+              <span><i class="fas fa-tag"></i> <b>Giá:</b> <span data-price></span></span>
+            </div>
+            <div class="actions">
+              <button class="btn outline" data-action="invoice"><i class="fas fa-file-invoice"></i> Hóa đơn</button>
+              <button class="btn" data-action="detail"><i class="fas fa-eye"></i> Xem vé</button>
+            </div>
+          </div>
+        </article> -->
+    
+        <!-- Ticket Card (mẫu 3 – Đã hủy) -->
+        <!-- <article class="ticket-card"
+          data-status="canceled"
+          data-start="2025-09-28T18:00"
+          data-end="2025-09-28T21:00"
+          data-order="ORD-7K55Z9"
+          data-seat="C15"
+          data-price="290000"
+          data-venue="Trung tâm Hội nghị Quốc gia, Hà Nội"
+          data-name="Music Night 2025">
+          <div class="ticket-media">
+            <img src="https://images.unsplash.com/photo-1514511547203-1f9b9a0f4806?q=80&w=1200&auto=format&fit=crop"
+                 alt="Music Night 2025">
+            <span class="badge is-canceled">Đã hủy</span>
+          </div>
+          <div class="ticket-body">
+            <h3 class="title">Music Night 2025</h3>
+            <p class="sub"><i class="fas fa-calendar"></i> <span data-date-range></span></p>
+            <p class="sub"><i class="fas fa-location-dot"></i> Trung tâm Hội nghị Quốc gia, Hà Nội</p>
+            <div class="meta">
+    <span><i class="fas fa-barcode"></i> <b>Mã:</b> ORD-7K55Z9</span>
+              <span><i class="fas fa-chair"></i> <b>Ghế:</b> C15</span>
+              <span><i class="fas fa-tag"></i> <b>Giá:</b> <span data-price></span></span>
+            </div>
+            <div class="actions">
+              <button class="btn outline" data-action="support"><i class="fas fa-life-ring"></i> Hỗ trợ</button>
+              <button class="btn" data-action="detail" disabled><i class="fas fa-ban"></i> Không khả dụng</button>
+            </div>
+          </div>
+        </article>
+    
+      </div>
+     -->
+    
+    <!-- Modal vé -->
+    <!-- <div id="ticket-modal-root">
+      <div class="overlay" data-close hidden></div>
+      <div class="ticket-modal" id="ticket-modal" hidden role="dialog" aria-modal="true" aria-label="Vé của bạn">
+        <div class="modal-head">
+          <h3 id="m-title">Tên sự kiện</h3>
+          <button class="close" data-close aria-label="Đóng">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="ticket-preview" id="ticket-print-area">
+            <div class="tp-left">
+              <img id="m-image" alt="Poster">
+              <div class="tp-meta">
+                <div><i class="fas fa-calendar"></i> <span id="m-date"></span></div>
+                <div><i class="fas fa-location-dot"></i> <span id="m-venue"></span></div>
+                <div><i class="fas fa-barcode"></i> <b>Mã:</b> <span id="m-order"></span></div>
+                <div><i class="fas fa-chair"></i> <b>Ghế:</b> <span id="m-seat"></span></div>
+                <div><i class="fas fa-tag"></i> <b>Giá:</b> <span id="m-price"></span></div>
+              </div>
+            </div>
+            <div class="tp-right">
+              <div class="qr"> -->
+                <!-- dùng dịch vụ QR công khai, nếu offline sẽ hiện fallback -->
+                <!-- <img id="m-qr" src="" alt="QR Code"
+                onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,'
+                  + encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'>
+                    <rect width='100%' height='100%' fill='#f3f4f6'/>
+                    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+                          font-family='monospace' font-size='28' fill='#111827'>QR</text>
+                  </svg>`);"/>
+           
+                <span class="qr-note">Quét để check-in</span>
+              </div>
+              <div class="tp-status" id="m-status">Sắp diễn ra</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn outline" id="btn-download"><i class="fas fa-download"></i> Tải PNG</button>
+          <button class="btn" id="btn-print"><i class="fas fa-print"></i> In vé</button>
+        </div>
+      </div>
+    </div>
+   </section>
+ -->
         <!-- Create Event Section -->
         <section id="create-event-section" class="content-section">
             <h2>Tạo Sự Kiện Mới</h2>
-
             <form class="create-event-form" id="createEventForm">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="eventTitle">Tên sự kiện *</label>
                         <input type="text" id="eventTitle" required>
                     </div>
-
                     <div class="form-group">
                         <label for="eventCategory">Danh mục</label>
                         <select id="eventCategory">
@@ -310,17 +540,14 @@
                             <option value="training">Đào tạo</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label for="eventDate">Ngày tổ chức *</label>
                         <input type="datetime-local" id="eventDate" required>
                     </div>
-
                     <div class="form-group">
                         <label for="eventDuration">Thời lượng (giờ)</label>
                         <input type="number" id="eventDuration" min="1" max="24" value="2">
                     </div>
-
                     <div class="form-group">
                         <label for="eventLocation">Địa điểm *</label>
                         <input type="text" id="eventLocation" required>
@@ -331,12 +558,10 @@
                         <input type="number" id="maxParticipants" min="1" value="100">
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="eventDescription">Mô tả sự kiện</label>
                     <textarea id="eventDescription" rows="4" placeholder="Mô tả chi tiết về sự kiện..."></textarea>
                 </div>
-
                 <div class="form-group">
                     <label for="eventImage">Hình ảnh sự kiện</label>
                     <div class="file-upload">
@@ -347,7 +572,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="form-actions">
                     <button type="button" class="btn btn-outline">Lưu Nháp</button>
                     <button type="submit" class="btn btn-primary">Tạo Sự Kiện</button>
@@ -355,7 +579,7 @@
             </form>
         </section>
 
-
+       
         <!-- Participants Section -->
         <section id="participants-section" class="content-section">
             <!-- Tiêu đề -->
@@ -1032,14 +1256,73 @@
         </section>
 
         <!-- Feedback Section -->
-      
+        <section id="feedback-section" class="content-section feedback-theme light">
+            <div class="survey-wrapper">
+                <div class="survey-card">
+                    <div class="survey-left">
+                        <h2>CHIA SẺ TRẢI NGHIỆM CỦA QUÝ VỊ</h2>
+                        <p class="subtitle">Ý kiến chân thành của bạn là vô giá để sự kiện được hoàn thiện hơn</p>
+                        <p>Quý vị hài lòng mức độ nào với sự kiện Hội nghị Đột phá Công nghệ 2024?</p>
+                        <div class="rating" id="stars">
+                            <i class="fa-star fa-regular" data-value="1"></i>
+                            <i class="fa-star fa-regular" data-value="2"></i>
+                            <i class="fa-star fa-regular" data-value="3"></i>
+                            <i class="fa-star fa-regular" data-value="4"></i>
+                            <i class="fa-star fa-regular" data-value="5"></i>
+                        </div>
+                        <p id="rate-text" class="rate-text">Tuyệt vời!</p>
 
+                        <label for="idea" class="label">Ý Kiến & Đề Xuất (Chi tiết)</label>
+                        <textarea id="idea" rows="4"
+                            placeholder="Mời quý vị chia sẻ suy nghĩ, góp ý chi tiết..."></textarea>
+                        <div class="options">
+                            <div class="col">
+                                <p>Quý vị ấn tượng nhất với điều gì?</p>
+                                <label><input type="checkbox" checked> Nội dung Diễn giả</label>
+                                <label><input type="checkbox"> Mạng lưới kết nối (Networking)</label>
+                                <label><input type="checkbox"> Địa điểm / Không gian</label>
+                            </div>
+                            <div class="col">
+                                <p>Quý vị có muốn nhận thông tin sự kiện sắp tới?</p>
+                                <label><input type="radio" name="sub" checked> Có</label>
+                                <label><input type="radio" name="sub"> Không</label>
+                            </div>
+                        </div>
+                        <div class="inputs">
+                            <input type="text" placeholder="Tên (Tuỳ chọn)">
+                            <input type="email" placeholder="Địa chỉ Email (Tuỳ chọn)">
+                        </div>
+                        <button id="submitBtn" class="btn">GỬI PHẢN HỒI</button>
+                    </div>
+                    <div class="survey-right">
+                        <h3>Feedback gần đây</h3>
+                        <div class="feedback-box">
+                            <div class="stars">★★★★★</div>
+                            <p>"Kỉ niệm và trải nghiệm tuyệt vời tại TechCo!"</p>
+                            <small>Gửi 2 ngày trước</small>
+                        </div>
+                        <div class="feedback-box">
+                            <div class="stars">★★★★★</div>
+                            <p>"Phần trình bày cực kỳ hữu ích và truyền cảm hứng."</p>
+                            <small>Gửi 2 ngày trước</small>
+                        </div>
+                        <div class="feedback-box">
+                            <div class="stars">★★★★☆</div>
+                            <p>- Hoàng Minh (CEO Bright Future)</p>
+                            <small>Gửi 2 ngày trước</small>
+                        </div>
+                        <!-- <a href="#" class="see-more">Xem thêm</a> -->
+                    </div>
+                </div>
+            </div>
+            <div id="toast" class="toast">Cảm ơn bạn đã gửi phản hồi 💙</div>
+        </section>
         <script>
-            // Giả lập xử lý form
-            document.getElementById('profileForm').addEventListener('submit', function (e) {
-                e.preventDefault();
-                alert('Thông tin cá nhân đã được cập nhật!');
-            });
+            // // Giả lập xử lý form
+            // document.getElementById('profileForm').addEventListener('submit', function (e) {
+            //     e.preventDefault();
+            //     alert('Thông tin cá nhân đã được cập nhật!');
+            // });
         </script>
     </div>
     <!-- QR Code Libraries -->
@@ -1098,11 +1381,12 @@
     <script src="../js/dashboard.js"></script>
     <script src="../js/qr-checkin.js"></script>
     <script src="../js/feedback.js" defer></script>
+    <script src="../js/suggest-events.js"></script>
+    
+<script defer src="../js/tickets.js"></script>
 </body>
 
 </html>
-
-
 </body>
 
 </html>

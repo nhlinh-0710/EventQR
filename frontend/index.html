@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatbot.css"> 
 </head>
 
 <body>
@@ -45,6 +46,7 @@
     </header>
 
     <!-- Hero Section -->
+     
     <section id="home" class="hero">
         <div class="hero-container">
             <div class="hero-content">
@@ -401,10 +403,32 @@
             </form>
         </div>
     </div>
+    <!-- 🧠 Chatbot -->
 
-    <script src="js/main.js"></script>
-   
+
+<button id="cb-open" class="cb-fab" aria-label="Mở trợ lý">💬</button>
+
+<div id="cb-window" class="cb-window hidden" role="dialog">
+  <div class="cb-header">
+    <div class="cb-badge">🤖</div>
+    <div>
+      <div style="font-weight:700">Trợ lý AI</div>
+      <div style="font-size:12px;opacity:.9">Luôn sẵn sàng hỗ trợ bạn</div>
+    </div>
+    <button id="cb-close" class="cb-close">✖</button>
+  </div>
+
+  <div id="cb-messages" class="cb-body"></div>
+
+  <div class="cb-inputbar">
+    <input id="cb-input" class="cb-input" placeholder="Nhập tin nhắn..." />
+    <button id="cb-send" class="cb-send">Gửi</button>
+  </div>
+</div>
+  <script src="js/main.js"></script>
+  
+
+<script src="js/chatbot.js"></script>
 
 </body>
-
 </html>
