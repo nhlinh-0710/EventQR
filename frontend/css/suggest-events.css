@@ -1,0 +1,171 @@
+/* ====== SUGGEST EVENTS (MATCH DASHBOARD STYLE) ====== */
+#suggest-events-section {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  color: #000 !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+#suggest-events-section .header h2 {
+  color: var(--primary-dark);
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+/* Tools */
+#suggest-events-section .tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+#suggest-events-section .tools input[type="text"] {
+  background: #fff;
+  color: #000;
+  padding: 8px 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+#suggest-events-section .tools input[type="text"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+}
+
+/* Tabs */
+#suggest-events-section .tabs {
+  margin: 20px 0;
+  display: flex;
+  gap: 8px;
+}
+#suggest-events-section .tab {
+  background: var(--secondary-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: var(--text-gray);
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+#suggest-events-section .tab:hover,
+#suggest-events-section .tab.active {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: var(--white);
+}
+
+/* Layout panels */
+#suggest-events-section .layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+}
+#suggest-events-section .panel {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+/* Grid cards */
+#evGrid {
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  position: relative;
+  transition: opacity 0.3s ease;
+}
+#suggest-events-section .event-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: all 0.25s ease;
+  color: #000;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#suggest-events-section .event-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Tag trạng thái */
+#suggest-events-section .tag {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+}
+.tag.upcoming { background: #007bff; }
+.tag.ongoing { background: #28a745; }
+.tag.completed { background: #6c757d; }
+
+/* Sidebar mini */
+#suggest-events-section .side h3 {
+  color: #000;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+#suggest-events-section .list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+  color: #000;
+  font-size: 15px;
+}
+#suggest-events-section .viewall {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Pagination */
+#evPagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  user-select: none;
+}
+#evPagination button {
+  min-width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: #fff;
+  color: #000;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+#evPagination button:hover,
+#evPagination button.active {
+  background: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  #suggest-events-section .layout {
+    grid-template-columns: 1fr;
+  }
+}
