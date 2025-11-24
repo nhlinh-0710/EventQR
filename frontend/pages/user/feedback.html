@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - EventQR</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../../css/placehoders.css">
+    <link rel="stylesheet" href="../../css/user/qr-checkin.css">
+    <link rel="stylesheet" href="../../css/user/suggest-events.css">
+    <link rel="stylesheet" href="../../css/user/my-tickets.css">
+    <link rel="stylesheet" href="../../css/user/my-events.css">
+    <link rel="stylesheet" href="../../css/user/feedback.css">
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                <span>EventQR</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="index.html" class="menu-link">
+                <i class="fas fa-fire"></i>
+                <span>Gợi ý sự kiện</span>
+            </a>
+            <a href="tickets.html" class="menu-link">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Vé của tôi</span>
+            </a>
+            <a href="profile.html" class="menu-link">
+                <i class="fas fa-user-cog"></i>
+                <span>Hồ Sơ</span>
+            </a>
+            <a href="feedback.html" class="menu-link active">
+                <i class="fas fa-comments"></i>
+                <span>Feedback</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Feedback</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm sự kiện...">
+                </div>
+                <div class="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">16</span>
+                    </button>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar-placeholder" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">Người dùng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+         <!-- Feedback Section -->
+        <section id="feedback-section" class="content-section feedback-theme light" style="display: block;">
+            <div class="survey-wrapper">
+                <div class="survey-card">
+                    <div class="survey-left">
+                        <h2>CHIA SẺ TRẢI NGHIỆM CỦA QUÝ VỊ</h2>
+                        <p class="subtitle">Ý kiến chân thành của bạn là vô giá để sự kiện được hoàn thiện hơn</p>
+                        
+                        <!-- Event Selector -->
+                        <div class="event-selector-feedback">
+                            <label for="eventSelectFeedback" class="label">Chọn sự kiện đã kết thúc:</label>
+                            <select id="eventSelectFeedback" class="event-select-feedback">
+                                <option value="">-- Chọn sự kiện --</option>
+                            </select>
+                            <p class="event-select-hint" id="eventSelectHint" style="display: none; color: #6b7280; font-size: 13px; margin-top: 8px;">
+                                Chỉ có thể đánh giá sự kiện đã kết thúc mà bạn đã tham gia
+                            </p>
+                        </div>
+                        
+                        <p id="eventQuestion" style="display: none; margin-top: 20px;">
+                            Quý vị hài lòng mức độ nào với sự kiện <strong id="selectedEventTitle"></strong>?
+                        </p>
+                        <div class="rating" id="stars" style="display: none;">
+                            <i class="fa-star fa-regular" data-value="1"></i>
+                            <i class="fa-star fa-regular" data-value="2"></i>
+                            <i class="fa-star fa-regular" data-value="3"></i>
+                            <i class="fa-star fa-regular" data-value="4"></i>
+                            <i class="fa-star fa-regular" data-value="5"></i>
+                        </div>
+                        <p id="rate-text" class="rate-text" style="display: none;">Mời bạn đánh giá ⭐</p>
+
+                        <div id="feedbackForm" style="display: none;">
+                            <label for="idea" class="label">Ý Kiến & Đề Xuất (Chi tiết)</label>
+                            <textarea id="idea" rows="4"
+                                placeholder="Mời quý vị chia sẻ suy nghĩ, góp ý chi tiết..."></textarea>
+                            <div class="options">
+                                <div class="col">
+                                    <p>Quý vị ấn tượng nhất với điều gì?</p>
+                                    <label><input type="checkbox" checked> Nội dung Diễn giả</label>
+                                    <label><input type="checkbox"> Mạng lưới kết nối (Networking)</label>
+                                    <label><input type="checkbox"> Địa điểm / Không gian</label>
+                                </div>
+                                <div class="col">
+                                    <p>Quý vị có muốn nhận thông tin sự kiện sắp tới?</p>
+                                    <label><input type="radio" name="sub" checked> Có</label>
+                                    <label><input type="radio" name="sub"> Không</label>
+                                </div>
+                            </div>
+                            <div class="inputs">
+                                <input type="text" placeholder="Tên (Tuỳ chọn)">
+                                <input type="email" placeholder="Địa chỉ Email (Tuỳ chọn)">
+                            </div>
+                            <button id="submitBtn" class="btn">GỬI PHẢN HỒI</button>
+                        </div>
+                        
+                        <div id="noEventsMessage" style="display: none; text-align: center; padding: 40px; color: #6b7280;">
+                            <i class="fas fa-calendar-times" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                            <p style="font-size: 16px; margin-bottom: 8px;">Chưa có sự kiện nào đã kết thúc</p>
+                            <p style="font-size: 14px;">Bạn chỉ có thể đánh giá các sự kiện đã kết thúc mà bạn đã tham gia.</p>
+                        </div>
+                    </div>
+                    <div class="survey-right">
+                        <h3>Feedback gần đây</h3>
+                        <div class="feedback-box">
+                            <div class="stars">★★★★★</div>
+                            <p>"Kỉ niệm và trải nghiệm tuyệt vời tại TechCo!"</p>
+                            <small>Gửi 2 ngày trước</small>
+                        </div>
+                        <div class="feedback-box">
+                            <div class="stars">★★★★★</div>
+                            <p>"Phần trình bày cực kỳ hữu ích và truyền cảm hứng."</p>
+                            <small>Gửi 2 ngày trước</small>
+                        </div>
+                        <div class="feedback-box">
+                            <div class="stars">★★★★☆</div>
+                            <p>- Hoàng Minh (CEO Bright Future)</p>
+                            <small>Gửi 2 ngày trước</small>
+                        </div>
+                        <!-- <a href="#" class="see-more">Xem thêm</a> -->
+                    </div>
+                </div>
+            </div>
+            <div id="toast" class="toast">Cảm ơn bạn đã gửi phản hồi 💙</div>
+        </section>
+    </div>
+    <script src="../../js/core/auth.js"></script>
+    <script src="../../js/user/feedback.js"></script>
+</body>
+
+</html>

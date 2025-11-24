@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Người Tham Dự - EventQR</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../../css/placehoders.css">
+    <link rel="stylesheet" href="../../css/user/qr-checkin.css">
+    <link rel="stylesheet" href="../../css/user/suggest-events.css">
+    <link rel="stylesheet" href="../../css/user/my-tickets.css">
+    <link rel="stylesheet" href="../../css/user/my-events.css">
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                <span>EventQR</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="index.html" class="menu-link">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="events.html" class="menu-link">
+                <i class="fas fa-calendar-check"></i>
+                <span>Sự Kiện của tôi</span>
+            </a>
+            <a href="create_event.html" class="menu-link">
+                <i class="fas fa-plus-circle"></i>
+                <span>Tạo Sự Kiện</span>
+            </a>
+            <a href="qr.html" class="menu-link">
+                <i class="fas fa-qrcode"></i>
+                <span>QR Check-in</span>
+            </a>
+            <a href="attendees.html" class="menu-link active">
+                <i class="fas fa-users"></i>
+                <span>Người Tham Dự</span>
+            </a>
+            <a href="static.html" class="menu-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Thống Kê</span>
+            </a>
+            <a href="feedback.html" class="menu-link">
+                <i class="fas fa-comments"></i>
+                <span>Feedback</span>
+            </a>
+            <a href="profile.html" class="menu-link">
+                <i class="fas fa-user-cog"></i>
+                <span>Hồ Sơ</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Quản Lý Người Tham Dự</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Tìm kiếm sự kiện...">
+                </div>
+                <div class="notifications">
+                    <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">0</span>
+                    </button>
+                    <!-- Notification Panel -->
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <h3>Thông báo</h3>
+                            <button class="mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                                Đánh dấu tất cả đã đọc
+                            </button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <div class="notification-loading">Đang tải...</div>
+                        </div>
+                        <div class="notification-footer">
+                            <a href="#" onclick="viewAllNotifications()">Xem tất cả</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar-placeholder" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">Người dùng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+
+
+        <!-- Participants Section -->
+        <section id="participants-section" class="content-section active">
+            <!-- Tiêu đề -->
+            <h2 class="panel-title">Quản Lý Người Tham Dự</h2>
+        
+            <div class="panel-topbar">
+                <div class="searchbox">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Tìm người tham gia theo tên hoặc email" />
+                </div>
+                <span class="action">
+                    <input id="new-attendee" class="modal-toggle" type="checkbox">
+                    <label for="new-attendee" class="btn-new">New Attendee</label>
+                    <div class="modal">
+                        <div class="modal-dialog" role="dialog" aria-modal="true">
+                            <h3>Thêm Người Tham Dự Mới</h3>
+                            <form>
+                                <label>Họ và tên</label>
+                                <input type="text" placeholder="VD: Nguyễn Văn A">
+                                
+                                <label>Email</label>
+                                <input type="email" placeholder="example@email.com">
+                                
+                                <label>Số điện thoại</label>
+                                <input type="tel" placeholder="0123456789">
+                                
+                                <label>Vai trò</label>
+                                <select>
+                                    <option>VIP</option>
+                                    <option>Speaker</option>
+                                    <option selected>Attendee</option>
+                                    <option>Staff</option>
+                                    <option>Press</option>
+                                </select>
+                                
+                                <label>Trạng thái</label>
+                                <select>
+                                    <option selected>PENDING</option>
+                                    <option>REGISTERED</option>
+                                    <option>CHECKED IN</option>
+                                </select>
+                                
+                                <label>Công ty/Tổ chức</label>
+                                <input type="text" placeholder="VD: ABC Corporation">
+                                
+                                <label>Chức vụ</label>
+                                <input type="text" placeholder="VD: Manager, Developer...">
+                                
+                                <label>Ghi chú</label>
+                                <textarea rows="3" placeholder="Thông tin bổ sung..."></textarea>
+                                
+                                <div class="modal-actions">
+                                    <label for="new-attendee" class="btn btn-cancel">Hủy</label>
+                                    <label for="new-attendee" class="btn btn-save">Thêm</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        
+            <!-- KPI -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-title">TỔNG SỐ NGƯỜI THAM DỰ:</div>
+                    <div class="kpi-body"><span class="kpi-number">1,800</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">ĐÃ NHẬN PHÒNG:</div>
+                    <div class="kpi-body"><span class="kpi-number">2,000</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">SỐ PHIÊN ĐÃ THAM GIA:</div>
+                    <div class="kpi-body"><span class="kpi-number">950</span></div>
+                </div>
+                <div class="kpi-card chart">
+                    <div class="trend-chart">
+                        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                            <polyline fill="none" stroke="#2563eb" stroke-width="3"
+                                points="0,35 15,25 30,28 45,18 60,22 75,10 90,15 100,5" />
+                        </svg>
+                    </div>
+                    <small class="kpi-title"><b>Xu hướng tham dự</b></small>
+                </div>
+            </div>
+        
+            <!-- Bảng -->
+            <div class="table-wrap">
+                <table class="participants-table">
+                    <thead>
+                        <tr>
+                            <th>HỌ VÀ TÊN</th>
+                            <th>EMAIL</th>
+                            <th>TRẠNG THÁI</th>
+                            <th>VAI TRÒ</th>
+                            <th>HÀNH ĐỘNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Row 1 -->
+                        <tr>
+                            <td class="user"><span class="name">Hồ Viết Hào</span></td>
+                            <td>hoviethao20042005@email.com</td>
+                            <td><span class="status status-blue">CHECKED IN</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <!-- EDIT -->
+                                <span class="action">
+                                    <input id="edit-1" class="modal-toggle" type="checkbox">
+                                    <label for="edit-1" class="btn btn-edit" aria-label="Chỉnh sửa">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog" role="dialog" aria-modal="true">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Hồ Viết Hào">
+                                                <label>Email</label>
+                                                <input type="email" value="hoviethao20042005@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-1" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-1" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <!-- UPDATE -->
+                                <span class="action">
+                                    <input id="update-1" class="modal-toggle" type="checkbox">
+                                    <label for="update-1" class="btn btn-update" aria-label="Cập nhật">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog" role="dialog" aria-modal="true">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option selected>CHECKED IN</option>
+                                                    <option>REGISTERED</option>
+                                                    <option>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-1" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-1" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <!-- DELETE -->
+                                <span class="action">
+                                    <input id="delete-1" class="modal-toggle" type="checkbox">
+                                    <label for="delete-1" class="btn btn-delete" aria-label="Xóa">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog" role="dialog" aria-modal="true">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Hồ Viết Hào</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-1" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-1" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+        
+                        <!-- Row 2 -->
+                        <tr>
+                            <td class="user"><span class="name">Ngô Châu Nhật Linh</span></td>
+                            <td>nhatlinh@email.com</td>
+                            <td><span class="status status-green">REGISTERED</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <span class="action">
+                                    <input id="edit-2" class="modal-toggle" type="checkbox">
+                                    <label for="edit-2" class="btn btn-edit">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Ngô Châu Nhật Linh">
+                                                <label>Email</label>
+                                                <input type="email" value="nhatlinh@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-2" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-2" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="update-2" class="modal-toggle" type="checkbox">
+                                    <label for="update-2" class="btn btn-update">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option>CHECKED IN</option>
+                                                    <option selected>REGISTERED</option>
+                                                    <option>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-2" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-2" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="delete-2" class="modal-toggle" type="checkbox">
+                                    <label for="delete-2" class="btn btn-delete">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Ngô Châu Nhật Linh</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-2" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-2" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+        
+                        <!-- Row 3 -->
+                        <tr>
+                            <td class="user"><span class="name">Nguyễn Minh Duy</span></td>
+                            <td>minhduyg@email.com</td>
+                            <td><span class="status status-blue">CHECKED IN</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <span class="action">
+                                    <input id="edit-3" class="modal-toggle" type="checkbox">
+                                    <label for="edit-3" class="btn btn-edit">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Nguyễn Minh Duy">
+                                                <label>Email</label>
+                                                <input type="email" value="minhduyg@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-3" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-3" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="update-3" class="modal-toggle" type="checkbox">
+                                    <label for="update-3" class="btn btn-update">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option selected>CHECKED IN</option>
+                                                    <option>REGISTERED</option>
+                                                    <option>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-3" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-3" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="delete-3" class="modal-toggle" type="checkbox">
+                                    <label for="delete-3" class="btn btn-delete">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Nguyễn Minh Duy</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-3" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-3" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+        
+                        <!-- Row 4 -->
+                        <tr>
+                            <td class="user"><span class="name">Phạm Văn Huy</span></td>
+                            <td>vanhuy@email.com</td>
+                            <td><span class="status status-yellow">PENDING</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <span class="action">
+                                    <input id="edit-4" class="modal-toggle" type="checkbox">
+                                    <label for="edit-4" class="btn btn-edit">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Phạm Văn Huy">
+                                                <label>Email</label>
+                                                <input type="email" value="vanhuy@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-4" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-4" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="update-4" class="modal-toggle" type="checkbox">
+                                    <label for="update-4" class="btn btn-update">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option>CHECKED IN</option>
+                                                    <option>REGISTERED</option>
+                                                    <option selected>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-4" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-4" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="delete-4" class="modal-toggle" type="checkbox">
+                                    <label for="delete-4" class="btn btn-delete">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Phạm Văn Huy</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-4" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-4" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+        
+                        <!-- Row 5 -->
+                        <tr>
+                            <td class="user"><span class="name">Nguyễn Công Minh</span></td>
+                            <td>congminh@email.com</td>
+                            <td><span class="status status-yellow">PENDING</span></td>
+                            <td>VIP</td>
+                            <td class="actions">
+                                <span class="action">
+                                    <input id="edit-5" class="modal-toggle" type="checkbox">
+                                    <label for="edit-5" class="btn btn-edit">✏️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Chỉnh sửa thông tin</h3>
+                                            <form>
+                                                <label>Họ và tên</label>
+                                                <input type="text" value="Nguyễn Công Minh">
+                                                <label>Email</label>
+                                                <input type="email" value="congminh@email.com">
+                                                <label>Vai trò</label>
+                                                <input type="text" value="VIP">
+                                                <div class="modal-actions">
+                                                    <label for="edit-5" class="btn btn-cancel">Hủy</label>
+                                                    <label for="edit-5" class="btn btn-save">Lưu</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="update-5" class="modal-toggle" type="checkbox">
+                                    <label for="update-5" class="btn btn-update">🔄</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Cập nhật trạng thái</h3>
+                                            <form>
+                                                <label>Trạng thái</label>
+                                                <select>
+                                                    <option>CHECKED IN</option>
+                                                    <option>REGISTERED</option>
+                                                    <option selected>PENDING</option>
+                                                </select>
+                                                <div class="modal-actions">
+                                                    <label for="update-5" class="btn btn-cancel">Hủy</label>
+                                                    <label for="update-5" class="btn btn-save">Cập nhật</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="action">
+                                    <input id="delete-5" class="modal-toggle" type="checkbox">
+                                    <label for="delete-5" class="btn btn-delete">🗑️</label>
+                                    <div class="modal">
+                                        <div class="modal-dialog">
+                                            <h3>Xóa người tham dự</h3>
+                                            <p>Bạn có chắc muốn xóa <b>Nguyễn Công Minh</b> khỏi danh sách?</p>
+                                            <div class="modal-actions">
+                                                <label for="delete-5" class="btn btn-cancel">Hủy</label>
+                                                <label for="delete-5" class="btn btn-delete-confirm">Xóa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        
+            <!-- NEW ATTENDEE MODAL -->
+            <span class="action">
+                <input id="new-attendee" class="modal-toggle" type="checkbox">
+                <div class="modal">
+                    <div class="modal-dialog" role="dialog" aria-modal="true">
+                        <h3>Thêm Người Tham Dự Mới</h3>
+                        <form>
+                            <label>Họ và tên</label>
+                            <input type="text" placeholder="VD: Nguyễn Văn A">
+                            
+                            <label>Email</label>
+                            <input type="email" placeholder="example@email.com">
+                            
+                            <label>Số điện thoại</label>
+                            <input type="tel" placeholder="0123456789">
+                            
+                            <label>Vai trò</label>
+                            <select>
+                                <option>VIP</option>
+                                <option>Speaker</option>
+                                <option selected>Attendee</option>
+                                <option>Staff</option>
+                                <option>Press</option>
+                            </select>
+                            
+                            <label>Trạng thái</label>
+                            <select>
+                                <option selected>PENDING</option>
+                                <option>REGISTERED</option>
+                                <option>CHECKED IN</option>
+                            </select>
+                            
+                            <label>Công ty/Tổ chức</label>
+                            <input type="text" placeholder="VD: ABC Corporation">
+                            
+                            <label>Chức vụ</label>
+                            <input type="text" placeholder="VD: Manager, Developer...">
+                            
+                            <label>Ghi chú</label>
+                            <textarea rows="3" placeholder="Thông tin bổ sung..."></textarea>
+                            
+                            <div class="modal-actions">
+                                <label for="new-attendee" class="btn btn-cancel">Hủy</label>
+                                <label for="new-attendee" class="btn btn-save">Thêm</label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </span>
+        </section>
+    </div>
+    <style>
+        
+    </style>
+    <!-- WebSocket Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    
+    <!-- Auth Check - Must load first -->
+    <script src="../../js/core/auth.js"></script>
+    <script src="../../js/core/websocket.js"></script>
+    <script src="../../js/admin/notifications.js"></script>
+
+    <script src="../../js/user/simple-qr.js"></script>
+    <script src="../../js/admin/dashboard.js"></script>
+    <script src="../../js/user/qr-checkin.js"></script>
+    <script src="../../js/admin/feedback.js" defer></script>
+    <script src="../../js/user/suggest-events.js"></script>
+    <script src="../../js/user/my-tickets.js"></script>
+    <!-- my-events.js không tồn tại, đã xóa reference -->
+</body>
+
+</html>
+</body>
+
+</html>
