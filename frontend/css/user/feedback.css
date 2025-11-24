@@ -202,10 +202,225 @@
     box-shadow: 0 10px 22px rgba(109,93,252,.26);
   }
   
-  /* Cột phải: feedback gần đây */
+  /* Cột phải: feedback của user */
   #feedback-section .survey-right h3{
     margin: 4px 0 12px; font-size: 16px; font-weight: 800; letter-spacing: .2px;
   }
+  
+  #feedback-section .user-feedbacks-list {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  
+  #feedback-section .user-feedbacks-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  #feedback-section .user-feedbacks-list::-webkit-scrollbar-track {
+    background: var(--brand-soft);
+    border-radius: 10px;
+  }
+  
+  #feedback-section .user-feedbacks-list::-webkit-scrollbar-thumb {
+    background: var(--brand);
+    border-radius: 10px;
+  }
+  
+  #feedback-section .user-feedback-item {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(37, 65, 111, 0.05);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  
+  #feedback-section .user-feedback-item:hover {
+    box-shadow: 0 6px 18px rgba(37, 65, 111, 0.08);
+    transform: translateY(-1px);
+  }
+  
+  #feedback-section .user-feedback-item.has-reply {
+    border-left: 3px solid var(--good);
+  }
+  
+  #feedback-section .user-feedback-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  #feedback-section .user-feedback-header .stars {
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #f6b04e;
+    font-size: 16px;
+  }
+  
+  #feedback-section .user-feedback-header small {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  
+  #feedback-section .user-feedback-event {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 6px 0;
+  }
+  
+  #feedback-section .user-feedback-event strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  
+  #feedback-section .user-feedback-comment {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  
+  /* Organizer reply box */
+  #feedback-section .organizer-reply-box {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, var(--brand-soft) 0%, #f0f4ff 100%);
+    border-radius: 10px;
+    border-left: 3px solid var(--brand);
+  }
+  
+  #feedback-section .organizer-reply-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    color: var(--brand);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  #feedback-section .organizer-reply-text {
+    margin: 6px 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  
+  #feedback-section .organizer-reply-date {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 11px;
+  }
+  
+  #feedback-section .waiting-reply {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  /* View others feedback button */
+  #feedback-section .view-others-feedback {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: var(--brand-soft);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--brand);
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  
+  #feedback-section .view-others-feedback:hover {
+    background: #e8edff;
+    border-color: var(--brand);
+  }
+  
+  #feedback-section .view-others-feedback i.toggle-icon {
+    font-size: 11px;
+    transition: transform 0.2s;
+  }
+  
+  /* Other feedbacks container */
+  #feedback-section .other-feedbacks-container {
+    margin-top: 12px;
+    padding: 14px;
+    background: #f9fafb;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+  }
+  
+  #feedback-section .other-feedbacks-loading,
+  #feedback-section .other-feedbacks-empty,
+  #feedback-section .other-feedbacks-error {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  
+  #feedback-section .other-feedbacks-header {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  
+  #feedback-section .other-feedback-item {
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  
+  #feedback-section .other-feedback-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  #feedback-section .other-feedback-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  
+  #feedback-section .other-feedback-header strong {
+    font-size: 13px;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 4px;
+  }
+  
+  #feedback-section .other-feedback-stars {
+    font-size: 14px;
+    color: #f6b04e;
+    letter-spacing: 1px;
+  }
+  
+  #feedback-section .other-feedback-header small {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  
+  #feedback-section .other-feedback-comment {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+  }
+  
+  /* Old feedback-box style (backward compatibility) */
   #feedback-section .feedback-box{
     border: 1px solid var(--line);
     border-radius: 14px;

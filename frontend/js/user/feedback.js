@@ -252,8 +252,9 @@
                     if (rateText) rateText.style.display = 'none';
                     if (feedbackForm) feedbackForm.style.display = 'none';
                     
-                    // Reload events (để cập nhật hasFeedback)
+                    // Reload events (để cập nhật hasFeedback) và reload feedbacks list
                     await loadCompletedEvents();
+                    setTimeout(loadUserFeedbacks, 500); // Delay để đảm bảo backend đã cập nhật
                 } else {
                     showToast(data.message || "Gửi phản hồi thất bại", "error");
                 }
@@ -275,8 +276,235 @@
         }
     });
 
+    // Load user feedbacks với organizer replies
+    async function loadUserFeedbacks() {
+        const user = JSON.parse(localStorage.getItem("currentUser"));
+        if (!user) {
+            console.warn('⚠️ Chưa đăng nhập');
+            return;
+        }
+
+        const feedbacksList = document.getElementById('userFeedbacksList');
+        const noFeedbacksMessage = document.getElementById('noFeedbacksMessage');
+        
+        if (!feedbacksList) return;
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/feedback/user/${user.user_id}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const feedbacks = await response.json();
+            console.log('📋 User feedbacks:', feedbacks);
+
+            if (!Array.isArray(feedbacks) || feedbacks.length === 0) {
+                feedbacksList.style.display = 'none';
+                if (noFeedbacksMessage) noFeedbacksMessage.style.display = 'block';
+                return;
+            }
+
+            feedbacksList.style.display = 'block';
+            if (noFeedbacksMessage) noFeedbacksMessage.style.display = 'none';
+
+            // Render feedbacks
+            feedbacksList.innerHTML = feedbacks.map((feedback, index) => {
+                // Create rating stars
+                const stars = '★'.repeat(feedback.rating || 0) + '☆'.repeat(5 - (feedback.rating || 0));
+                
+                // Format date
+                const feedbackDate = feedback.createdAt ? new Date(feedback.createdAt) : new Date();
+                const dateStr = formatDateForDisplay(feedbackDate);
+                
+                // Check if has organizer reply
+                const hasReply = feedback.organizerReply && feedback.organizerReply.trim().length > 0;
+                const replyDate = feedback.organizerReplyAt ? new Date(feedback.organizerReplyAt) : null;
+                const replyDateStr = replyDate ? formatDateForDisplay(replyDate) : '';
+
+                return `
+                    <div class="user-feedback-item ${hasReply ? 'has-reply' : ''}" data-event-id="${feedback.eventId}" data-feedback-index="${index}">
+                        <div class="user-feedback-header">
+                            <div class="stars">${stars}</div>
+                            <small>${dateStr}</small>
+                        </div>
+                        <p class="user-feedback-event">Sự kiện: <strong>${feedback.eventTitle || 'N/A'}</strong></p>
+                        <p class="user-feedback-comment">${feedback.comment || '<em style="color: #94a3b8;">Không có bình luận</em>'}</p>
+                        ${hasReply ? `
+                            <div class="organizer-reply-box">
+                                <div class="organizer-reply-header">
+                                    <i class="fas fa-reply" style="margin-right: 6px;"></i>
+                                    <strong>Phản hồi từ tổ chức viên</strong>
+                                </div>
+                                <p class="organizer-reply-text">${feedback.organizerReply}</p>
+                                <small class="organizer-reply-date">${replyDateStr}</small>
+                            </div>
+                        ` : `
+                            <div class="waiting-reply">
+                                <small style="color: #94a3b8; font-style: italic;">
+                                    <i class="fas fa-clock"></i> Đang chờ phản hồi từ tổ chức viên
+                                </small>
+                            </div>
+                        `}
+                        <div class="view-others-feedback" onclick="loadOtherFeedbacks(this, ${feedback.eventId}, '${feedback.eventTitle || 'Sự kiện'}')">
+                            <i class="fas fa-comments"></i>
+                            <span>Xem đánh giá của người khác</span>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="other-feedbacks-container" id="other-feedbacks-${feedback.eventId}" style="display: none;">
+                            <div class="other-feedbacks-loading">
+                                <i class="fas fa-spinner fa-spin"></i> Đang tải...
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+        } catch (error) {
+            console.error('❌ Lỗi load user feedbacks:', error);
+            feedbacksList.innerHTML = `
+                <div style="text-align: center; padding: 20px; color: #ef4444;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p style="font-size: 14px; margin-top: 8px;">Không thể tải feedback</p>
+                </div>
+            `;
+        }
+    }
+
+    // Format date for display
+    function formatDateForDisplay(date) {
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) {
+            return 'Hôm nay';
+        } else if (diffDays === 1) {
+            return 'Hôm qua';
+        } else if (diffDays < 7) {
+            return `${diffDays} ngày trước`;
+        } else {
+            return date.toLocaleDateString('vi-VN');
+        }
+    }
+
+    // Load feedbacks of others for an event
+    window.loadOtherFeedbacks = async function(buttonElement, eventId, eventTitle) {
+        const container = document.getElementById(`other-feedbacks-${eventId}`);
+        const toggleIcon = buttonElement.querySelector('.toggle-icon');
+        
+        if (!container) return;
+        
+        // Get current user ID
+        const user = JSON.parse(localStorage.getItem("currentUser"));
+        if (!user) {
+            console.warn('⚠️ Chưa đăng nhập');
+            return;
+        }
+        const currentUserId = user.user_id;
+        
+        // Toggle show/hide
+        const isHidden = container.style.display === 'none';
+        
+        if (isHidden) {
+            container.style.display = 'block';
+            toggleIcon.classList.remove('fa-chevron-down');
+            toggleIcon.classList.add('fa-chevron-up');
+            
+            // Check if already loaded
+            if (container.dataset.loaded === 'true') {
+                return;
+            }
+            
+            try {
+                // Show loading
+                container.innerHTML = '<div class="other-feedbacks-loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div>';
+                
+                const response = await fetch(`http://localhost:8080/api/feedback/event/${eventId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const allFeedbacks = await response.json();
+                
+                // Filter out current user's feedback
+                const otherFeedbacks = Array.isArray(allFeedbacks) 
+                    ? allFeedbacks.filter(f => f.userId != currentUserId) // Use != to handle type coercion
+                    : [];
+                
+                console.log(`📋 Loaded ${otherFeedbacks.length} feedbacks từ người khác cho event ${eventId}`);
+                
+                if (otherFeedbacks.length === 0) {
+                    container.innerHTML = `
+                        <div class="other-feedbacks-empty">
+                            <i class="fas fa-comments" style="opacity: 0.3;"></i>
+                            <p>Chưa có đánh giá nào từ người khác</p>
+                        </div>
+                    `;
+                    container.dataset.loaded = 'true';
+                    return;
+                }
+                
+                // Render other feedbacks
+                container.innerHTML = `
+                    <div class="other-feedbacks-header">
+                        <strong>${otherFeedbacks.length} đánh giá từ người khác</strong>
+                    </div>
+                    ${otherFeedbacks.map(feedback => {
+                        const stars = '★'.repeat(feedback.rating || 0) + '☆'.repeat(5 - (feedback.rating || 0));
+                        const feedbackDate = feedback.createdAt ? new Date(feedback.createdAt) : new Date();
+                        const dateStr = formatDateForDisplay(feedbackDate);
+                        
+                        return `
+                            <div class="other-feedback-item">
+                                <div class="other-feedback-header">
+                                    <div>
+                                        <strong>${feedback.userName || 'Người dùng ẩn danh'}</strong>
+                                        <span class="other-feedback-stars">${stars}</span>
+                                    </div>
+                                    <small>${dateStr}</small>
+                                </div>
+                                <p class="other-feedback-comment">${feedback.comment || '<em style="color: #94a3b8;">Không có bình luận</em>'}</p>
+                            </div>
+                        `;
+                    }).join('')}
+                `;
+                
+                container.dataset.loaded = 'true';
+                
+            } catch (error) {
+                console.error('❌ Lỗi load other feedbacks:', error);
+                container.innerHTML = `
+                    <div class="other-feedbacks-error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Không thể tải đánh giá</p>
+                    </div>
+                `;
+            }
+        } else {
+            // Hide
+            container.style.display = 'none';
+            toggleIcon.classList.remove('fa-chevron-up');
+            toggleIcon.classList.add('fa-chevron-down');
+        }
+    };
+
     // Load events khi page load
     document.addEventListener('DOMContentLoaded', () => {
         loadCompletedEvents();
+        loadUserFeedbacks();
+        
+        // Reload feedbacks khi nhận notification về feedback reply
+        if (typeof addNotificationToList !== 'undefined') {
+            const originalAdd = addNotificationToList;
+            window.addNotificationToList = function(notification) {
+                originalAdd(notification);
+                if (notification.type === 'feedback_reply') {
+                    // Reload feedbacks để hiển thị reply mới
+                    setTimeout(loadUserFeedbacks, 500);
+                }
+            };
+        }
     });
 })();

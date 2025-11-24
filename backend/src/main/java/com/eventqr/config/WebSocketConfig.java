@@ -24,8 +24,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // Register the "/ws" endpoint, enabling SockJS fallback options
         // This allows clients to connect to "/ws" and use any transport (websocket, xhr-streaming, etc.)
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("*") // Allow all origins for development
-                .withSockJS();
+                .setAllowedOrigins(
+                    "http://localhost:5501",
+                    "http://127.0.0.1:5501",
+                    "http://localhost:3000",
+                    "http://127.0.0.1:3000",
+                    "http://localhost:8080"
+                ) // Cho phép các origin cụ thể
+                .withSockJS()
+                .setHeartbeatTime(25000) // 25 seconds
+                .setDisconnectDelay(5000); // 5 seconds
     }
 }
 

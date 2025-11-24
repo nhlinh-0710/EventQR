@@ -6,6 +6,7 @@ import com.eventqr.dto.FeedbackReplyRequest;
 import com.eventqr.dto.FeedbackResponse;
 import com.eventqr.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,7 @@ public class FeedbackController {
 
     /**
      * POST /api/feedback
-     * Submit feedback cho sự kiện
+     * Submit feedback cho sự kiện (endpoint legacy - giữ lại để backward compatibility)
      */
     @PostMapping
     public ResponseEntity<?> submitFeedback(@RequestBody FeedbackRequest request) {
@@ -53,12 +54,16 @@ public class FeedbackController {
                 "message", "Cảm ơn bạn đã đánh giá!",
                 "feedback", response
             ));
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            return ResponseEntity.badRequest().body(
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("success", false, "message", e.getMessage())
+            );
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 Map.of("success", false, "message", e.getMessage())
             );
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 Map.of("success", false, "message", "Lỗi server: " + e.getMessage())
             );
         }
@@ -98,7 +103,7 @@ public class FeedbackController {
 
     /**
      * GET /api/feedback/organizer/{organizerId}
-     * Lấy tất cả feedback của các sự kiện thuộc về một organizer
+     * Lấy tất cả feedback của các sự kiện thuộc về một organizer (format FeedbackResponse - legacy)
      */
     @GetMapping("/organizer/{organizerId}")
     public ResponseEntity<?> getFeedbacksByOrganizer(@PathVariable("organizerId") Long organizerId) {

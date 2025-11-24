@@ -226,8 +226,8 @@ function renderFeedbackGroups(feedbacks) {
     
     // Calculate stats for each event
     const eventStats = {};
-    Object.keys(groupedByEvent).forEach(eventTitle => {
-        const eventFeedbacks = groupedByEvent[eventTitle];
+    Object.keys(groupedFeedbacksData).forEach(eventTitle => {
+        const eventFeedbacks = groupedFeedbacksData[eventTitle];
         const totalRating = eventFeedbacks.reduce((sum, f) => sum + (f.rating || 0), 0);
         const avgRating = (totalRating / eventFeedbacks.length).toFixed(1);
         const fiveStarCount = eventFeedbacks.filter(f => f.rating === 5).length;

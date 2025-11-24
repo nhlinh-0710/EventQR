@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "feedbacks")
+@Table(name = "feedbacks", uniqueConstraints = {
+    @UniqueConstraint(name = "uniq_event_user_feedback", columnNames = {"event_id", "user_id"})
+})
 public class Feedback {
 
     @Id

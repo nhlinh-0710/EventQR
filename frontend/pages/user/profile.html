@@ -71,9 +71,21 @@
           <input type="text" placeholder="Tìm kiếm sự kiện..." />
         </div>
         <div class="notifications">
-          <button class="notification-btn" aria-label="Thông báo">
-            <i class="fas fa-bell"></i><span class="notification-badge">16</span>
+          <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()" aria-label="Thông báo">
+            <i class="fas fa-bell"></i><span class="notification-badge" id="notification-badge">0</span>
           </button>
+          <!-- Notification Panel -->
+          <div class="notification-panel" id="notificationPanel">
+              <div class="notification-header">
+                  <h3>Thông báo</h3>
+                  <button class="mark-all-read-btn" onclick="markAllNotificationsAsRead()">
+                      Đánh dấu tất cả đã đọc
+                  </button>
+              </div>
+              <div class="notification-list" id="notificationList">
+                  <div class="notification-loading">Đang tải...</div>
+              </div>
+          </div>
         </div>
         <div class="user-profile">
           <div class="avatar-placeholder" id="userAvatar">U</div>
@@ -236,6 +248,11 @@
     </section>
   </div>
 
+  <!-- WebSocket & Notifications -->
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+  <script src="../../js/core/websocket.js"></script>
+  <script src="../../js/core/notifications.js"></script>
   <!-- JS dự án -->
   <script src="../../js/core/auth.js" defer></script>
   <script src="../../js/user/simple-qr.js" defer></script>

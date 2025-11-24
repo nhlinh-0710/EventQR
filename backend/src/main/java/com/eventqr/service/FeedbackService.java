@@ -3,6 +3,7 @@ package com.eventqr.service;
 import com.eventqr.dto.CompletedEventResponse;
 import com.eventqr.dto.FeedbackRequest;
 import com.eventqr.dto.FeedbackResponse;
+import com.eventqr.dto.OrganizerFeedbackResponse;
 import com.eventqr.model.Event;
 import com.eventqr.model.EventTicket;
 import com.eventqr.model.Feedback;
@@ -10,13 +11,16 @@ import com.eventqr.repository.EventRepository;
 import com.eventqr.repository.EventTicketRepository;
 import com.eventqr.repository.FeedbackRepository;
 import com.eventqr.repository.AccountRepository;
+import com.eventqr.repository.CheckinRepository;
 import com.eventqr.model.Account;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -31,15 +35,21 @@ public class FeedbackService {
     private final EventRepository eventRepository;
     private final EventTicketRepository eventTicketRepository;
     private final AccountRepository accountRepository;
+    private final CheckinRepository checkinRepository;
+    private final NotificationService notificationService;
 
     public FeedbackService(FeedbackRepository feedbackRepository,
                           EventRepository eventRepository,
                           EventTicketRepository eventTicketRepository,
-                          AccountRepository accountRepository) {
+                          AccountRepository accountRepository,
+                          CheckinRepository checkinRepository,
+                          NotificationService notificationService) {
         this.feedbackRepository = feedbackRepository;
         this.eventRepository = eventRepository;
         this.eventTicketRepository = eventTicketRepository;
         this.accountRepository = accountRepository;
+        this.checkinRepository = checkinRepository;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -159,15 +169,20 @@ public class FeedbackService {
     }
 
     /**
-     * Submit feedback
-     * Logic: 
-     * - Chỉ cho phép feedback sự kiện đã kết thúc
-     * - User phải đã đăng ký sự kiện (có ticket)
-     * - Mỗi user chỉ feedback 1 lần cho mỗi sự kiện
+     * Submit feedback cho sự kiện
+     * Logic đầy đủ theo yêu cầu:
+     * 1. Chỉ cho phép feedback khi status = "ENDED" hoặc "FINISHED"
+     * 2. User phải đã đăng ký và tham gia (có event_ticket hoặc checkin_history)
+     * 3. Mỗi user chỉ feedback 1 lần (hoặc update trong vòng 24h)
+     * 4. Organizer không được đánh giá sự kiện của chính họ
+     * 5. Gửi notification cho organizer khi có feedback mới
      */
     @Transactional
     public FeedbackResponse submitFeedback(FeedbackRequest request) {
-        // Validate
+        logger.info("📝 Bắt đầu submit feedback: eventId={}, userId={}, rating={}", 
+            request.getEventId(), request.getUserId(), request.getRating());
+
+        // ===== 1. VALIDATE INPUT =====
         if (request.getEventId() == null || request.getUserId() == null) {
             throw new IllegalArgumentException("EventId và UserId không được để trống");
         }
@@ -176,71 +191,123 @@ public class FeedbackService {
             throw new IllegalArgumentException("Rating phải từ 1 đến 5");
         }
 
-        // Kiểm tra user đã feedback chưa
-        if (feedbackRepository.existsByEventIdAndUserId(request.getEventId(), request.getUserId())) {
-            throw new IllegalStateException("Bạn đã đánh giá sự kiện này rồi!");
+        // ===== 2. KIỂM TRA SỰ KIỆN TỒN TẠI =====
+        Event event = eventRepository.findById(request.getEventId())
+            .orElseThrow(() -> new IllegalArgumentException("Sự kiện không tồn tại"));
+
+        // ===== 3. KIỂM TRA TRẠNG THÁI SỰ KIỆN = "ENDED" hoặc "FINISHED" =====
+        String eventStatus = event.getStatus();
+        if (eventStatus == null) {
+            eventStatus = "";
+        }
+        String upperStatus = eventStatus.toUpperCase().trim();
+        
+        boolean isEnded = "ENDED".equals(upperStatus) || "FINISHED".equals(upperStatus);
+        
+        if (!isEnded) {
+            throw new IllegalStateException("Sự kiện chưa kết thúc, không thể đánh giá. (Trạng thái hiện tại: " + eventStatus + ")");
         }
 
-        // Kiểm tra user có ticket không
+        // ===== 4. KIỂM TRA ORGANIZER KHÔNG ĐƯỢC ĐÁNH GIÁ SỰ KIỆN CỦA CHÍNH HỌ =====
+        if (event.getOrganizerId().equals(request.getUserId())) {
+            throw new IllegalStateException("Bạn không thể đánh giá sự kiện do chính mình tổ chức!");
+        }
+
+        // ===== 5. KIỂM TRA USER ĐÃ THAM GIA SỰ KIỆN CHƯA =====
+        // Kiểm tra có ticket (đã đăng ký)
         boolean hasTicket = eventTicketRepository.existsByEventIdAndUserId(
             request.getEventId(), 
             request.getUserId()
         );
         
-        if (!hasTicket) {
-            throw new IllegalStateException("Bạn chưa tham gia sự kiện này!");
+        // Kiểm tra có checkin (đã tham gia)
+        boolean hasCheckin = checkinRepository.existsByEventIdAndUserId(
+            request.getEventId(),
+            request.getUserId()
+        );
+
+        if (!hasTicket && !hasCheckin) {
+            throw new IllegalStateException("Bạn chưa tham gia sự kiện này! Vui lòng đăng ký và tham gia trước khi đánh giá.");
         }
 
-        // Kiểm tra sự kiện đã kết thúc chưa
-        Event event = eventRepository.findById(request.getEventId())
-            .orElseThrow(() -> new IllegalArgumentException("Sự kiện không tồn tại"));
+        // ===== 6. KIỂM TRA USER ĐÃ ĐÁNH GIÁ CHƯA =====
+        Optional<Feedback> existingFeedbackOpt = feedbackRepository.findByEventIdAndUserId(
+            request.getEventId(), 
+            request.getUserId()
+        );
 
-        LocalDateTime now = LocalDateTime.now();
-        boolean isCompleted = false;
-        String eventStatus = event.getStatus();
+        Feedback feedback;
+        boolean isUpdate = false;
 
-        // Ưu tiên kiểm tra endTime trước (nếu endTime đã qua thì coi như đã kết thúc)
-        if (event.getEndTime() != null && event.getEndTime().isBefore(now)) {
-            isCompleted = true;
-        }
-        
-        // Hoặc kiểm tra status: COMPLETED hoặc "Đã kết thúc" (tiếng Việt)
-        if (!isCompleted && eventStatus != null) {
-            String upperStatus = eventStatus.toUpperCase().trim();
-            if ("COMPLETED".equals(upperStatus) || "ĐÃ KẾT THÚC".equals(upperStatus)) {
-                isCompleted = true;
+        if (existingFeedbackOpt.isPresent()) {
+            Feedback existing = existingFeedbackOpt.get();
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime createdAt = existing.getCreatedAt();
+            
+            // Kiểm tra xem có trong vòng 24h không
+            long hoursBetween = java.time.Duration.between(createdAt, now).toHours();
+            
+            if (hoursBetween > 24) {
+                throw new IllegalStateException("Bạn đã đánh giá sự kiện này rồi. Chỉ có thể cập nhật trong vòng 24 giờ sau khi đánh giá!");
             }
+            
+            // Cho phép update trong vòng 24h
+            logger.info("🔄 Cập nhật feedback trong vòng 24h (đã qua {} giờ)", hoursBetween);
+            feedback = existing;
+            isUpdate = true;
+        } else {
+            // Tạo feedback mới
+            feedback = new Feedback();
+            feedback.setEventId(request.getEventId());
+            feedback.setUserId(request.getUserId());
+            feedback.setCreatedAt(LocalDateTime.now());
         }
 
-        if (!isCompleted) {
-            throw new IllegalStateException(
-                String.format("Chỉ có thể đánh giá sự kiện đã kết thúc! (Status: %s, EndTime: %s)", 
-                    eventStatus, event.getEndTime())
-            );
-        }
-
-        // Tạo feedback
-        Feedback feedback = new Feedback();
-        feedback.setEventId(request.getEventId());
-        feedback.setUserId(request.getUserId());
+        // Cập nhật rating và comment
         feedback.setRating(request.getRating());
         feedback.setComment(request.getComment());
-        feedback.setCreatedAt(LocalDateTime.now());
+        if (!isUpdate) {
+            feedback.setCreatedAt(LocalDateTime.now());
+        }
 
         Feedback saved = feedbackRepository.save(feedback);
 
-        // Tạo response
+        // ===== 7. GỬI NOTIFICATION CHO ORGANIZER (chỉ khi tạo mới) =====
+        if (!isUpdate) {
+            try {
+                Account user = accountRepository.findById(request.getUserId()).orElse(null);
+                String userName = user != null ? user.getName() : "Người dùng";
+                
+                notificationService.sendFeedbackNotificationToOrganizer(
+                    event.getOrganizerId(),
+                    event.getEventId(),
+                    event.getTitle(),
+                    userName,
+                    saved.getRating()
+                );
+                
+                logger.info("✅ Đã gửi notification cho organizer {}", event.getOrganizerId());
+            } catch (Exception e) {
+                // Log lỗi nhưng không throw để không ảnh hưởng đến quá trình feedback
+                logger.error("❌ Lỗi khi gửi notification: {}", e.getMessage(), e);
+            }
+        }
+
+        // ===== 8. TẠO RESPONSE =====
+        Account user = accountRepository.findById(saved.getUserId()).orElse(null);
         FeedbackResponse response = new FeedbackResponse();
         response.setFeedbackId(saved.getFeedbackId());
         response.setEventId(saved.getEventId());
         response.setEventTitle(event.getTitle());
         response.setUserId(saved.getUserId());
+        response.setUserName(user != null ? user.getName() : "Khách ẩn danh");
         response.setRating(saved.getRating());
         response.setComment(saved.getComment());
         response.setOrganizerReply(saved.getOrganizerReply());
         response.setOrganizerReplyAt(saved.getOrganizerReplyAt());
         response.setCreatedAt(saved.getCreatedAt());
 
+        logger.info("✅ Submit feedback thành công: feedbackId={}", saved.getFeedbackId());
         return response;
     }
 
@@ -295,7 +362,48 @@ public class FeedbackService {
     }
 
     /**
-     * Lấy tất cả feedback của các sự kiện thuộc về một organizer
+     * Lấy danh sách feedback của organizer theo format yêu cầu
+     * GET /api/organizer/{id}/feedback
+     * Format: [{"eventId": 12, "eventName": "...", "userName": "...", "rating": 5, "comment": "...", "time": "2025-11-20 14:22"}]
+     */
+    @Transactional(readOnly = true)
+    public List<OrganizerFeedbackResponse> getOrganizerFeedbacks(Long organizerId) {
+        logger.info("🔍 Lấy danh sách feedback cho organizer: {}", organizerId);
+        
+        // Lấy tất cả feedback của các sự kiện thuộc về organizer
+        List<Feedback> feedbacks = feedbackRepository.findByOrganizerIdOrderByCreatedAtDesc(organizerId);
+        
+        if (feedbacks.isEmpty()) {
+            logger.warn("⚠️ Không tìm thấy feedback nào cho organizer {}", organizerId);
+            return new ArrayList<>();
+        }
+
+        // Format DateTime: "2025-11-20 14:22"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        return feedbacks.stream().map(f -> {
+            Event event = eventRepository.findById(f.getEventId()).orElse(null);
+            Account user = accountRepository.findById(f.getUserId()).orElse(null);
+            
+            String eventName = event != null ? event.getTitle() : "Sự kiện không tồn tại";
+            String userName = user != null ? user.getName() : "Khách ẩn danh";
+            String time = f.getCreatedAt() != null 
+                ? f.getCreatedAt().format(formatter) 
+                : LocalDateTime.now().format(formatter);
+            
+            return new OrganizerFeedbackResponse(
+                f.getEventId(),
+                eventName,
+                userName,
+                f.getRating(),
+                f.getComment(),
+                time
+            );
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * Lấy tất cả feedback của các sự kiện thuộc về một organizer (format FeedbackResponse)
      */
     @Transactional(readOnly = true)
     public List<FeedbackResponse> getFeedbacksByOrganizerId(Long organizerId) {
@@ -393,6 +501,20 @@ public class FeedbackService {
         feedback.setOrganizerReplyAt(LocalDateTime.now());
         
         Feedback saved = feedbackRepository.save(feedback);
+        
+        // Gửi notification cho user khi organizer reply
+        try {
+            notificationService.sendFeedbackReplyNotificationToUser(
+                saved.getUserId(),
+                event.getEventId(),
+                event.getTitle(),
+                saved.getOrganizerReply()
+            );
+            logger.info("✅ Đã gửi notification cho user {} khi organizer reply", saved.getUserId());
+        } catch (Exception e) {
+            // Log lỗi nhưng không throw để không ảnh hưởng đến quá trình reply
+            logger.error("❌ Lỗi khi gửi notification: {}", e.getMessage(), e);
+        }
         
         // Tạo response
         Account user = accountRepository.findById(saved.getUserId()).orElse(null);
