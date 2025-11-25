@@ -122,6 +122,8 @@ public class EventRegistrationService {
                     cancelled // Ticket cancelled status
             );
             
+            response.setPhone(t.getPhone());
+
             // Verify fields are set
             System.out.println("   - Response eventStatus: " + response.getEventStatus());
             System.out.println("   - Response cancelled: " + response.getCancelled());

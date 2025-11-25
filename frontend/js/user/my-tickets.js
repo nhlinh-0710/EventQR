@@ -274,6 +274,8 @@ function createTicketCard(t) {
     card.dataset.eventId = t.eventId;
     card.dataset.seatType = t.ticketType ?? "General";
     card.dataset.registered = t.registeredAt;
+    card.dataset.phone = t.phone;
+
 
     card.innerHTML = `
         <div class="ticket-media">
@@ -464,11 +466,12 @@ function viewTicketDetails(ticketCode) {
     const status = card.dataset.status;
     const registeredAt = card.dataset.registered;
     const eventId = card.dataset.eventId;
+    const phone = card.dataset.phone || "Không có";   
     const ticketId = ticketCode.replace("TCK-", "");
 
     const user = JSON.parse(localStorage.getItem("currentUser"));
 
-    // Create QR
+    // QR
     const qrPayload = generateUniqueQR(ticketId, eventId, user.user_id, registeredAt);
     const temp = document.createElement("div");
 
@@ -483,12 +486,14 @@ function viewTicketDetails(ticketCode) {
     document.getElementById("modal-seat").textContent = seatType;
     document.getElementById("modal-price").textContent = "Miễn phí";
 
-    const statusText = 
+    document.getElementById("modal-phone").textContent = phone; 
+
+    const statusText =
         status === "upcoming" ? "Sắp diễn ra" :
         status === "ongoing" ? "Đang diễn ra" :
         status === "ended" ? "Đã kết thúc" :
         status === "cancelled" ? "Đã hủy" : "Không xác định";
-    
+
     document.getElementById("modal-ticket-status").textContent = statusText;
     document.getElementById("modal-datetime").textContent = formatDateRange(start, end);
     document.getElementById("modal-venue").textContent = venue;

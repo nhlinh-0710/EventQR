@@ -79,7 +79,6 @@
 
 <!-- Main Content -->
 <div class="main-content">
-    <!-- Header -->
     <header class="header">
         <div class="header-left">
             <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -97,7 +96,7 @@
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge" id="notification-badge">0</span>
                 </button>
-                <!-- Notification Panel -->
+
                 <div class="notification-panel" id="notificationPanel">
                     <div class="notification-header">
                         <h3>Thông báo</h3>
@@ -131,58 +130,21 @@
 
             <!-- Tabs -->
             <div class="qr-tabs">
-                <button class="qr-tab active" data-tab="generate">Tạo QR Code</button>
-                <button class="qr-tab" data-tab="scan">Quét QR Code</button>
+                <button class="qr-tab active" data-tab="scan">Quét QR Code</button>
                 <button class="qr-tab" data-tab="history">Lịch Sử Check-in</button>
             </div>
 
-            <!-- Generate QR Code Tab -->
-            <div id="generate-tab" class="qr-tab-content active">
-                <div class="qr-generate-section">
-                    <div class="event-selector">
-                        <h3>Chọn Sự Kiện</h3>
-                        <select id="eventSelect" class="event-select">
-                            <option value="">Chọn sự kiện để tạo QR code</option>
-                            <option value="event1">Hội thảo Công nghệ AI - 15 Sep 2025</option>
-                            <option value="event2">Workshop Design Thinking - 22 Sep 2025</option>
-                            <option value="event3">Meetup Startup Vietnam - 30 Sep 2025</option>
-                        </select>
-                        <button class="btn btn-primary" onclick="generateQRCode()">
-                            <i class="fas fa-qrcode"></i> Tạo QR Code
-                        </button>
-                    </div>
-
-                    <div class="qr-display" id="qrDisplay" style="display: none;">
-                        <div class="qr-code-container">
-                            <h4>QR Code Check-in</h4>
-                            <div id="qrcode" class="qr-code"></div>
-                            <div class="qr-info">
-                                <p><strong>Sự kiện:</strong> <span id="selectedEventName"></span></p>
-                                <p><strong>Ngày tạo:</strong> <span id="qrCreatedDate"></span></p>
-                                <p><strong>Mã QR:</strong> <span id="qrCodeValue"></span></p>
-                            </div>
-                            <div class="qr-actions">
-                                <button class="btn btn-outline" onclick="downloadQRCode()">
-                                    <i class="fas fa-download"></i> Tải xuống
-                                </button>
-                                <button class="btn btn-primary" onclick="printQRCode()">
-                                    <i class="fas fa-print"></i> In QR Code
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Scan QR Code Tab -->
-            <div id="scan-tab" class="qr-tab-content">
+            <div id="scan-tab" class="qr-tab-content active">
                 <div class="qr-scan-section">
+
                     <div class="scan-methods">
                         <div class="scan-method">
                             <h3>Quét bằng Camera</h3>
                             <div class="camera-scanner">
                                 <video id="qrVideo" class="qr-video" style="display: none;"></video>
                                 <div id="qrScanResult" class="scan-result" style="display: none;"></div>
+
                                 <div class="scanner-controls">
                                     <button class="btn btn-primary" onclick="startQRScanner()" id="startScanBtn">
                                         <i class="fas fa-camera"></i> Bắt đầu quét
@@ -224,10 +186,12 @@
                                 <label for="participantPhone">Số điện thoại:</label>
                                 <input type="tel" id="participantPhone">
                             </div>
+
                             <div class="event-info">
                                 <p><strong>Sự kiện:</strong> <span id="checkinEventName"></span></p>
                                 <p><strong>Thời gian:</strong> <span id="checkinTime"></span></p>
                             </div>
+
                             <div class="checkin-actions">
                                 <button class="btn btn-primary" onclick="confirmCheckin()">
                                     <i class="fas fa-check-circle"></i> Xác nhận Check-in
@@ -238,12 +202,14 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
             <!-- Check-in History Tab -->
             <div id="history-tab" class="qr-tab-content">
                 <div class="checkin-history">
+
                     <div class="history-filters">
                         <div class="filter-group">
                             <label for="historyEventFilter">Lọc theo sự kiện:</label>
@@ -254,10 +220,12 @@
                                 <option value="event3">Meetup Startup Vietnam</option>
                             </select>
                         </div>
+
                         <div class="filter-group">
                             <label for="historyDateFilter">Lọc theo ngày:</label>
                             <input type="date" id="historyDateFilter">
                         </div>
+
                         <button class="btn btn-primary" onclick="filterCheckinHistory()">
                             <i class="fas fa-filter"></i> Lọc
                         </button>
@@ -265,31 +233,16 @@
 
                     <div class="history-stats">
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-user-check"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="totalCheckins">25</h3>
-                                <p>Tổng check-in</p>
-                            </div>
+                            <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                            <div class="stat-info"><h3 id="totalCheckins">25</h3><p>Tổng check-in</p></div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="todayCheckins">8</h3>
-                                <p>Check-in hôm nay</p>
-                            </div>
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info"><h3 id="todayCheckins">8</h3><p>Check-in hôm nay</p></div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-calendar-day"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="activeEvents">3</h3>
-                                <p>Sự kiện đang diễn ra</p>
-                            </div>
+                            <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                            <div class="stat-info"><h3 id="activeEvents">3</h3><p>Sự kiện đang diễn ra</p></div>
                         </div>
                     </div>
 
@@ -305,67 +258,28 @@
                                 <th>Thao tác</th>
                             </tr>
                             </thead>
-                            <tbody id="checkinTableBody">
-                            <!-- Sample data -->
-                            <tr>
-                                <td>Nguyễn Văn A</td>
-                                <td>nguyenvana@email.com</td>
-                                <td>Hội thảo Công nghệ AI</td>
-                                <td>08/09/2025 09:30</td>
-                                <td><span class="status-badge success">Đã check-in</span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline">Chi tiết</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Trần Thị B</td>
-                                <td>tranthib@email.com</td>
-                                <td>Workshop Design Thinking</td>
-                                <td>08/09/2025 14:15</td>
-                                <td><span class="status-badge success">Đã check-in</span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline">Chi tiết</button>
-                                </td>
-                            </tr>
-                            </tbody>
+                            <tbody id="checkinTableBody"></tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
-            <!-- End Tabs -->
+
         </div>
     </section>
 </div>
 
 <!-- ================= Scripts ================= -->
 
-<!-- QR generate libs (nếu cần sinh QR đơn giản) -->
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-
-<!-- Chart.js (nếu bạn sử dụng trong thống kê) -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- QR Code Library (qrcode-generator) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
-
-<!-- jsQR: dùng để đọc QR từ camera (phục vụ qr-checkin.js) -->
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-
-<!-- WebSocket Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 
-<!-- Script của bạn -->
 <script src="../../js/core/auth.js"></script>
 <script src="../../js/core/websocket.js"></script>
 <script src="../../js/admin/notifications.js"></script>
-<script src="../../js/user/simple-qr.js"></script>
-<script src="../../js/admin/dashboard.js"></script>
 <script src="../../js/user/qr-checkin.js"></script>
 <script src="../../js/admin/feedback.js" defer></script>
-<script src="../../js/user/suggest-events.js"></script>
-<script src="../../js/user/my-tickets.js"></script>
-<script src="../../js/user/my-events.js"></script>
 
 </body>
 </html>

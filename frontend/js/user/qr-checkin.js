@@ -166,7 +166,7 @@ function fillCheckinForm(data) {
 
     document.getElementById("participantName").value = data.user.name;
     document.getElementById("participantEmail").value = data.user.email;
-    document.getElementById("participantPhone").value = data.user.phone || "";
+    document.getElementById("participantPhone").value = data.phone || data.ticket.phone || "";
 
     document.getElementById("checkinEventName").textContent = data.event.title;
     document.getElementById("checkinTime").textContent =
