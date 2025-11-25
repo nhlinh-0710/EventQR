@@ -9,12 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../../css/admin/dashboard.css">
-    <link rel="stylesheet" href="../../css/placehoders.css">
-    <link rel="stylesheet" href="../../css/user/qr-checkin.css">
-    <link rel="stylesheet" href="../../css/user/suggest-events.css">
-    <link rel="stylesheet" href="../../css/user/my-tickets.css">
-    <link rel="stylesheet" href="../../css/user/my-events.css">
-
+    <link rel="stylesheet" href="../../css/admin/stactics.css">
 </head>
 
 <body>
@@ -80,13 +75,9 @@
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 id="pageTitle">Dashboard</h1>
+                <h1>Thống Kê & Báo Cáo</h1>
             </div>
             <div class="header-right">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Tìm kiếm sự kiện...">
-                </div>
                 <div class="notifications">
                     <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()">
                         <i class="fas fa-bell"></i>
@@ -115,94 +106,85 @@
                 </div>
             </div>
         </header>
-        <!-- Analytics Section -->
-        <section id="analytics-section" class="content-section active">
-            <div class="analytics-card">
-                <h2>Thống Kê & Báo Cáo</h2>
-                <!-- Bộ lọc từ ngày đến ngày -->
-                <div class="date-filter">
-                    <label for="startDate">Từ ngày:</label>
-                    <input type="date" id="startDate">
-                    <label for="endDate">Đến ngày:</label>
-                    <input type="date" id="endDate">
-                    <button onclick="filterChart()">Lọc</button>
+
+        <!-- Statistics Content -->
+        <div class="statistics-container">
+            <!-- Loading State -->
+            <div id="loading-state" class="loading-state">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Đang tải thống kê...</p>
+            </div>
+
+            <!-- Main Chart Card -->
+            <div id="main-chart-section" class="main-chart-card" style="display: none;">
+                <!-- Date Filter -->
+                <div class="date-filter-section">
+                    <div class="filter-label">Từ ngày:</div>
+                    <input type="date" id="startDate" class="date-input">
+                    
+                    <div class="filter-label">Đến ngày:</div>
+                    <input type="date" id="endDate" class="date-input">
+                    
+                    <button onclick="applyDateFilter()" class="filter-btn">Lọc</button>
                 </div>
-                <!-- Biểu đồ -->
-                <div class="chart-container">
-                    <canvas id="areaChart"></canvas>
+
+                <!-- Main Chart -->
+                <div class="main-chart-container">
+                    <canvas id="mainChart"></canvas>
                 </div>
             </div>
-        </section>
+
+            <!-- Event Details Table -->
+            <div id="event-table-section" class="event-table-section" style="display: none;">
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Chi Tiết Đăng Ký Theo Sự Kiện</h3>
+                    </div>
+                    <div class="table-container">
+                        <table class="event-stats-table">
+                            <thead>
+                                <tr>
+                                    <th>Tên Sự Kiện</th>
+                                    <th>Ngày Tổ Chức</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Số Lượng Đăng Ký</th>
+                                </tr>
+                            </thead>
+                            <tbody id="event-stats-tbody">
+                                <!-- Động từ JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <i class="fas fa-chart-pie"></i>
+                <h3>Chưa Có Dữ Liệu Thống Kê</h3>
+                <p>Hãy tạo sự kiện đầu tiên của bạn để xem thống kê</p>
+                <a href="create_event.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Tạo Sự Kiện
+                </a>
+            </div>
+        </div>
     </div>
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const ctx = document.getElementById('areaChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8'],
-                    datasets: [{
-                        label: 'Người tham dự',
-                        data: [80, 10, 50, 70, 80, 70, 56, 140,],
-                        fill: true,
-                        backgroundColor: 'rgba(54, 162, 235, 0.3)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        pointBackgroundColor: 'white',
-                        pointBorderColor: 'rgba(54, 162, 235, 1)',
-                        pointRadius: 5,
-                        pointHoverRadius: 7
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                font: {
-                                    family: 'Poppins'
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 50
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-
-    <!-- QR Code Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 
     <!-- WebSocket Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     
-    <!-- Auth Check - Must load first -->
+    <!-- Core Scripts -->
     <script src="../../js/core/auth.js"></script>
     <script src="../../js/core/websocket.js"></script>
     <script src="../../js/admin/notifications.js"></script>
-
-    <script src="../../js/user/simple-qr.js"></script>
     <script src="../../js/admin/dashboard.js"></script>
-    <script src="../../js/user/qr-checkin.js"></script>
-    <script src="../../js/admin/feedback.js" defer></script>
-    <script src="../../js/user/suggest-events.js"></script>
-    <script src="../../js/user/my-tickets.js"></script>
-    <!-- my-events.js không tồn tại, đã xóa reference -->
-</body>
-
-</html>
+    
+    <!-- Statistics Script -->
+    <script src="../../js/admin/statistics.js"></script>
 </body>
 
 </html>

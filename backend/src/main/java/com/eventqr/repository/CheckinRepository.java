@@ -14,5 +14,11 @@ public interface CheckinRepository extends JpaRepository<CheckInHistory, Long> {
      */
     @Query("SELECT COUNT(c) > 0 FROM CheckInHistory c WHERE c.eventId = :eventId AND c.userId = :userId")
     boolean existsByEventIdAndUserId(@Param("eventId") Long eventId, @Param("userId") Long userId);
+    
+    /**
+     * Đếm số check-in của một sự kiện
+     */
+    @Query("SELECT COUNT(c) FROM CheckInHistory c WHERE c.eventId = :eventId")
+    int countByEventId(@Param("eventId") Long eventId);
 }
 

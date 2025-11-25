@@ -241,5 +241,129 @@ public class NotificationService {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Gửi thông báo cho user khi sự kiện sắp bắt đầu (1 giờ trước)
+     * 
+     * @param userId ID của user (người nhận thông báo)
+     * @param eventId ID của sự kiện
+     * @param eventTitle Tên sự kiện
+     * @param startTime Thời gian bắt đầu sự kiện
+     */
+    @Transactional
+    public void sendEventStartSoonNotification(Long userId, Long eventId, String eventTitle, java.time.LocalDateTime startTime) {
+        try {
+            // Validate input
+            if (userId == null || eventId == null || eventTitle == null) {
+                throw new IllegalArgumentException("Thông tin không đầy đủ để gửi thông báo sự kiện sắp bắt đầu");
+            }
+
+            String title = "Sự kiện sắp bắt đầu";
+            String timeStr = startTime != null 
+                ? startTime.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                : "sắp tới";
+            String message = String.format("Sự kiện \"%s\" sẽ bắt đầu vào %s. Hãy chuẩn bị tham gia!", 
+                eventTitle, timeStr);
+
+            // Kiểm tra xem đã gửi thông báo này chưa (tránh duplicate)
+            if (notificationRepository.existsByUserIdAndEventIdAndTitle(userId, eventId, title)) {
+                System.out.println("⚠️ Đã gửi thông báo sự kiện sắp bắt đầu cho user " + userId + " về event " + eventId);
+                return;
+            }
+
+            // Lưu vào database
+            Notification notification = new Notification();
+            notification.setUserId(userId);
+            notification.setEventId(eventId);
+            notification.setTitle(title);
+            notification.setMessage(message);
+            notification.setStatus(Notification.NotificationStatus.unread);
+            
+            Notification savedNotification = notificationRepository.save(notification);
+
+            // Tạo JSON response để gửi qua WebSocket
+            Map<String, Object> notificationData = new HashMap<>();
+            notificationData.put("notificationId", savedNotification.getNotificationId());
+            notificationData.put("userId", savedNotification.getUserId());
+            notificationData.put("eventId", savedNotification.getEventId());
+            notificationData.put("title", savedNotification.getTitle());
+            notificationData.put("message", savedNotification.getMessage());
+            notificationData.put("status", savedNotification.getStatus().name());
+            notificationData.put("createdAt", savedNotification.getCreatedAt() != null 
+                ? savedNotification.getCreatedAt().toString() 
+                : java.time.LocalDateTime.now().toString());
+            notificationData.put("type", "event_start_soon"); // Loại thông báo
+
+            // Gửi thông báo realtime qua WebSocket tới topic: /topic/user/{userId}
+            String destination = "/topic/user/" + userId;
+            messagingTemplate.convertAndSend(destination, notificationData);
+            
+            System.out.println("✅ Đã gửi thông báo sự kiện sắp bắt đầu WebSocket tới: " + destination);
+        } catch (Exception e) {
+            // Log lỗi nhưng không throw
+            System.err.println("❌ Lỗi khi gửi thông báo sự kiện sắp bắt đầu WebSocket: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gửi thông báo cho user khi sự kiện đã kết thúc (yêu cầu feedback)
+     * 
+     * @param userId ID của user (người nhận thông báo)
+     * @param eventId ID của sự kiện
+     * @param eventTitle Tên sự kiện
+     */
+    @Transactional
+    public void sendEventEndedNotification(Long userId, Long eventId, String eventTitle) {
+        try {
+            // Validate input
+            if (userId == null || eventId == null || eventTitle == null) {
+                throw new IllegalArgumentException("Thông tin không đầy đủ để gửi thông báo sự kiện đã kết thúc");
+            }
+
+            String title = "Sự kiện đã kết thúc";
+            String message = String.format("Sự kiện \"%s\" đã kết thúc. Hãy chia sẻ đánh giá của bạn để giúp chúng tôi cải thiện!", 
+                eventTitle);
+
+            // Kiểm tra xem đã gửi thông báo này chưa (tránh duplicate)
+            if (notificationRepository.existsByUserIdAndEventIdAndTitle(userId, eventId, title)) {
+                System.out.println("⚠️ Đã gửi thông báo sự kiện đã kết thúc cho user " + userId + " về event " + eventId);
+                return;
+            }
+
+            // Lưu vào database
+            Notification notification = new Notification();
+            notification.setUserId(userId);
+            notification.setEventId(eventId);
+            notification.setTitle(title);
+            notification.setMessage(message);
+            notification.setStatus(Notification.NotificationStatus.unread);
+            
+            Notification savedNotification = notificationRepository.save(notification);
+
+            // Tạo JSON response để gửi qua WebSocket
+            Map<String, Object> notificationData = new HashMap<>();
+            notificationData.put("notificationId", savedNotification.getNotificationId());
+            notificationData.put("userId", savedNotification.getUserId());
+            notificationData.put("eventId", savedNotification.getEventId());
+            notificationData.put("title", savedNotification.getTitle());
+            notificationData.put("message", savedNotification.getMessage());
+            notificationData.put("status", savedNotification.getStatus().name());
+            notificationData.put("createdAt", savedNotification.getCreatedAt() != null 
+                ? savedNotification.getCreatedAt().toString() 
+                : java.time.LocalDateTime.now().toString());
+            notificationData.put("type", "event_ended"); // Loại thông báo
+
+            // Gửi thông báo realtime qua WebSocket tới topic: /topic/user/{userId}
+            String destination = "/topic/user/" + userId;
+            messagingTemplate.convertAndSend(destination, notificationData);
+            
+            System.out.println("✅ Đã gửi thông báo sự kiện đã kết thúc WebSocket tới: " + destination);
+        } catch (Exception e) {
+            // Log lỗi nhưng không throw
+            System.err.println("❌ Lỗi khi gửi thông báo sự kiện đã kết thúc WebSocket: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
 
