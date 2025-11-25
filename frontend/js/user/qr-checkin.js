@@ -152,10 +152,20 @@ function updateScanResultSuccess(data) {
 // NHẬP MÃ TAY
 // =====================================================
 function processManualQRCode() {
-    const txt = document.getElementById("manualQRCode").value.trim();
-    if (!txt) return showNotification("Chưa nhập mã!", "error");
+    const code = document.getElementById("manualQRCode").value.trim();
+    if (!code) return showNotification("Chưa nhập mã!", "error");
 
-    onQRDetected(txt);
+    fetch(`http://localhost:8080/api/checkin-by-code?code=${encodeURIComponent(code)}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success === false) {
+                return showNotification(data.message, "error");
+            }
+
+            updateScanResultSuccess(data);
+            fillCheckinForm(data);
+        })
+        .catch(() => showNotification("Mã QR không hợp lệ!", "error"));
 }
 
 // =====================================================

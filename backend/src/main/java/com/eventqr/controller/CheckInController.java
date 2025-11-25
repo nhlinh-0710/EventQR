@@ -99,4 +99,52 @@ public class CheckInController {
         m.put("message", msg);
         return m;
     }
+    @GetMapping("/checkin-by-code")
+public ResponseEntity<?> checkInByCode(@RequestParam("code") String code) {
+    try {
+        // Mã có dạng: #8-E5-U1
+        String cleaned = code.replace("#", "").trim();   // => 8-E5-U1
+        String[] parts = cleaned.split("-");
+
+        if (parts.length != 3) {
+            throw new IllegalArgumentException("Mã QR không hợp lệ!");
+        }
+
+        Long ticketId = Long.parseLong(parts[0]);       // 8
+        Long eventId = Long.parseLong(parts[1].substring(1));  // E5 -> 5
+        Long userId = Long.parseLong(parts[2].substring(1));   // U1 -> 1
+
+        // Lấy ticket
+        EventTicket ticket = ticketRepo.findById(ticketId)
+                .orElseThrow(() -> new IllegalArgumentException("Vé không tồn tại!"));
+
+        // Lấy event
+        Event event = eventRepo.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Sự kiện không tồn tại!"));
+
+        // Lấy user
+        Account user = accountRepo.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Người dùng không tồn tại!"));
+
+        // Kiểm tra trùng event
+        if (!ticket.getEventId().equals(event.getEventId())) {
+            throw new IllegalArgumentException("Mã QR không đúng sự kiện!");
+        }
+
+        // Không cho check-in trùng
+        if (checkRepo.existsByTicket_TicketId(ticketId)) {
+            throw new IllegalStateException("Vé này đã check-in!");
+        }
+
+        // Lưu lịch sử
+        CheckInHistory history = new CheckInHistory(ticket, userId, eventId);
+        checkRepo.save(history);
+
+        return ResponseEntity.ok(new CheckinResponse(event, ticket, user));
+
+    } catch (Exception e) {
+        return ResponseEntity.badRequest().body(error(e.getMessage()));
+    }
+}
+
 }
