@@ -52,10 +52,6 @@
             <i class="fas fa-qrcode"></i>
             <span>QR Check-in</span>
         </a>
-        <a href="attendees.html" class="menu-link">
-            <i class="fas fa-users"></i>
-            <span>Người Tham Dự</span>
-        </a>
         <a href="static.html" class="menu-link">
             <i class="fas fa-chart-bar"></i>
             <span>Thống Kê</span>
@@ -87,10 +83,6 @@
             <h1 id="pageTitle">QR Check-in</h1>
         </div>
         <div class="header-right">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Tìm kiếm sự kiện...">
-            </div>
             <div class="notifications">
                 <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()">
                     <i class="fas fa-bell"></i>
@@ -211,24 +203,41 @@
                 <div class="checkin-history">
 
                     <div class="history-filters">
-                        <div class="filter-group">
-                            <label for="historyEventFilter">Lọc theo sự kiện:</label>
-                            <select id="historyEventFilter">
-                                <option value="">Tất cả sự kiện</option>
-                                <option value="event1">Hội thảo Công nghệ AI</option>
-                                <option value="event2">Workshop Design Thinking</option>
-                                <option value="event3">Meetup Startup Vietnam</option>
-                            </select>
-                        </div>
+                        <div class="filter-container">
+                            <div class="filter-group">
+                                <label for="historyEventFilter">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    Sự kiện
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-chevron-down"></i>
+                                    <select id="historyEventFilter">
+                                        <option value="">Tất cả sự kiện</option>
+                                        <!-- Các sự kiện sẽ được load từ API -->
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div class="filter-group">
-                            <label for="historyDateFilter">Lọc theo ngày:</label>
-                            <input type="date" id="historyDateFilter">
-                        </div>
+                            <div class="filter-group">
+                                <label for="historyDateFilter">
+                                    <i class="fas fa-calendar-day"></i>
+                                    Ngày
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-calendar"></i>
+                                    <input type="date" id="historyDateFilter" placeholder="Chọn ngày...">
+                                </div>
+                            </div>
 
-                        <button class="btn btn-primary" onclick="filterCheckinHistory()">
-                            <i class="fas fa-filter"></i> Lọc
-                        </button>
+                            <div class="filter-actions">
+                                <button class="btn btn-primary" onclick="filterCheckinHistory()">
+                                    <i class="fas fa-filter"></i> Lọc
+                                </button>
+                                <button class="btn btn-outline" onclick="resetFilters()">
+                                    <i class="fas fa-redo"></i> Đặt lại
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="history-stats">

@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupTabs();
     loadCheckinHistory();
     updateCheckinStats();
+    loadOrganizerEvents(); // Load các sự kiện của organizer
 });
 
 // =====================================================
@@ -191,7 +192,7 @@ function fillCheckinForm(data) {
 // =====================================================
 // XÁC NHẬN CHECK-IN
 // =====================================================
-function confirmCheckin() {
+async function confirmCheckin() {
     const form = document.getElementById("checkinForm");
     const data = JSON.parse(form.dataset.apiData);
 
@@ -201,22 +202,15 @@ function confirmCheckin() {
 
     if (!name || !email) return showNotification("Nhập đầy đủ thông tin!", "error");
 
-    const record = {
-        id: Date.now(),
-        participant: { name, email, phone },
-        qrData: currentQRPayload,
-        eventName: data.event.title,
-        checkinTime: new Date().toISOString(),
-        status: "success"
-    };
-
-    storeCheckinRecord(record);
-    addCheckinToHistory(record);
-
-    updateCheckinStats();
+    // Backend đã lưu check-in rồi (khi gọi /api/checkin hoặc /api/checkin-by-code)
+    // Giờ chỉ cần reload lại danh sách
+    
     showNotification("Check-in thành công!", "success");
-
     cancelCheckin();
+    
+    // Reload lại lịch sử và thống kê từ API
+    await loadCheckinHistory();
+    await updateCheckinStats();
 }
 
 function cancelCheckin() {
@@ -226,17 +220,90 @@ function cancelCheckin() {
 }
 
 // =====================================================
-// LỊCH SỬ CHECK-IN
+// LỊCH SỬ CHECK-IN - GỌI TỪ API
 // =====================================================
 function storeCheckinRecord(record) {
-    let list = JSON.parse(localStorage.getItem("checkinHistory") || "[]");
-    list.unshift(record);
-    localStorage.setItem("checkinHistory", JSON.stringify(list));
+    // Không còn lưu localStorage nữa - backend tự lưu rồi
+    console.log("✅ Check-in đã được lưu vào database");
 }
 
-function loadCheckinHistory() {
-    let list = JSON.parse(localStorage.getItem("checkinHistory") || "[]");
-    list.forEach(r => addCheckinToHistory(r, false));
+async function loadCheckinHistory() {
+    // Lấy organizerId từ localStorage
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) {
+        console.warn("⚠️ Chưa đăng nhập");
+        showNotification("Vui lòng đăng nhập để xem lịch sử check-in", "error");
+        return;
+    }
+    
+    let organizerId;
+    try {
+        const userData = JSON.parse(currentUser);
+        organizerId = userData.user_id;
+        
+        console.log("👤 User data:", userData);
+        console.log("🆔 Organizer ID:", organizerId);
+        
+        if (!organizerId) {
+            console.warn("⚠️ Không tìm thấy organizerId");
+            showNotification("Không tìm thấy thông tin organizer", "error");
+            return;
+        }
+    } catch (error) {
+        console.error("❌ Lỗi parse user data:", error);
+        showNotification("Lỗi xác thực người dùng", "error");
+        return;
+    }
+    
+    try {
+        // Gọi API lấy check-in history
+        const url = `http://localhost:8080/api/checkin-history?organizerId=${organizerId}`;
+        console.log("🌐 Gọi API:", url);
+        
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        
+        console.log("📡 Response status:", response.status);
+        console.log("📡 Response OK:", response.ok);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("❌ Error response:", errorText);
+            throw new Error(`HTTP ${response.status}: ${errorText || 'Không thể tải lịch sử check-in'}`);
+        }
+        
+        const checkins = await response.json();
+        console.log("✅ Đã tải", checkins.length, "check-in từ server");
+        console.log("📦 Dữ liệu check-in:", checkins);
+        
+        // Clear bảng và load lại
+        const body = document.getElementById("checkinTableBody");
+        body.innerHTML = "";
+        
+        if (checkins.length === 0) {
+            body.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 30px; color: #999;">
+                        <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                        Chưa có check-in nào
+                    </td>
+                </tr>
+            `;
+        } else {
+            // Hiển thị từng check-in
+            checkins.forEach(checkin => {
+                addCheckinToHistoryFromAPI(checkin);
+            });
+        }
+        
+    } catch (error) {
+        console.error("❌ Lỗi khi tải lịch sử check-in:", error);
+        showNotification("Không thể tải lịch sử check-in: " + error.message, "error");
+    }
 }
 
 function addCheckinToHistory(rec, scroll = true) {
@@ -257,6 +324,26 @@ function addCheckinToHistory(rec, scroll = true) {
     if (scroll) row.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
+// Function mới để thêm check-in từ API
+function addCheckinToHistoryFromAPI(checkin) {
+    const body = document.getElementById("checkinTableBody");
+    
+    const row = document.createElement("tr");
+    row.dataset.eventId = checkin.eventId; // Lưu eventId để lọc
+    row.dataset.checkinId = checkin.checkinId;
+    
+    row.innerHTML = `
+        <td>${checkin.userName}</td>
+        <td>${checkin.userEmail}</td>
+        <td>${checkin.eventName}</td>
+        <td>${checkin.checkinTime}</td>
+        <td><span class="status-badge success">Đã check-in</span></td>
+        <td><button class="btn btn-sm btn-outline" onclick="viewCheckinFromAPI(${checkin.checkinId})">Chi tiết</button></td>
+    `;
+    
+    body.appendChild(row);
+}
+
 function viewCheckin(id) {
     const list = JSON.parse(localStorage.getItem("checkinHistory") || "[]");
     const rec = list.find(r => r.id == id);
@@ -271,20 +358,247 @@ Thời gian: ${new Date(rec.checkinTime).toLocaleString("vi-VN")}
 `);
 }
 
+// Function mới để xem chi tiết check-in từ API
+function viewCheckinFromAPI(checkinId) {
+    const row = document.querySelector(`tr[data-checkin-id="${checkinId}"]`);
+    if (!row) return;
+    
+    const cells = row.querySelectorAll("td");
+    alert(`
+Tên: ${cells[0].textContent}
+Email: ${cells[1].textContent}
+Sự kiện: ${cells[2].textContent}
+Thời gian check-in: ${cells[3].textContent}
+Trạng thái: Đã check-in
+`);
+}
+
 // =====================================================
-// THỐNG KÊ
+// THỐNG KÊ - TỪ API
 // =====================================================
-function updateCheckinStats() {
-    const list = JSON.parse(localStorage.getItem("checkinHistory") || "[]");
+async function updateCheckinStats() {
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) return;
+    
+    try {
+        const userData = JSON.parse(currentUser);
+        const organizerId = userData.user_id;
+        
+        const url = `http://localhost:8080/api/checkin-history?organizerId=${organizerId}`;
+        const response = await fetch(url);
+        
+        if (!response.ok) throw new Error("Không thể tải thống kê");
+        
+        const checkins = await response.json();
+        
+        // Tổng check-in
+        document.getElementById("totalCheckins").textContent = checkins.length;
+        
+        // Check-in hôm nay
+        const today = new Date().toLocaleDateString("vi-VN");
+        const todayCheckins = checkins.filter(c => {
+            // Format từ API: "dd/MM/yyyy HH:mm:ss"
+            const checkinDate = c.checkinTime.split(" ")[0]; // Lấy phần ngày
+            return checkinDate === today.split("/").reverse().join("/");
+        }).length;
+        document.getElementById("todayCheckins").textContent = todayCheckins;
+        
+        // Số sự kiện unique
+        const uniqueEvents = new Set(checkins.map(c => c.eventId));
+        document.getElementById("activeEvents").textContent = uniqueEvents.size;
+        
+    } catch (error) {
+        console.error("Lỗi khi cập nhật thống kê:", error);
+    }
+}
 
-    document.getElementById("totalCheckins").textContent = list.length;
+// =====================================================
+// LOAD SỰ KIỆN CỦA ORGANIZER
+// =====================================================
+async function loadOrganizerEvents() {
+    const eventFilter = document.getElementById("historyEventFilter");
+    if (!eventFilter) return;
+    
+    // Lấy organizerId từ localStorage
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) {
+        console.warn("Chưa đăng nhập");
+        return;
+    }
+    
+    let organizerId;
+    try {
+        const userData = JSON.parse(currentUser);
+        organizerId = userData.user_id;
+        
+        if (!organizerId) {
+            console.warn("Không tìm thấy organizerId");
+            return;
+        }
+    } catch (error) {
+        console.error("Lỗi parse user data:", error);
+        return;
+    }
+    
+    // Hiển thị loading state
+    eventFilter.innerHTML = '<option value="">Đang tải sự kiện...</option>';
+    eventFilter.disabled = true;
+    
+    try {
+        // API đúng: /api/events/my-events
+        const url = `http://localhost:8080/api/events/my-events?organizerId=${organizerId}`;
+        
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: Không thể tải danh sách sự kiện`);
+        }
+        
+        const events = await response.json();
+        console.log("✅ Đã tải được", events.length, "sự kiện");
+        console.log("📦 Dữ liệu events:", events);
+        
+        // Kiểm tra cấu trúc event đầu tiên
+        if (events.length > 0) {
+            console.log("🔍 Event đầu tiên:", {
+                eventId: events[0].eventId,
+                title: events[0].title,
+                "có eventId?": events[0].eventId !== undefined
+            });
+        }
+        
+        // Xóa loading và populate dropdown
+        eventFilter.innerHTML = '<option value="">Tất cả sự kiện</option>';
+        eventFilter.disabled = false;
+        
+        if (events.length === 0) {
+            const option = document.createElement("option");
+            option.value = "";
+            option.textContent = "Chưa có sự kiện nào";
+            option.disabled = true;
+            eventFilter.appendChild(option);
+        } else {
+            // Thêm các sự kiện thực tế - SỬA: event.id → event.eventId
+            events.forEach(event => {
+                const option = document.createElement("option");
+                option.value = event.eventId; // ✅ SỬA: Dùng eventId thay vì id
+                option.textContent = event.title;
+                eventFilter.appendChild(option);
+                
+                console.log("✅ Thêm option:", event.title, "với eventId:", event.eventId);
+            });
+            
+            console.log("📋 Tổng số option trong dropdown:", eventFilter.options.length);
+            
+            // Cập nhật eventId cho các check-in cũ dựa trên tên sự kiện
+            updateOldCheckinWithEventId(events);
+        }
+        
+    } catch (error) {
+        console.error("❌ Lỗi khi tải sự kiện:", error);
+        eventFilter.innerHTML = '<option value="">Lỗi tải sự kiện</option>';
+        eventFilter.disabled = false;
+        showNotification("Không thể tải danh sách sự kiện: " + error.message, "error");
+    }
+}
 
-    document.getElementById("todayCheckins").textContent =
-        list.filter(r =>
-            new Date(r.checkinTime).toDateString() === new Date().toDateString()
-        ).length;
+// =====================================================
+// CẬP NHẬT EVENT ID CHO CHECK-IN CŨ - KHÔNG CẦN NỮA
+// =====================================================
+function updateOldCheckinWithEventId(events) {
+    // Không còn dùng localStorage nữa, không cần function này
+    console.log("ℹ️ Không còn sử dụng localStorage cho check-in");
+}
 
-    document.getElementById("activeEvents").textContent = "1";
+// =====================================================
+// LỌC LỊCH SỬ - SỬ DỤNG DOM FILTER
+// =====================================================
+function filterCheckinHistory() {
+    const eventFilterElement = document.getElementById("historyEventFilter");
+    const dateFilterElement = document.getElementById("historyDateFilter");
+    
+    const eventFilter = eventFilterElement.value;
+    const dateFilter = dateFilterElement.value;
+    
+    const body = document.getElementById("checkinTableBody");
+    const allRows = body.querySelectorAll("tr[data-event-id]");
+    
+    console.log("===========================================");
+    console.log("🔍 BẮT ĐẦU LỌC");
+    console.log("📌 Filter - Sự kiện ID:", eventFilter);
+    console.log("📌 Filter - Ngày:", dateFilter);
+    console.log("📊 Tổng số row:", allRows.length);
+    console.log("-------------------------------------------");
+    
+    let visibleCount = 0;
+    
+    allRows.forEach(row => {
+        const rowEventId = row.dataset.eventId;
+        const rowCheckinTime = row.querySelectorAll("td")[3].textContent; // Cột thời gian
+        
+        let showRow = true;
+        
+        // Lọc theo sự kiện
+        if (eventFilter) {
+            if (String(rowEventId) !== String(eventFilter)) {
+                showRow = false;
+            }
+        }
+        
+        // Lọc theo ngày
+        if (dateFilter && showRow) {
+            // dateFilter format: "YYYY-MM-DD"
+            // rowCheckinTime format: "dd/MM/yyyy HH:mm:ss"
+            const checkinDate = rowCheckinTime.split(" ")[0]; // "dd/MM/yyyy"
+            const [day, month, year] = checkinDate.split("/");
+            const rowDateFormatted = `${year}-${month}-${day}`; // Convert sang "YYYY-MM-DD"
+            
+            if (rowDateFormatted !== dateFilter) {
+                showRow = false;
+            }
+        }
+        
+        // Hiển thị hoặc ẩn row
+        row.style.display = showRow ? "" : "none";
+        if (showRow) visibleCount++;
+    });
+    
+    console.log("✅ Kết quả hiển thị:", visibleCount, "record");
+    console.log("===========================================");
+    
+    // Hiển thị thông báo nếu không có kết quả
+    if (visibleCount === 0) {
+        body.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 30px; color: #999;">
+                    <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                    Không tìm thấy kết quả phù hợp
+                </td>
+            </tr>
+        `;
+    }
+    
+    showNotification(`Tìm thấy ${visibleCount} kết quả`, "success");
+}
+
+function resetFilters() {
+    document.getElementById("historyEventFilter").value = "";
+    document.getElementById("historyDateFilter").value = "";
+    
+    // Hiển thị lại tất cả các row
+    const body = document.getElementById("checkinTableBody");
+    const allRows = body.querySelectorAll("tr[data-event-id]");
+    
+    allRows.forEach(row => {
+        row.style.display = "";
+    });
+    
+    showNotification("Đã đặt lại bộ lọc", "info");
 }
 
 // =====================================================
@@ -319,3 +633,43 @@ function showNotification(msg, type = "info") {
     document.body.appendChild(box);
     setTimeout(() => box.remove(), 3000);
 }
+
+// =====================================================
+// DEBUG: Xem dữ liệu check-in từ API
+// =====================================================
+async function debugCheckinData() {
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) {
+        console.log("❌ Chưa đăng nhập");
+        return;
+    }
+    
+    try {
+        const userData = JSON.parse(currentUser);
+        const organizerId = userData.user_id;
+        
+        const url = `http://localhost:8080/api/checkin-history?organizerId=${organizerId}`;
+        const response = await fetch(url);
+        const checkins = await response.json();
+        
+        if (checkins.length === 0) {
+            console.log("❌ Chưa có dữ liệu check-in nào");
+            return;
+        }
+        
+        console.log("📊 DANH SÁCH CHECK-IN:", checkins.length, "record");
+        console.table(checkins.map(c => ({
+            "ID": c.checkinId,
+            "Tên": c.userName,
+            "Email": c.userEmail,
+            "Sự kiện": c.eventName,
+            "Event ID": c.eventId,
+            "Thời gian": c.checkinTime
+        })));
+        
+        console.log("📦 Raw data:", checkins);
+    } catch (error) {
+        console.error("❌ Lỗi:", error);
+    }
+}
+// Gọi trong console: debugCheckinData()

@@ -15,6 +15,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load user data
     loadUserData();
     
+    // Load dashboard statistics
+    loadDashboardStatistics();
+    
+    // Load recent events
+    loadRecentEvents();
+    
     // Apply role-based menu visibility
     applyRoleBasedMenu(userData.role);
     
@@ -258,6 +264,20 @@ function updateActiveMenuItem(clickedItem) {
 
 // Update page title
 function updatePageTitle(section) {
+    const pageTitle = document.getElementById('pageTitle');
+    if (!pageTitle) return;
+    
+    // ⚠️ Check nếu title trong HTML đã khác "Dashboard", KHÔNG override
+    // Nghĩa là đang ở trang riêng (events.html, profile.html...) đã có title sẵn
+    const currentTitle = pageTitle.textContent.trim();
+    const protectedTitles = ['Sự Kiện của tôi', 'Tạo Sự Kiện', 'QR Check-in', 'Thống Kê', 'Feedback', 'Hồ Sơ'];
+    
+    if (protectedTitles.includes(currentTitle)) {
+        console.log('✅ Giữ nguyên title:', currentTitle);
+        return; // Không thay đổi title
+    }
+    
+    // Chỉ update khi ở trang dashboard index.html (multi-section)
     const titles = {
         'dashboard': 'Dashboard',
         'events': 'Quản Lý Sự Kiện',
@@ -271,10 +291,7 @@ function updatePageTitle(section) {
         'feedback': 'Feedback'
     };
 
-    const pageTitle = document.getElementById('pageTitle');
-    if (pageTitle) {
-        pageTitle.textContent = titles[section] || 'Dashboard';
-    }
+    pageTitle.textContent = titles[section] || 'Dashboard';
 }
 
 // Filter events based on status
@@ -539,3 +556,197 @@ window.addEventListener('popstate', function() {
         }
     });
 });
+
+// ===== DASHBOARD STATISTICS FUNCTIONS =====
+
+/**
+ * Load dashboard statistics from API
+ */
+async function loadDashboardStatistics() {
+    try {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const organizerId = currentUser ? currentUser.user_id : null;
+        
+        // Build API URL
+        let apiUrl = 'http://localhost:8080/api/dashboard/statistics';
+        if (organizerId) {
+            apiUrl += `?organizerId=${organizerId}`;
+        }
+        
+        console.log('📊 Fetching dashboard statistics from:', apiUrl);
+        
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const stats = await response.json();
+        console.log('✅ Dashboard statistics loaded:', stats);
+        
+        // Update UI with real data
+        updateDashboardStats(stats);
+        
+    } catch (error) {
+        console.error('❌ Error loading dashboard statistics:', error);
+        showNotification('Không thể tải thống kê dashboard', 'error');
+    }
+}
+
+/**
+ * Update dashboard statistics in UI
+ */
+function updateDashboardStats(stats) {
+    // Update active events count
+    const activeEventsElement = document.querySelector('.stat-card:nth-child(1) .stat-info h3');
+    if (activeEventsElement) {
+        activeEventsElement.textContent = stats.activeEvents || 0;
+    }
+    
+    // Update total attendees count
+    const attendeesElement = document.querySelector('.stat-card:nth-child(2) .stat-info h3');
+    if (attendeesElement) {
+        attendeesElement.textContent = formatNumber(stats.totalAttendees || 0);
+    }
+    
+    // Update tickets sold count
+    const ticketsElement = document.querySelector('.stat-card:nth-child(3) .stat-info h3');
+    if (ticketsElement) {
+        ticketsElement.textContent = formatNumber(stats.totalTicketsSold || 0);
+    }
+    
+    // Update revenue
+    const revenueElement = document.querySelector('.stat-card:nth-child(4) .stat-info h3');
+    if (revenueElement) {
+        revenueElement.textContent = formatRevenue(stats.totalRevenue || 0);
+    }
+}
+
+/**
+ * Load recent events from API
+ */
+async function loadRecentEvents() {
+    try {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const organizerId = currentUser ? currentUser.user_id : null;
+        
+        // Build API URL
+        let apiUrl = 'http://localhost:8080/api/dashboard/recent-events?limit=5';
+        if (organizerId) {
+            apiUrl += `&organizerId=${organizerId}`;
+        }
+        
+        console.log('📅 Fetching recent events from:', apiUrl);
+        
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const events = await response.json();
+        console.log('✅ Recent events loaded:', events);
+        
+        // Update UI with real events
+        updateRecentEventsList(events);
+        
+    } catch (error) {
+        console.error('❌ Error loading recent events:', error);
+        showNotification('Không thể tải danh sách sự kiện gần đây', 'error');
+    }
+}
+
+/**
+ * Update recent events list in UI
+ */
+function updateRecentEventsList(events) {
+    const eventsList = document.querySelector('.events-list');
+    if (!eventsList) return;
+    
+    if (!events || events.length === 0) {
+        eventsList.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #999;">
+                <i class="fas fa-calendar-times" style="font-size: 48px; margin-bottom: 16px;"></i>
+                <p>Chưa có sự kiện nào</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Clear current list
+    eventsList.innerHTML = '';
+    
+    // Add each event
+    events.forEach(event => {
+        const eventItem = createEventItem(event);
+        eventsList.appendChild(eventItem);
+    });
+}
+
+/**
+ * Create event item element
+ */
+function createEventItem(event) {
+    const eventItem = document.createElement('div');
+    eventItem.className = 'event-item';
+    
+    // Format date
+    const eventDate = event.startTime ? new Date(event.startTime) : new Date();
+    const day = eventDate.getDate();
+    const month = eventDate.toLocaleDateString('vi-VN', { month: 'short' });
+    
+    // Determine event status
+    const now = new Date();
+    const startTime = new Date(event.startTime);
+    const endTime = new Date(event.endTime);
+    
+    let status = 'upcoming';
+    let statusText = 'Sắp diễn ra';
+    
+    if (now > endTime) {
+        status = 'completed';
+        statusText = 'Đã hoàn thành';
+    } else if (now >= startTime && now <= endTime) {
+        status = 'ongoing';
+        statusText = 'Đang diễn ra';
+    }
+    
+    // Count participants (from maxParticipants or default)
+    const maxParticipants = event.maxParticipants || 0;
+    
+    eventItem.innerHTML = `
+        <div class="event-date">
+            <span class="day">${day}</span>
+            <span class="month">${month}</span>
+        </div>
+        <div class="event-info">
+            <h4>${event.title || 'Sự kiện'}</h4>
+            <p><i class="fas fa-map-marker-alt"></i> ${event.location || 'Chưa có địa điểm'}</p>
+            <p><i class="fas fa-users"></i> ${maxParticipants} người tham dự</p>
+        </div>
+        <div class="event-status">
+            <span class="status ${status}">${statusText}</span>
+        </div>
+    `;
+    
+    return eventItem;
+}
+
+/**
+ * Format number with thousand separators
+ */
+function formatNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+/**
+ * Format revenue with VND suffix
+ */
+function formatRevenue(revenue) {
+    if (revenue >= 1000000) {
+        return (revenue / 1000000).toFixed(1) + 'M';
+    } else if (revenue >= 1000) {
+        return (revenue / 1000).toFixed(1) + 'K';
+    }
+    return revenue.toString();
+}

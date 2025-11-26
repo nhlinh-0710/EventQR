@@ -1,6 +1,7 @@
 package com.eventqr.controller;
 
 import com.eventqr.dto.CheckinResponse;
+import com.eventqr.dto.CheckInHistoryResponse;
 import com.eventqr.dto.QrCheckinPayload;
 import com.eventqr.model.Account;
 import com.eventqr.model.CheckInHistory;
@@ -16,10 +17,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -146,5 +148,52 @@ public ResponseEntity<?> checkInByCode(@RequestParam("code") String code) {
         return ResponseEntity.badRequest().body(error(e.getMessage()));
     }
 }
+
+    /**
+     * GET /api/checkin-history?organizerId={id}
+     * Lấy lịch sử check-in của tất cả sự kiện thuộc organizer
+     * 
+     * Query params:
+     * - organizerId: ID của organizer (required)
+     * - eventId: ID sự kiện cụ thể (optional) - nếu muốn lọc theo 1 sự kiện
+     */
+    @GetMapping("/checkin-history")
+    public ResponseEntity<?> getCheckinHistory(
+            @RequestParam("organizerId") Long organizerId,
+            @RequestParam(value = "eventId", required = false) Long eventId) {
+        try {
+            List<CheckInHistory> histories;
+            
+            // Nếu có eventId, lấy check-in của sự kiện đó (verify organizer)
+            if (eventId != null) {
+                histories = checkRepo.findByEventIdAndOrganizerId(eventId, organizerId);
+            } else {
+                // Lấy tất cả check-in của organizer
+                histories = checkRepo.findByOrganizerId(organizerId);
+            }
+            
+            // Convert sang DTO
+            List<CheckInHistoryResponse> response = histories.stream()
+                .map(history -> {
+                    // Lấy event
+                    Event event = eventRepo.findById(history.getEventId()).orElse(null);
+                    // Lấy user
+                    Account user = accountRepo.findById(history.getUserId()).orElse(null);
+                    
+                    if (event != null && user != null) {
+                        return new CheckInHistoryResponse(history, event, user);
+                    }
+                    return null;
+                })
+                .filter(item -> item != null)
+                .collect(Collectors.toList());
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(error("Lỗi khi lấy lịch sử check-in: " + e.getMessage()));
+        }
+    }
 
 }

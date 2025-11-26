@@ -32,5 +32,21 @@ public class CheckInHistory {
         this.eventId = eventId;
         this.checkedAt = LocalDateTime.now();
     }
+
+    // Getters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public EventTicket getTicket() { return ticket; }
+    public void setTicket(EventTicket ticket) { this.ticket = ticket; }
+
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+
+    public Long getEventId() { return eventId; }
+    public void setEventId(Long eventId) { this.eventId = eventId; }
+
+    public LocalDateTime getCheckedAt() { return checkedAt; }
+    public void setCheckedAt(LocalDateTime checkedAt) { this.checkedAt = checkedAt; }
 }
 
