@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chatbot - EventQR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/chatbot.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .demo-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .demo-section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .test-questions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .test-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .test-btn:active {
+            transform: translateY(0);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: #f3f4f6;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .feature-card .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .demo-section {
+                padding: 25px;
+            }
+
+            .test-questions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Test AI Chatbot</h1>
+            <p>Trợ lý AI thông minh cho EventQR</p>
+            <div class="status">✅ Hoạt động 100% Offline</div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎯 Giới Thiệu</h2>
+            <p>
+                Chatbot AI đã được tích hợp vào EventQR với giao diện đẹp, hiện đại. 
+                Bot có thể trả lời câu hỏi bằng tiếng Việt tự nhiên, tìm kiếm sự kiện, 
+                và hướng dẫn người dùng sử dụng hệ thống.
+            </p>
+            <p>
+                <strong>Đặc biệt:</strong> Không cần API key, hoạt động 100% offline, nhanh và miễn phí!
+            </p>
+        </div>
+
+        <div class="demo-section">
+            <h2>🚀 Tính Năng</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="icon">💬</div>
+                    <h3>Trò Chuyện Tự Nhiên</h3>
+                    <p>Hiểu tiếng Việt, trả lời thông minh theo ngữ cảnh</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🔍</div>
+                    <h3>Tìm Kiếm Sự Kiện</h3>
+                    <p>Tích hợp với backend, tìm sự kiện theo yêu cầu</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">❓</div>
+                    <h3>Trả Lời FAQ</h3>
+                    <p>10+ chủ đề, 50+ keywords được train sẵn</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">⚡</div>
+                    <h3>Quick Actions</h3>
+                    <p>Các nút gợi ý giúp người dùng hỏi nhanh</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🧪 Test Chatbot</h2>
+            <p>Nhấn vào icon 🤖 ở góc phải dưới màn hình, sau đó thử các câu hỏi sau:</p>
+            
+            <div class="test-questions">
+                <button class="test-btn" onclick="testQuestion('Xin chào!')">
+                    👋 Xin chào!
+                </button>
+                <button class="test-btn" onclick="testQuestion('Làm sao để đăng ký sự kiện?')">
+                    📝 Làm sao để đăng ký sự kiện?
+                </button>
+                <button class="test-btn" onclick="testQuestion('Tìm sự kiện công nghệ')">
+                    🔍 Tìm sự kiện công nghệ
+                </button>
+                <button class="test-btn" onclick="testQuestion('EventQR có tính năng gì?')">
+                    ⭐ EventQR có tính năng gì?
+                </button>
+                <button class="test-btn" onclick="testQuestion('Xem vé của tôi')">
+                    🎫 Xem vé của tôi
+                </button>
+                <button class="test-btn" onclick="testQuestion('Check-in như thế nào?')">
+                    ✅ Check-in như thế nào?
+                </button>
+                <button class="test-btn" onclick="testQuestion('Sự kiện có miễn phí không?')">
+                    💰 Sự kiện có miễn phí không?
+                </button>
+                <button class="test-btn" onclick="testQuestion('Liên hệ hỗ trợ')">
+                    📞 Liên hệ hỗ trợ
+                </button>
+            </div>
+
+            <p style="margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 12px; color: #92400e;">
+                <strong>💡 Lưu ý:</strong> Chatbot sẽ tự động mở và điền câu hỏi khi bạn nhấn vào nút. 
+                Bạn cũng có thể gõ bất kỳ câu hỏi nào khác!
+            </p>
+        </div>
+
+        <div class="demo-section" style="text-align: center;">
+            <h2>✨ Sẵn Sàng Sử Dụng</h2>
+            <p>Chatbot đã được tích hợp vào trang chủ EventQR</p>
+            <a href="index.html" class="cta-button">
+                🏠 Về Trang Chủ
+            </a>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <button id="cb-open" class="cb-fab" aria-label="Mở trợ lý AI">🤖</button>
+
+    <div id="cb-window" class="cb-window hidden" role="dialog" aria-labelledby="cb-title">
+        <div class="cb-header">
+            <div class="cb-badge">🤖</div>
+            <div class="cb-header-content">
+                <h3 class="cb-header-title" id="cb-title">Trợ lý AI</h3>
+                <p class="cb-header-subtitle">Luôn sẵn sàng hỗ trợ bạn</p>
+            </div>
+            <button id="cb-close" class="cb-close" aria-label="Đóng">✕</button>
+        </div>
+
+        <div id="cb-messages" class="cb-body"></div>
+
+        <div class="cb-inputbar">
+            <input 
+                id="cb-input" 
+                class="cb-input" 
+                type="text"
+                placeholder="Nhập tin nhắn..." 
+                autocomplete="off"
+                aria-label="Nhập tin nhắn"
+            />
+            <button id="cb-send" class="cb-send" aria-label="Gửi tin nhắn">➤</button>
+        </div>
+    </div>
+
+    <script src="js/core/chatbot-simple.js"></script>
+    <script>
+        function testQuestion(question) {
+            // Open chatbot if not open
+            if (!ChatbotSimple) {
+                alert('Chatbot chưa được khởi tạo. Vui lòng reload trang!');
+                return;
+            }
+
+            // Send the question
+            ChatbotSimple.sendQuickAction(question);
+        }
+    </script>
+</body>
+</html>
+

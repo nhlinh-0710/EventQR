@@ -9,6 +9,7 @@ import com.eventqr.repository.EventTicketRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -93,6 +94,10 @@ public class EventRegistrationService {
                         HashMap::putAll
                 );
 
+        // Cập nhật status động cho tất cả events
+        LocalDateTime now = LocalDateTime.now();
+        eventMap.values().forEach(event -> updateEventStatus(event, now));
+
         List<UserTicketResponse> output = new ArrayList<>();
 
         for (EventTicket t : list) {
@@ -158,5 +163,44 @@ public class EventRegistrationService {
         // Đánh dấu vé là đã hủy thay vì xóa
         ticket.setCancelled(true);
         eventTicketRepo.save(ticket);
+    }
+    
+    /**
+     * Cập nhật status của event dựa trên thời gian hiện tại
+     * KHÔNG lưu vào database, chỉ update object trong memory
+     * 
+     * LƯU Ý: Không override status nếu là CANCELLED hoặc DRAFT (do người dùng set thủ công)
+     */
+    private void updateEventStatus(Event event, LocalDateTime now) {
+        String currentStatus = event.getStatus();
+        
+        // Nếu status là CANCELLED hoặc DRAFT, giữ nguyên (người dùng set thủ công)
+        if (currentStatus != null) {
+            String upperStatus = currentStatus.toUpperCase();
+            if ("CANCELLED".equals(upperStatus) || "DRAFT".equals(upperStatus)) {
+                return; // Không tự động override
+            }
+        }
+        
+        LocalDateTime startTime = event.getStartTime();
+        LocalDateTime endTime = event.getEndTime();
+        
+        // Nếu không có thời gian, set DRAFT
+        if (startTime == null || endTime == null) {
+            event.setStatus("DRAFT");
+            return;
+        }
+        
+        // Xác định status tự động dựa trên thời gian
+        if (now.isBefore(startTime)) {
+            // Chưa bắt đầu
+            event.setStatus("UPCOMING");
+        } else if (now.isAfter(endTime)) {
+            // Đã kết thúc
+            event.setStatus("COMPLETED");
+        } else {
+            // Đang diễn ra
+            event.setStatus("ONGOING");
+        }
     }
 }

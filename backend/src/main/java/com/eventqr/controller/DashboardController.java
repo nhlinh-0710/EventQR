@@ -2,7 +2,6 @@ package com.eventqr.controller;
 
 import com.eventqr.dto.DashboardStatsDTO;
 import com.eventqr.model.Event;
-import com.eventqr.repository.CheckinRepository;
 import com.eventqr.repository.EventRepository;
 import com.eventqr.repository.EventTicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ public class DashboardController {
     @Autowired
     private EventTicketRepository ticketRepository;
     
-    @Autowired
-    private CheckinRepository checkinRepository;
-    
     /**
      * GET /api/dashboard/statistics
      * Lấy thống kê tổng quan cho dashboard
@@ -43,12 +39,14 @@ public class DashboardController {
                 // Thống kê cho một organizer cụ thể
                 activeEvents = countActiveEventsByOrganizer(organizerId);
                 totalTicketsSold = countTicketsByOrganizer(organizerId);
-                totalAttendees = countAttendeesByOrganizer(organizerId);
+                // Số người tham dự = số người đăng ký (tickets), không phải check-in
+                totalAttendees = totalTicketsSold;
             } else {
                 // Thống kê tổng toàn hệ thống
                 activeEvents = countActiveEvents();
                 totalTicketsSold = ticketRepository.count();
-                totalAttendees = checkinRepository.count();
+                // Số người tham dự = số người đăng ký (tickets), không phải check-in
+                totalAttendees = totalTicketsSold;
             }
             
             // Tính doanh thu mẫu (100,000 VND/vé)
@@ -90,6 +88,10 @@ public class DashboardController {
                 events = eventRepository.findAll();
             }
             
+            // Cập nhật status động cho tất cả events
+            LocalDateTime now = LocalDateTime.now();
+            events.forEach(event -> updateEventStatus(event, now));
+            
             // Lọc và sắp xếp theo thời gian bắt đầu
             List<Event> recentEvents = events.stream()
                 .sorted((e1, e2) -> {
@@ -111,11 +113,14 @@ public class DashboardController {
     // ===== HELPER METHODS =====
     
     /**
-     * Đếm số sự kiện hoạt động (status = "active" hoặc đang trong thời gian diễn ra)
+     * Đếm số sự kiện hoạt động (UPCOMING hoặc ONGOING)
      */
     private long countActiveEvents() {
         LocalDateTime now = LocalDateTime.now();
         List<Event> allEvents = eventRepository.findAll();
+        
+        // Cập nhật status động cho tất cả events
+        allEvents.forEach(event -> updateEventStatus(event, now));
         
         return allEvents.stream()
             .filter(event -> isEventActive(event, now))
@@ -129,6 +134,9 @@ public class DashboardController {
         LocalDateTime now = LocalDateTime.now();
         List<Event> organizerEvents = eventRepository.findByOrganizerIdOrderByCreatedAtDesc(organizerId);
         
+        // Cập nhật status động cho tất cả events
+        organizerEvents.forEach(event -> updateEventStatus(event, now));
+        
         return organizerEvents.stream()
             .filter(event -> isEventActive(event, now))
             .count();
@@ -136,25 +144,23 @@ public class DashboardController {
     
     /**
      * Kiểm tra sự kiện có đang hoạt động không
+     * Sự kiện hoạt động = UPCOMING (sắp diễn ra) hoặc ONGOING (đang diễn ra)
+     * KHÔNG bao gồm COMPLETED (đã kết thúc)
      */
     private boolean isEventActive(Event event, LocalDateTime now) {
-        // Sự kiện hoạt động nếu:
-        // 1. Status = "active" hoặc
-        // 2. Thời gian bắt đầu trong tương lai (upcoming) hoặc
-        // 3. Đang trong thời gian diễn ra (ongoing)
+        String status = event.getStatus();
         
-        if ("active".equalsIgnoreCase(event.getStatus())) {
+        if (status == null) {
+            return false;
+        }
+        
+        // Kiểm tra status: chỉ UPCOMING hoặc ONGOING là active
+        status = status.toUpperCase();
+        if ("UPCOMING".equals(status) || "ONGOING".equals(status)) {
             return true;
         }
         
-        LocalDateTime startTime = event.getStartTime();
-        LocalDateTime endTime = event.getEndTime();
-        
-        if (startTime != null && endTime != null) {
-            // Upcoming hoặc Ongoing
-            return now.isBefore(endTime);
-        }
-        
+        // Nếu status là COMPLETED hoặc khác, không phải active
         return false;
     }
     
@@ -170,14 +176,42 @@ public class DashboardController {
     }
     
     /**
-     * Đếm số người đã check-in vào các sự kiện của organizer
+     * Cập nhật status của event dựa trên thời gian hiện tại
+     * KHÔNG lưu vào database, chỉ update object trong memory
+     * 
+     * LƯU Ý: Không override status nếu là CANCELLED hoặc DRAFT (do người dùng set thủ công)
      */
-    private long countAttendeesByOrganizer(Long organizerId) {
-        List<Event> organizerEvents = eventRepository.findByOrganizerIdOrderByCreatedAtDesc(organizerId);
+    private void updateEventStatus(Event event, LocalDateTime now) {
+        String currentStatus = event.getStatus();
         
-        return organizerEvents.stream()
-            .mapToLong(event -> checkinRepository.findByEventId(event.getEventId()).size())
-            .sum();
+        // Nếu status là CANCELLED hoặc DRAFT, giữ nguyên (người dùng set thủ công)
+        if (currentStatus != null) {
+            String upperStatus = currentStatus.toUpperCase();
+            if ("CANCELLED".equals(upperStatus) || "DRAFT".equals(upperStatus)) {
+                return; // Không tự động override
+            }
+        }
+        
+        LocalDateTime startTime = event.getStartTime();
+        LocalDateTime endTime = event.getEndTime();
+        
+        // Nếu không có thời gian, set DRAFT
+        if (startTime == null || endTime == null) {
+            event.setStatus("DRAFT");
+            return;
+        }
+        
+        // Xác định status tự động dựa trên thời gian
+        if (now.isBefore(startTime)) {
+            // Chưa bắt đầu
+            event.setStatus("UPCOMING");
+        } else if (now.isAfter(endTime)) {
+            // Đã kết thúc
+            event.setStatus("COMPLETED");
+        } else {
+            // Đang diễn ra
+            event.setStatus("ONGOING");
+        }
     }
 }
 

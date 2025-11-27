@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <div class="event-footer">
-          <div class="price">Miễn phí</div>
+          <div class="price">Từ 200.000 ₫</div>
           <button class="btn primary btn-register">
             <i class="fa-solid fa-ticket"></i> Đăng ký
           </button>
@@ -321,12 +321,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const qty = parseInt(qtyInput.value || "1");
 
+  // Giá vé cố định
   let price = 0;
 
-  if (selectedTicketType === "VIP") {
-    price = 299000;
+  // Chuyển sang chữ thường để so sánh
+  const ticketType = (selectedTicketType || "").toLowerCase();
+  
+  if (ticketType === "vip") {
+    price = 500000; // VIP: 500.000 đ
   } else {
-    price = 149000;
+    price = 200000; // Regular: 200.000 đ
   }
 
   const total = qty * price;

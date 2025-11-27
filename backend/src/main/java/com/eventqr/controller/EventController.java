@@ -1,5 +1,6 @@
 package com.eventqr.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +116,9 @@ public class EventController {
         try {
             Event event = eventService.getEventById(id);
             
+            // Cập nhật status động
+            updateEventStatus(event, LocalDateTime.now());
+            
             // Nếu có organizerId, kiểm tra quyền sở hữu
             Long organizerId = organizerIdHeader != null ? organizerIdHeader : organizerIdParam;
             if (organizerId != null) {
@@ -145,7 +149,11 @@ public class EventController {
     @GetMapping 
     public ResponseEntity<List<Event>> getAllEvents() {
         try {
-        List<Event> events = eventService.findAll(); 
+        List<Event> events = eventService.findAll();
+        
+        // Cập nhật status động cho tất cả events
+        LocalDateTime now = LocalDateTime.now();
+        events.forEach(event -> updateEventStatus(event, now));
         
         if (events.isEmpty()) {
             // ✅ SỬA ĐỔI: Thay vì NO_CONTENT (204), trả về MẢNG RỖNG (200 OK)
@@ -176,12 +184,56 @@ public class EventController {
             }
             
             List<Event> events = eventService.findByOrganizerId(organizerId);
+            
+            // Cập nhật status động cho tất cả events
+            LocalDateTime now = LocalDateTime.now();
+            events.forEach(event -> updateEventStatus(event, now));
+            
             return new ResponseEntity<>(events, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(
                 Map.of("success", false, "message", "Lỗi khi lấy danh sách sự kiện: " + e.getMessage()), 
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
+        }
+    }
+    
+    /**
+     * Cập nhật status của event dựa trên thời gian hiện tại
+     * KHÔNG lưu vào database, chỉ update object trong memory
+     * 
+     * LƯU Ý: Không override status nếu là CANCELLED hoặc DRAFT (do người dùng set thủ công)
+     */
+    private void updateEventStatus(Event event, LocalDateTime now) {
+        String currentStatus = event.getStatus();
+        
+        // Nếu status là CANCELLED hoặc DRAFT, giữ nguyên (người dùng set thủ công)
+        if (currentStatus != null) {
+            String upperStatus = currentStatus.toUpperCase();
+            if ("CANCELLED".equals(upperStatus) || "DRAFT".equals(upperStatus)) {
+                return; // Không tự động override
+            }
+        }
+        
+        LocalDateTime startTime = event.getStartTime();
+        LocalDateTime endTime = event.getEndTime();
+        
+        // Nếu không có thời gian, set DRAFT
+        if (startTime == null || endTime == null) {
+            event.setStatus("DRAFT");
+            return;
+        }
+        
+        // Xác định status tự động dựa trên thời gian
+        if (now.isBefore(startTime)) {
+            // Chưa bắt đầu
+            event.setStatus("UPCOMING");
+        } else if (now.isAfter(endTime)) {
+            // Đã kết thúc
+            event.setStatus("COMPLETED");
+        } else {
+            // Đang diễn ra
+            event.setStatus("ONGOING");
         }
     }
 }
