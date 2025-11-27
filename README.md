@@ -406,117 +406,7 @@ Password: user123
 
 ---
 
-## 🌐 API Documentation
 
-### Authentication APIs
-
-#### Register User
-```http
-POST /api/auth/register
-Content-Type: application/json
-
-{
-  "email": "user@example.com",
-  "password": "password123",
-  "fullName": "Nguyen Van A",
-  "phoneNumber": "0123456789"
-}
-```
-
-#### Login
-```http
-POST /api/auth/login
-Content-Type: application/json
-
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-
-Response: {
-  "token": "eyJhbGciOiJIUzI1NiIs...",
-  "user": {...}
-}
-```
-
-### Event APIs
-
-#### Get All Events
-```http
-GET /api/events
-Authorization: Bearer {token}
-```
-
-#### Create Event (Admin)
-```http
-POST /api/events
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "title": "Tech Conference 2024",
-  "description": "Annual tech conference",
-  "eventDate": "2024-12-01T09:00:00",
-  "location": "Duy Tan University",
-  "maxParticipants": 200,
-  "category": "conference"
-}
-```
-
-#### Get Event Details
-```http
-GET /api/events/{eventId}
-Authorization: Bearer {token}
-```
-
-### Registration APIs
-
-#### Register for Event
-```http
-POST /api/registrations/{eventId}
-Authorization: Bearer {token}
-```
-
-#### Get My Tickets
-```http
-GET /api/registrations/my-tickets
-Authorization: Bearer {token}
-```
-
-### Check-in APIs
-
-#### QR Check-in
-```http
-POST /api/checkin/qr
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "qrCode": "EVT-12345-USR-67890"
-}
-```
-
-#### Get Check-in History
-```http
-GET /api/checkin/history/{eventId}
-Authorization: Bearer {token}
-```
-
-### Feedback APIs
-
-#### Submit Feedback
-```http
-POST /api/feedback/{eventId}
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "rating": 5,
-  "comment": "Great event!"
-}
-```
-
-### WebSocket Endpoints
 
 ```javascript
 // Connect to WebSocket
@@ -537,16 +427,17 @@ stompClient.subscribe('/user/queue/notifications', (message) => {
 ![Landing Page](screenshots/landing.png)
 
 ### Admin Dashboard
-![Admin Dashboard](screenshots/admin-dashboard.png)
+![Admin Dashboard](image.png)
 
 ### Event Management
-![Event Management](screenshots/event-management.png)
+![Event Management](image.png)
 
 ### QR Check-in
-![QR Check-in](screenshots/qr-checkin.png)
+![QR Check-in](image.png) 
 
 ### Statistics
-![Statistics](screenshots/statistics.png)
+![Statistics](image.png)
+
 
 ---
 
@@ -597,61 +488,212 @@ mvn test
 - Hover effects đầy đủ
 - Charts & visualizations
 
-### 📱 Tablet (768px - 1023px)
-- Collapsible sidebar
-- Adaptive grid layout
-- Touch-friendly buttons
-- Optimized spacing
 
-### 📱 Mobile (≤ 767px)
-- Hamburger menu
-- Single column layout
-- Bottom navigation
-- Mobile-first approach
 
 ---
 
-## 🗺️ Roadmap
+## 🗺️ Development Roadmap
 
-### Phase 1 ✅ (Completed)
-- [x] Xây dựng backend API với Spring Boot
-- [x] Thiết kế database schema
-- [x] Tạo giao diện frontend
-- [x] Tích hợp JWT authentication
-- [x] QR code generation & scanning
-- [x] WebSocket real-time notifications
-- [x] Dashboard với thống kê cơ bản
-- [x] CRUD operations cho tất cả entities
+Dự án được phát triển theo phương pháp **Agile Scrum** với 4 Sprint chính, mỗi Sprint khoảng 3-4 tuần.
 
-### Phase 2 🚧 (In Progress)
-- [ ] AI Chatbot hoàn chỉnh với NLP
-- [ ] Email notifications (thông báo tự động)
-- [ ] SMS notifications
-- [ ] Payment integration (VNPay/MoMo)
-- [ ] Export PDF reports
-- [ ] Advanced analytics & insights
-- [ ] Calendar integration
-- [ ] Social media sharing
+---
 
-### Phase 3 📋 (Planned)
-- [ ] Mobile app (React Native/Flutter)
-- [ ] Push notifications
-- [ ] Multi-language support (i18n)
-- [ ] Dark mode
-- [ ] Video streaming cho sự kiện online
-- [ ] Live chat trong sự kiện
-- [ ] Gamification (badges, points)
-- [ ] Recommendation system
+### 🟢 Sprint 1: Core System & User Management ✅
+**Timeline:** 03/09 - 30/09  
+**Branch:** `v1.0-core-system`  
+**Status:** ✅ Completed
 
-### Phase 4 🔮 (Future)
-- [ ] Microservices architecture
-- [ ] Kubernetes deployment
-- [ ] CI/CD pipeline
-- [ ] Load balancing
-- [ ] Redis caching
-- [ ] Elasticsearch integration
-- [ ] Machine Learning predictions
-- [ ] Blockchain-based ticketing
+#### 🎯 Mục tiêu
+Xây dựng nền tảng cơ bản của hệ thống với chức năng đăng nhập, đăng ký và quản lý sự kiện.
+
+#### 📋 Tasks & Assignments
+
+**Frontend (Hào)**
+- [x] Thiết kế giao diện đăng nhập/đăng ký
+- [x] Trang chủ cho người dùng (User)
+- [x] Trang chủ cho người tổ chức (Organizer)
+- [x] Responsive design cho tất cả màn hình
+
+**Database & Backend (Linh)**
+- [x] Thiết kế Database Schema (MySQL)
+- [x] Tạo các Entity Models (Account, Event, Role)
+- [x] API đăng ký tài khoản (User & Organizer)
+- [x] API đăng nhập với JWT authentication
+- [x] Phân quyền User/Organizer
+
+**Backend - Event Management (Duy)**
+- [x] API Create Event (POST /api/events)
+- [x] API Update Event (PUT /api/events/{id})
+- [x] API Delete Event (DELETE /api/events/{id})
+- [x] API Get Events (GET /api/events)
+- [x] Validation & Error handling
+
+**Frontend - Event Suggestion (Huy)**
+- [x] Chức năng gợi ý sự kiện mới
+- [x] Hiển thị sự kiện hot/trending
+- [x] Filter và search events
+- [x] Tích hợp với backend API
+
+#### 🎉 Deliverables
+✅ Hệ thống cơ bản hoạt động với đăng nhập, đăng ký, CRUD sự kiện  
+✅ Database schema hoàn chỉnh  
+✅ JWT authentication working  
+✅ User/Organizer role-based access
+
+---
+
+### 🟢 Sprint 2: Event Registration & QR Check-in ✅
+**Timeline:** 01/10 - 21/10  
+**Branch:** `v2.0-qr-checkin`  
+**Status:** ✅ Completed
+
+#### 🎯 Mục tiêu
+Triển khai hệ thống đăng ký sự kiện, tạo vé điện tử và QR check-in.
+
+#### 📋 Tasks & Assignments
+
+**Frontend - Ticket UI (Hào)**
+- [x] Giao diện "My Events" (danh sách vé của user)
+- [x] Giao diện hiển thị vé điện tử với QR code
+- [x] Giao diện QR check-in scanner
+- [x] Modal check-in success/error
+
+**Backend - Registration (Linh)**
+- [x] API đăng ký sự kiện cho User
+- [x] Tạo EventTicket khi đăng ký thành công
+- [x] API lấy danh sách vé của User
+- [x] Validation số lượng người tham gia
+
+**Backend - Notifications (Linh)**
+- [x] WebSocket configuration
+- [x] Gửi thông báo đến Organizer khi có đăng ký mới
+- [x] Notification entity & repository
+- [x] Real-time notification system
+
+**Backend - QR Generation (Huy)**
+- [x] Tạo mã QR unique cho mỗi vé
+- [x] Format: EVT-{eventId}-USR-{userId}-{timestamp}
+- [x] API generate QR code
+- [x] Lưu QR code vào database
+
+**Backend - QR Scanner (Duy)**
+- [x] API đọc và validate QR code
+- [x] Xử lý check-in logic
+- [x] Kiểm tra duplicate check-in
+- [x] Response check-in status
+
+**Backend - Check-in History (Linh)**
+- [x] CheckInHistory entity
+- [x] Lưu lịch sử check-in với timestamp
+- [x] API lấy lịch sử check-in theo Event
+- [x] Thống kê số lượng đã check-in
+
+#### 🎉 Deliverables
+✅ User có thể đăng ký sự kiện và nhận vé QR  
+✅ QR check-in hoạt động (scanner + validate)  
+✅ Lịch sử check-in được lưu trữ  
+✅ Notification real-time cho Organizer
+
+---
+
+### 🟢 Sprint 3: Dashboard & Feedback System ✅
+**Timeline:** 22/10 - 11/11  
+**Branch:** `v3.0-reports-notifications`  
+**Status:** ✅ Completed
+
+#### 🎯 Mục tiêu
+Xây dựng dashboard thống kê và hệ thống feedback/đánh giá sự kiện.
+
+#### 📋 Tasks & Assignments
+
+**Frontend - Feedback UI (Hào)**
+- [x] Giao diện đánh giá sự kiện (User)
+- [x] Rating system (1-5 sao)
+- [x] Form nhập comment feedback
+- [x] Giao diện xem feedback (Organizer)
+- [x] Hiển thị danh sách feedback của sự kiện
+
+**Backend - Feedback System (Linh)**
+- [x] Feedback entity (rating, comment)
+- [x] API submit feedback (POST /api/feedback/{eventId})
+- [x] API get feedback by event
+- [x] Validation: chỉ cho phép feedback sau khi check-in
+- [x] Tính điểm rating trung bình
+
+**Backend - Export Reports (Duy)**
+- [x] Export feedback ra Excel
+- [x] Export feedback ra PDF
+- [x] API export check-in list
+- [x] Format và styling cho reports
+
+**Backend - Dashboard Statistics (Linh)**
+- [x] API dashboard cho Organizer
+- [x] Thống kê số lượng đăng ký theo sự kiện
+- [x] Thống kê tỷ lệ check-in
+- [x] Thống kê rating/feedback
+- [x] Time-series data cho biểu đồ
+
+#### 🎉 Deliverables
+✅ Dashboard thống kê hoàn chỉnh cho Organizer  
+✅ User có thể đánh giá và feedback  
+✅ Export reports Excel/PDF  
+✅ Real-time statistics updates
+
+---
+
+### 🟢 Sprint 4: AI Chatbot Integration ✅
+**Timeline:** 12/11 - 02/12  
+**Branch:** `v4.0-ai-chatbot`  
+**Status:** ✅ Completed
+
+#### 🎯 Mục tiêu
+Tích hợp AI Chatbot để hỗ trợ người dùng tự động 24/7.
+
+#### 📋 Tasks & Assignments
+
+**Frontend - Chatbot UI (Hào)**
+- [x] Thiết kế khung chat nổi (floating chat widget)
+- [x] Chat interface với typing indicator
+- [x] Message history display
+- [x] Responsive chatbot UI
+- [x] Tối ưu UI/UX đa trình duyệt (Chrome, Firefox, Safari, Edge)
+- [x] Animation và transitions mượt mà
+
+**Backend - AI Integration (Linh & Duy)**
+- [x] Tích hợp Google Gemini AI API
+- [x] API endpoint cho chatbot
+- [x] Context management cho conversations
+- [x] Training data về sự kiện
+- [x] Natural language processing
+- [x] Response formatting và optimization
+
+**Testing & Optimization (Team)**
+- [x] Test chatbot trên nhiều trình duyệt
+- [x] Performance optimization
+- [x] Error handling & fallback responses
+- [x] User acceptance testing
+
+#### 🎉 Deliverables
+✅ **MVP hoàn chỉnh** - Tất cả tính năng core hoạt động  
+✅ **AI Chatbot** - Hỗ trợ tự động cho User  
+✅ **Cross-browser compatible** - Hoạt động mượt mà mọi trình duyệt  
+✅ **Production ready** - Sẵn sàng deploy
+
+---
+
+### 📊 Sprint Summary
+
+| Sprint | Duration | Features | Status |
+|--------|----------|----------|--------|
+| Sprint 1 | 03/09 - 30/09 | Auth, CRUD Events | ✅ |
+| Sprint 2 | 01/10 - 21/10 | QR Check-in, Tickets | ✅ |
+| Sprint 3 | 22/10 - 11/11 | Dashboard, Feedback | ✅ |
+| Sprint 4 | 12/11 - 02/12 | AI Chatbot | ✅ |
+
+**Total Development Time:** 3 months (Sep - Dec 2024)  
+**Team Size:** 4 developers  
+**Methodology:** Agile Scrum  
+**Current Version:** v4.0
 
 ---
 
@@ -714,15 +756,14 @@ in the Software without restriction...
 
 ## 👥 Team
 
-### Project Members
-- **Nguyễn Văn A** - Backend Developer
-- **Trần Thị B** - Frontend Developer
-- **Lê Văn C** - Full Stack Developer
-- **Phạm Thị D** - UI/UX Designer
-
-### Advisors
-- **TS. Nguyễn Văn E** - Project Supervisor
-- **ThS. Trần Thị F** - Technical Advisor
+### Project Members 
+- **Ngô Châu Nhật Linh** - Backend Developer
+- **Nguyễn Minh Duy** - Backend Developer
+- **Phạm Văn Huy** - Backend Developer
+- **Hồ Viết Hào** - UI/UX Designer
+- **Nguyễn Công Minh** - Document
+### Project Leader
+- **Ngô Châu Nhật Linh**
 
 ---
 
