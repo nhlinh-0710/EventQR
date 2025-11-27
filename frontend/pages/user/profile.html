@@ -31,36 +31,20 @@
 
     <div class="sidebar-menu">
         <a href="index.html" class="menu-link">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>Dashboard</span>
+            <i class="fas fa-fire"></i>
+            <span>Gợi ý sự kiện</span>
         </a>
-        <a href="events.html" class="menu-link">
-            <i class="fas fa-calendar-check"></i>
-            <span>Sự Kiện của tôi</span>
-        </a>
-        <a href="create_event.html" class="menu-link">
-            <i class="fas fa-plus-circle"></i>
-            <span>Tạo Sự Kiện</span>
-        </a>
-        <a href="qr.html" class="menu-link">
-            <i class="fas fa-qrcode"></i>
-            <span>QR Check-in</span>
-        </a>
-        <a href="attendees.html" class="menu-link">
-            <i class="fas fa-users"></i>
-            <span>Người Tham Dự</span>
-        </a>
-        <a href="static.html" class="menu-link">
-            <i class="fas fa-chart-bar"></i>
-            <span>Thống Kê</span>
-        </a>
-        <a href="feedback.html" class="menu-link">
-            <i class="fas fa-comments"></i>
-            <span>Feedback</span>
+        <a href="tickets.html" class="menu-link">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Vé của tôi</span>
         </a>
         <a href="profile.html" class="menu-link active">
             <i class="fas fa-user-cog"></i>
             <span>Hồ Sơ</span>
+        </a>
+        <a href="feedback.html" class="menu-link">
+            <i class="fas fa-comments"></i>
+            <span>Feedback</span>
         </a>
     </div>
     <div class="sidebar-footer">
@@ -151,46 +135,46 @@
 </div>
 
 
-        <!-- PROJECTS -->
+        <!-- RECENT EVENTS -->
         <div class="ap-projects">
-          <h2 class="ap-h2">Dự án gần đây</h2>
+          <h2 class="ap-h2">Sự kiện đăng ký gần đây</h2>
           <div class="ap-grid">
             <article class="ap-card">
               <div class="ap-card-cover">
                 <img loading="lazy"
-                  src="https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1600&auto=format&fit=crop"
-                  alt="EventHub Dashboard" />
+                  src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1600&auto=format&fit=crop"
+                  alt="Sơn Tùng MTP" />
               </div>
               <div class="ap-meta">
-                <h3>EventHub Dashboard</h3>
-                <p>Quản trị sự kiện · realtime · RBAC · audit log.</p>
-                <div class="ap-tags"><span>Next.js</span><span>Supabase</span><span>Shadcn</span></div>
+                <h3>Sơn Tùng MTP</h3>
+                <p>📅 00:14 27/11/2025 · 📍 Âu Cơ<br>Không có mô tả.</p>
+                <div class="ap-tags"><span>Đã hủy</span></div>
               </div>
             </article>
 
             <article class="ap-card">
               <div class="ap-card-cover">
                 <img loading="lazy"
-                  src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1600&auto=format&fit=crop"
-                  alt="Smart Library" />
+                  src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1600&auto=format&fit=crop"
+                  alt="DTU_event" />
               </div>
               <div class="ap-meta">
-                <h3>Smart Library</h3>
-                <p>Mượn/trả, tìm kiếm nâng cao, log hoạt động.</p>
-                <div class="ap-tags"><span>NestJS</span><span>Postgres</span><span>Redis</span></div>
+                <h3>DTU_event</h3>
+                <p>📅 18:19 27/11/2025 · 📍 Nguyễn Văn Linh<br>Không có mô tả.</p>
+                <div class="ap-tags"><span>Sắp diễn ra</span></div>
               </div>
             </article>
 
             <article class="ap-card">
               <div class="ap-card-cover">
                 <img loading="lazy"
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&auto=format&fit=crop"
-                  alt="ShopEase" />
+                  src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop"
+                  alt="Đà Nẵng Festival" />
               </div>
               <div class="ap-meta">
-                <h3>ShopEase</h3>
-                <p>E-commerce tối giản, thanh toán an toàn.</p>
-                <div class="ap-tags"><span>Next.js</span><span>Stripe</span><span>Prisma</span></div>
+                <h3>Đà Nẵng Festival</h3>
+                <p>📅 14:15 27/11/2025 · 📍 Quang Trung<br>Không có mô tả.</p>
+                <div class="ap-tags"><span>Đang diễn ra</span></div>
               </div>
             </article>
           </div>
@@ -232,20 +216,345 @@
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
   
-  <!-- JS dự án -->
+  <!-- JS cần thiết -->
   <script src="../../js/core/auth.js"></script>
   <script src="../../js/core/websocket.js"></script>
   <script src="../../js/admin/notifications.js"></script>
-  <script src="../../js/user/simple-qr.js" defer></script>
-  <script src="../../js/admin/dashboard.js" defer></script>
-  <script src="../../js/user/qr-checkin.js" defer></script>
-  <script src="../../js/admin/feedback.js" defer></script>
-  <script src="../../js/user/suggest-events.js" defer></script>
-  <script src="../../js/user/my-tickets.js" defer></script>
-  <!-- my-events.js không tồn tại, đã xóa reference -->
-
-  <!-- JS riêng cho trang Profile (fallback nhẹ) -->
-  <script src="../../js/admin/profile.js" defer></script>
+  
+  <!-- JS cho trang Profile -->
+  <script>
+    // Load user profile data
+    document.addEventListener('DOMContentLoaded', async function() {
+      console.log('📄 User Profile page loaded');
+      
+      // Check authentication - use currentUser key like auth.js
+      const userDataString = localStorage.getItem('currentUser');
+      if (!userDataString) {
+        console.warn('⚠️ No user data found in localStorage');
+        return;
+      }
+      
+      const user = JSON.parse(userDataString);
+      
+      // Update user info in header
+      const userNameElement = document.getElementById('userName');
+      const userAvatarElement = document.getElementById('userAvatar');
+      
+      if (userNameElement) {
+        userNameElement.textContent = user.fullName || user.username || 'Người dùng';
+      }
+      
+      if (userAvatarElement) {
+        const initial = (user.fullName || user.username || 'U').charAt(0).toUpperCase();
+        userAvatarElement.textContent = initial;
+      }
+      
+      // Load registered events
+      await loadRegisteredEvents(user.id);
+      
+      // Setup edit profile button
+      setupEditProfileButton();
+      
+      // Setup mobile menu
+      setupMobileMenu();
+      
+      // Setup sidebar toggle
+      setupSidebarToggle();
+    });
+    
+    // Load registered events
+    async function loadRegisteredEvents(userId) {
+      try {
+        console.log('📅 Loading registered events for user:', userId);
+        
+        const userDataString = localStorage.getItem('currentUser');
+        const userData = userDataString ? JSON.parse(userDataString) : null;
+        const token = userData ? userData.token : null;
+        
+        if (!token) {
+          console.warn('⚠️ No token found');
+          showNoEvents();
+          return;
+        }
+        
+        const response = await fetch(`http://localhost:8080/api/events/user/${userId}/tickets`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to load events');
+        }
+        
+        const events = await response.json();
+        console.log('✅ Loaded events:', events);
+        
+        displayRegisteredEvents(events);
+      } catch (error) {
+        console.error('❌ Error loading events:', error);
+        showNoEvents();
+      }
+    }
+    
+    // Display registered events
+    function displayRegisteredEvents(events) {
+      const gridContainer = document.querySelector('.ap-grid');
+      
+      if (!gridContainer) {
+        console.error('❌ Grid container not found');
+        return;
+      }
+      
+      if (!events || events.length === 0) {
+        showNoEvents();
+        return;
+      }
+      
+      // Take only the 3 most recent events
+      const recentEvents = events.slice(0, 3);
+      
+      gridContainer.innerHTML = recentEvents.map(ticket => {
+        const event = ticket.event;
+        const eventDate = new Date(event.eventDate);
+        const now = new Date();
+        
+        let status = '';
+        let statusClass = '';
+        
+        if (event.status === 'CANCELLED') {
+          status = 'Đã hủy';
+          statusClass = 'badge-cancelled';
+        } else if (eventDate > now) {
+          status = 'Sắp diễn ra';
+          statusClass = 'badge-upcoming';
+        } else {
+          status = 'Đã kết thúc';
+          statusClass = 'badge-ended';
+        }
+        
+        const imageUrl = event.imageUrl || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop';
+        
+        return `
+          <article class="ap-card">
+            <div class="ap-card-cover">
+              <img loading="lazy" src="${imageUrl}" alt="${event.eventName}" />
+            </div>
+            <div class="ap-meta">
+              <h3>${event.eventName}</h3>
+              <p>📅 ${formatDateTime(event.eventDate)} · 📍 ${event.location}<br>
+              ${event.description || 'Không có mô tả.'}</p>
+              <div class="ap-tags"><span class="${statusClass}">${status}</span></div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+    
+    // Show no events message
+    function showNoEvents() {
+      const gridContainer = document.querySelector('.ap-grid');
+      if (gridContainer) {
+        gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem;">Chưa có sự kiện nào.</p>';
+      }
+    }
+    
+    // Format date time
+    function formatDateTime(dateString) {
+      const date = new Date(dateString);
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      return `${hours}:${minutes} ${day}/${month}/${year}`;
+    }
+    
+    // Setup edit profile button
+    function setupEditProfileButton() {
+      const editBtn = document.querySelector('.edit-profile-btn');
+      const modal = document.getElementById('profileEditModal');
+      
+      if (editBtn && modal) {
+        editBtn.addEventListener('click', () => {
+          modal.style.display = 'flex';
+        });
+      }
+    }
+    
+    // Close edit profile modal
+    function closeEditProfile() {
+      const modal = document.getElementById('profileEditModal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+    
+    // Save profile
+    function saveProfile() {
+      alert('Chức năng đang được phát triển!');
+      closeEditProfile();
+    }
+    
+    // Logout handler
+    function handleLogout() {
+      localStorage.removeItem('currentUser');
+      window.location.href = '../../index.html';
+    }
+    
+    // Setup mobile menu
+    function setupMobileMenu() {
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (mobileMenuBtn && sidebar) {
+        mobileMenuBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('active');
+        });
+      }
+    }
+    
+    // Setup sidebar toggle
+    function setupSidebarToggle() {
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');
+        });
+      }
+    }
+    
+    // Toggle notification panel
+    function toggleNotificationPanel() {
+      const panel = document.getElementById('notificationPanel');
+      if (panel) {
+        panel.classList.toggle('show');
+      }
+    }
+    
+    // Mark all notifications as read
+    function markAllNotificationsAsRead() {
+      console.log('Marking all as read...');
+    }
+    
+    // View all notifications
+    function viewAllNotifications() {
+      console.log('View all notifications...');
+    }
+  </script>
+  
+  <style>
+    .badge-cancelled {
+      background-color: #ff4444;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+    
+    .badge-upcoming {
+      background-color: #4CAF50;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+    
+    .badge-ended {
+      background-color: #9E9E9E;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+    
+    .edit-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    
+    .edit-modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .edit-modal-content h2 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+    }
+    
+    .edit-modal-content label {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .edit-modal-content input,
+    .edit-modal-content textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+    }
+    
+    .edit-modal-content textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .save-btn,
+    .close-btn {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .save-btn {
+      background: #6C5CE7;
+      color: white;
+    }
+    
+    .save-btn:hover {
+      background: #5f4fd1;
+    }
+    
+    .close-btn {
+      background: #e0e0e0;
+      color: #333;
+    }
+    
+    .close-btn:hover {
+      background: #d0d0d0;
+    }
+  </style>
 </body>
 
 </html>
