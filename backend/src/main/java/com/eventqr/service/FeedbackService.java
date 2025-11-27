@@ -195,14 +195,22 @@ public class FeedbackService {
         Event event = eventRepository.findById(request.getEventId())
             .orElseThrow(() -> new IllegalArgumentException("Sự kiện không tồn tại"));
 
-        // ===== 3. KIỂM TRA TRẠNG THÁI SỰ KIỆN = "ENDED" hoặc "FINISHED" =====
+        // ===== 3. KIỂM TRA TRẠNG THÁI SỰ KIỆN = "ENDED", "FINISHED" hoặc "COMPLETED" =====
         String eventStatus = event.getStatus();
         if (eventStatus == null) {
             eventStatus = "";
         }
         String upperStatus = eventStatus.toUpperCase().trim();
         
-        boolean isEnded = "ENDED".equals(upperStatus) || "FINISHED".equals(upperStatus);
+        // Kiểm tra status hoặc endTime đã qua
+        LocalDateTime endTime = event.getEndTime();
+        LocalDateTime currentTime = LocalDateTime.now();
+        
+        boolean isEnded = "ENDED".equals(upperStatus) 
+                       || "FINISHED".equals(upperStatus) 
+                       || "COMPLETED".equals(upperStatus)
+                       || "ĐÃ KẾT THÚC".equals(upperStatus)
+                       || (endTime != null && endTime.isBefore(currentTime));
         
         if (!isEnded) {
             throw new IllegalStateException("Sự kiện chưa kết thúc, không thể đánh giá. (Trạng thái hiện tại: " + eventStatus + ")");
