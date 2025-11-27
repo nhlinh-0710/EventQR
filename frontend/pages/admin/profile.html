@@ -46,6 +46,10 @@
             <i class="fas fa-qrcode"></i>
             <span>QR Check-in</span>
         </a>
+        <a href="attendees.html" class="menu-link">
+            <i class="fas fa-users"></i>
+            <span>Người Tham Dự</span>
+        </a>
         <a href="static.html" class="menu-link">
             <i class="fas fa-chart-bar"></i>
             <span>Thống Kê</span>
@@ -77,6 +81,10 @@
         <h1 id="pageTitle">Hồ Sơ</h1>
       </div>
       <div class="header-right">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Tìm kiếm sự kiện..." />
+        </div>
         <div class="notifications">
           <button class="notification-btn" id="notificationBtn" onclick="toggleNotificationPanel()" aria-label="Thông báo">
             <i class="fas fa-bell"></i>
@@ -116,64 +124,32 @@
               alt="Avatar nhóm" class="ap-avatar" />
           </div>
           <div class="ap-right">
-            <h1 class="ap-name">NHÓM CỦA CHÚNG TÔI</h1>
-            <p class="ap-title">Software Engineer · Web Developer</p>
-            <p class="ap-about">
-              Tạo ra những sản phẩm web hiện đại, thân thiện, tối ưu trải nghiệm và mang lại giá trị thật cho doanh
-              nghiệp.
-              Chúng tôi kết hợp <strong>kỹ thuật</strong> và <strong>tư duy sản phẩm</strong> để ship nhanh – chuẩn –
-              bền.
-            </p>
-            <div class="ap-meta-badges">
-              <span class="badge">⚡ Agile</span>
-              <span class="badge">🔐 Bảo mật</span>
-              <span class="badge">📈 Hiệu năng</span>
-              <span class="badge">🧪 QA</span>
-            </div>
-            <div class="ap-socials" style="display:flex; gap:8px;">
-              <a href="https://www.facebook.com/share/1WBDuKs5wK/?mibextid=wwXIfr" target="_blank" rel="noopener"
-                aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://github.com/your-org" target="_blank" rel="noopener" aria-label="GitHub"><i
-                  class="fab fa-github"></i></a>
-              <a href="mailto:Hoviethao@email.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-            </div>
-          </div>
-        </div>
+    <h1 class="ap-name">NHÓM CỦA CHÚNG TÔI</h1>
+    <p class="ap-title">Software Engineer · Web Developer</p>
+    <p class="ap-about">
+      Tạo ra những sản phẩm web hiện đại, thân thiện, tối ưu trải nghiệm và mang lại giá trị thật cho doanh nghiệp.
+      Chúng tôi kết hợp <strong>kỹ thuật</strong> và <strong>tư duy sản phẩm</strong> để ship nhanh – chuẩn – bền.
+    </p>
 
-        <!-- KPIs -->
-        <div class="ap-stats">
-          <div class="stat">
-            <div class="stat-num">36+</div>
-            <div class="stat-label">Dự án đã triển khai</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num">98%</div>
-            <div class="stat-label">Mức độ hài lòng</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num">&lt; 1s</div>
-            <div class="stat-label">TTFB trung bình</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num">0 P1</div>
-            <div class="stat-label">Sự cố nghiêm trọng</div>
-          </div>
-        </div>
+    <!-- ⭐ NÚT SỬA HỒ SƠ — CHỈ THÊM DÒNG NÀY ⭐ -->
+    <button class="edit-profile-btn"><i class="fas fa-edit"></i> Sửa hồ sơ</button>
 
-        <!-- SKILLS -->
-        <div class="ap-skills">
-          <h2 class="ap-h2">Năng lực cốt lõi</h2>
-          <ul class="skill-chips">
-            <li>React / Next.js</li>
-            <li>Node.js / NestJS</li>
-            <li>Postgres / Supabase</li>
-            <li>CI/CD · Docker</li>
-            <li>Auth · RBAC</li>
-            <li>Cloud · Vercel</li>
-            <li>Design System</li>
-            <li>UX Writing</li>
-          </ul>
-        </div>
+    <div class="ap-meta-badges">
+      <span class="badge">⚡ Agile</span>
+      <span class="badge">🔐 Bảo mật</span>
+      <span class="badge">📈 Hiệu năng</span>
+      <span class="badge">🧪 QA</span>
+    </div>
+
+    <div class="ap-socials" style="display:flex; gap:8px;">
+      <a href="https://www.facebook.com/share/1WBDuKs5wK/?mibextid=wwXIfr" target="_blank" rel="noopener"
+        aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://github.com/your-org" target="_blank" rel="noopener" aria-label="GitHub"><i
+          class="fab fa-github"></i></a>
+      <a href="mailto:Hoviethao@email.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+    </div>
+</div>
+
 
         <!-- PROJECTS -->
         <div class="ap-projects">
@@ -219,45 +195,38 @@
             </article>
           </div>
         </div>
+        <!-- EDIT PROFILE MODAL -->
+<div id="profileEditModal" class="edit-modal">
+  <div class="edit-modal-content">
+    <h2>Sửa hồ sơ</h2>
 
-        <!-- TIMELINE -->
-        <div class="ap-timeline">
-          <h2 class="ap-h2">Dấu mốc</h2>
-          <ul class="tl">
-            <li><span class="dot"></span>
-              <div>
-                <h4>2025 · Ra mắt EventHub v2</h4>
-                <p>Nâng cấp core, GenAI gợi ý sự kiện & phân quyền tuỳ biến.</p>
-              </div>
-            </li>
-            <li><span class="dot"></span>
-              <div>
-                <h4>2024 · 10+ dự án enterprise</h4>
-                <p>Tích hợp SSO, audit trail, tối ưu hiệu năng & bảo mật.</p>
-              </div>
-            </li>
-            <li><span class="dot"></span>
-              <div>
-                <h4>2023 · Thành lập nhóm</h4>
-                <p>Đặt mục tiêu xây dựng sản phẩm có ích, UX tốt, dễ mở rộng.</p>
-              </div>
-            </li>
-          </ul>
-        </div>
+    <label>Ảnh đại diện</label>
+    <input type="file" id="editAvatar">
 
-        <!-- CTA -->
-        <div class="ap-cta">
-          <div class="cta-box">
-            <div>
-              <h3>Muốn cộng tác?</h3>
-              <p>Chia sẻ brief của bạn – tụi mình tư vấn miễn phí trong 24h.</p>
-            </div>
-            <a class="cta-btn" href="mailto:Hoviethao@email.com">Liên hệ ngay</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <label>Tiêu đề (Tên nhóm / Tên người dùng)</label>
+    <input type="text" id="editTitle">
+
+    <label>Chức danh</label>
+    <input type="text" id="editSubtitle">
+
+    <label>Mô tả</label>
+    <textarea id="editDescription"></textarea>
+
+    <label>Facebook URL</label>
+    <input type="text" id="editFacebook">
+
+    <label>GitHub URL</label>
+    <input type="text" id="editGithub">
+
+    <label>Email liên hệ</label>
+    <input type="email" id="editEmail">
+
+    <div class="modal-actions">
+      <button onclick="saveProfile()" class="save-btn">Lưu</button>
+      <button onclick="closeEditProfile()" class="close-btn">Hủy</button>
+    </div>
   </div>
+</div>
 
   <!-- WebSocket Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
@@ -276,7 +245,7 @@
   <!-- my-events.js không tồn tại, đã xóa reference -->
 
   <!-- JS riêng cho trang Profile (fallback nhẹ) -->
-  <script src="../../js/user/profile.js" defer></script>
+  <script src="../../js/admin/profile.js" defer></script>
 </body>
 
 </html>

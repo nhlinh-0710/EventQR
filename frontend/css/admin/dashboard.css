@@ -1815,12 +1815,6 @@ width: 240px;
   margin: 0 auto;
 }
 
-#profile-section .ap-grid{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-}
-
 #profile-section .ap-card{
   background: var(--ap-card);
   border-radius: 14px;
@@ -1936,5 +1930,184 @@ width: 240px;
   #profile-section .ap-cta .cta-box{ flex-direction: column; align-items: stretch; }
 }
 #profile-section.content-section{ display:block !important; }
+/* =============================
+   PROFILE — BEAUTIFUL MODAL UI
+   ============================= */
 
+.edit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(2px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 9999;
+  animation: fadeIn .25s ease;
+}
+
+.edit-modal.show {
+  display: flex !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.edit-modal-content {
+  width: 450px;
+  max-width: 95%;
+  background: #ffffff;
+  padding: 28px 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+  animation: slideUp .25s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.edit-modal-content h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 20px;
+}
+
+/* Labels */
+.edit-modal-content label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: block;
+  color: #374151;
+}
+
+/* Inputs */
+.edit-modal-content input,
+.edit-modal-content textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1.6px solid #e5e7eb;
+  background: #f9fafb;
+  font-size: 14px;
+  transition: .2s ease;
+  margin-bottom: 14px;
+}
+
+.edit-modal-content input:focus,
+.edit-modal-content textarea:focus {
+  border-color: #6366f1;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+  outline: none;
+}
+
+/* Buttons */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.save-btn,
+.close-btn {
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+.save-btn {
+  background: linear-gradient(90deg, #6366f1, #4f46e5);
+  color: white;
+  box-shadow: 0 6px 14px rgba(99,102,241,0.35);
+}
+
+.save-btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.close-btn {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.close-btn:hover {
+  background: #d1d5db;
+  transform: translateY(-1px);
+}
+/* ================================
+   PROFILE PROJECTS — 1 HÀNG NGANG
+   ================================ */
+
+#profile-section .ap-projects {
+  width: min(95%, 1100px);
+  margin: 0 auto;
+}
+#profile-section .ap-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+#profile-section .ap-projects::-webkit-scrollbar {
+  height: 8px;
+}
+#profile-section .ap-projects::-webkit-scrollbar-thumb {
+  background: #c7cbd4;
+  border-radius: 6px;
+}
+#profile-section .ap-card {
+  width: 100%;
+  min-width: 280px;
+}
+/* FIX NÚT SỬA HỒ SƠ */
+.edit-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+
+  background: #ffffff;
+  color: #111;
+
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.edit-profile-btn i {
+  font-size: 13px;
+  color: #374151;
+}
+
+/* Hover */
+.edit-profile-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+}
+
+/* Khi click */
+.edit-profile-btn:active {
+  transform: scale(0.97);
+}
 
