@@ -6,11 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
+
 
     /**
      * Tìm feedback theo eventId và userId (để kiểm tra user đã feedback chưa)
@@ -21,6 +23,11 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
      * Lấy tất cả feedback của một sự kiện
      */
     List<Feedback> findByEventIdOrderByCreatedAtDesc(Long eventId);
+
+        /**
+     * Xoá tất cả feedback của một event
+     */
+    void deleteByEventId(Long eventId);
 
     /**
      * Lấy tất cả feedback của một user

@@ -27,3 +27,4 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE e.endTime >= :oneHourAgo AND e.endTime <= :now AND e.status != 'CANCELLED'")
     List<Event> findEventsJustEnded(@Param("oneHourAgo") LocalDateTime oneHourAgo, @Param("now") LocalDateTime now);
 }
+

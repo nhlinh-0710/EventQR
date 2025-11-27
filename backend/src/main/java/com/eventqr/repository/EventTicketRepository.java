@@ -11,4 +11,10 @@ public interface EventTicketRepository extends JpaRepository<EventTicket, Long> 
     List<EventTicket> findByUserId(Long userId);                  // 🔥 Long
     
     List<EventTicket> findByEventId(Long eventId);                 // Tìm tickets theo eventId
+
+        /**
+     * Xoá tất cả vé của một event
+     */
+    void deleteByEventId(Long eventId);
+
 }

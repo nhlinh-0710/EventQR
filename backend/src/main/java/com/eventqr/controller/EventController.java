@@ -82,29 +82,6 @@ public class EventController {
         }
     }
     
-    // API: DELETE /api/events/{id} (Xóa Sự Kiện)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEvent(
-            @PathVariable Long id,
-            @RequestHeader(value = "X-Organizer-Id", required = false) Long organizerIdHeader,
-            @RequestParam(value = "organizerId", required = false) Long organizerIdParam) {
-        try {
-            Long organizerId = organizerIdHeader != null ? organizerIdHeader : organizerIdParam;
-            if (organizerId == null) {
-                return new ResponseEntity<>("Thiếu thông tin organizerId", HttpStatus.BAD_REQUEST);
-            }
-            
-            eventService.deleteEvent(id, organizerId);
-            return new ResponseEntity<>(Map.of("success", true, "message", "Xóa sự kiện thành công"), HttpStatus.OK);
-        } catch (IllegalStateException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Lỗi khi xóa sự kiện: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    
     // API: GET /api/events/{id} (Lấy Chi Tiết Sự Kiện)
     // Nếu có organizerId, chỉ trả về nếu organizer là chủ sở hữu
     // Nếu không có organizerId, cho phép xem công khai (cho user tham dự)
@@ -197,6 +174,7 @@ public class EventController {
             );
         }
     }
+    
     
     /**
      * Cập nhật status của event dựa trên thời gian hiện tại

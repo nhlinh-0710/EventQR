@@ -46,5 +46,11 @@ public interface CheckinRepository extends JpaRepository<CheckInHistory, Long> {
      * Lấy tất cả check-in của một sự kiện
      */
     List<CheckInHistory> findByEventId(Long eventId);
+
+        /**
+     * Xoá toàn bộ lịch sử checkin của một event
+     */
+    void deleteByEventId(Long eventId);
+
 }
 
