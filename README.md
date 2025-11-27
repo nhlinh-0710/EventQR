@@ -419,24 +419,7 @@ stompClient.subscribe('/user/queue/notifications', (message) => {
 });
 ```
 
----
 
-## 📸 Screenshots
-
-### Landing Page
-![Landing Page](screenshots/landing.png)
-
-### Admin Dashboard
-![Admin Dashboard](image.png)
-
-### Event Management
-![Event Management](image.png)
-
-### QR Check-in
-![QR Check-in](image.png) 
-
-### Statistics
-![Statistics](image.png)
 
 
 ---
