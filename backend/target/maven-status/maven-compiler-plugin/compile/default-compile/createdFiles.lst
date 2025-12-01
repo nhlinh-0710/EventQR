@@ -10,9 +10,12 @@ com\eventqr\service\EventNotificationScheduler.class
 com\eventqr\repository\FeedbackRepository.class
 com\eventqr\repository\EventRepository.class
 com\eventqr\dto\QrCheckinPayload.class
+com\eventqr\service\FileStorageService.class
 com\eventqr\dto\AttendeeResponse.class
 com\eventqr\dto\CheckInHistoryResponse.class
 com\eventqr\controller\EventRegistrationController.class
+com\eventqr\controller\AdminEventController.class
+com\eventqr\util\ImageUrlConverter.class
 com\eventqr\service\NotificationService.class
 com\eventqr\dto\AttendeeStatistics.class
 com\eventqr\dto\EventRequest.class
@@ -44,10 +47,12 @@ com\eventqr\repository\NotificationRepository.class
 com\eventqr\repository\EventTicketRepository.class
 com\eventqr\service\FeedbackService.class
 com\eventqr\controller\AuthController.class
+com\eventqr\controller\ImageController.class
 com\eventqr\config\CorsConfig$1.class
 com\eventqr\repository\CheckinRepository.class
 com\eventqr\service\StatisticsService.class
 com\eventqr\dto\EventStatisticsDTO$TimeSeriesStat.class
 com\eventqr\dto\EventStatisticsDTO.class
 com\eventqr\service\EventServiceImpl.class
+com\eventqr\config\WebConfig.class
 com\eventqr\service\AuthService.class

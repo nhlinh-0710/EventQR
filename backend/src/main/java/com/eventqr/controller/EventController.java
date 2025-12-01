@@ -13,6 +13,7 @@ import java.util.Map;
 import com.eventqr.dto.EventRequest;
 import com.eventqr.model.Event;
 import com.eventqr.service.EventService;
+import com.eventqr.util.ImageUrlConverter;
 
 @RestController
 @RequestMapping("/api/events")
@@ -48,6 +49,10 @@ public class EventController {
             eventRequest.setOrganizerId(organizerId);
             
             Event createdEvent = eventService.createEvent(eventRequest);
+            
+            // Convert imageUrl trước khi trả về
+            prepareEventForResponse(createdEvent, LocalDateTime.now());
+            
             return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(
@@ -72,6 +77,10 @@ public class EventController {
             }
             
             Event updatedEvent = eventService.updateEvent(id, eventRequest, organizerId);
+            
+            // Convert imageUrl trước khi trả về
+            prepareEventForResponse(updatedEvent, LocalDateTime.now());
+            
             return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
         } catch (IllegalStateException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
@@ -93,8 +102,8 @@ public class EventController {
         try {
             Event event = eventService.getEventById(id);
             
-            // Cập nhật status động
-            updateEventStatus(event, LocalDateTime.now());
+            // Cập nhật status động và convert image URL
+            prepareEventForResponse(event, LocalDateTime.now());
             
             // Nếu có organizerId, kiểm tra quyền sở hữu
             Long organizerId = organizerIdHeader != null ? organizerIdHeader : organizerIdParam;
@@ -128,9 +137,9 @@ public class EventController {
         try {
         List<Event> events = eventService.findAll();
         
-        // Cập nhật status động cho tất cả events
+        // Cập nhật status động và convert image URL cho tất cả events
         LocalDateTime now = LocalDateTime.now();
-        events.forEach(event -> updateEventStatus(event, now));
+        events.forEach(event -> prepareEventForResponse(event, now));
         
         if (events.isEmpty()) {
             // ✅ SỬA ĐỔI: Thay vì NO_CONTENT (204), trả về MẢNG RỖNG (200 OK)
@@ -162,9 +171,9 @@ public class EventController {
             
             List<Event> events = eventService.findByOrganizerId(organizerId);
             
-            // Cập nhật status động cho tất cả events
+            // Cập nhật status động và convert image URL cho tất cả events
             LocalDateTime now = LocalDateTime.now();
-            events.forEach(event -> updateEventStatus(event, now));
+            events.forEach(event -> prepareEventForResponse(event, now));
             
             return new ResponseEntity<>(events, HttpStatus.OK);
         } catch (Exception e) {
@@ -213,5 +222,23 @@ public class EventController {
             // Đang diễn ra
             event.setStatus("ONGOING");
         }
+    }
+    
+    /**
+     * Convert đường dẫn file thành URL có thể truy cập được qua API
+     */
+    private void convertImageUrlToApiUrl(Event event) {
+        String convertedUrl = ImageUrlConverter.convertToAccessibleUrl(event.getImageUrl());
+        if (convertedUrl != null) {
+            event.setImageUrl(convertedUrl);
+        }
+    }
+    
+    /**
+     * Xử lý event trước khi trả về cho frontend (update status và convert image URL)
+     */
+    private void prepareEventForResponse(Event event, LocalDateTime now) {
+        updateEventStatus(event, now);
+        convertImageUrlToApiUrl(event);
     }
 }

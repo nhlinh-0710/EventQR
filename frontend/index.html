@@ -8,8 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/chatbot.css"> 
+    <link rel="stylesheet" href="css/style.css"> 
 </head>
 
 <body>
@@ -403,45 +402,7 @@
             </form>
         </div>
     </div>
-    <!-- 🤖 AI Chatbot -->
-<button id="cb-open" class="cb-fab" aria-label="Mở trợ lý AI">
-  🤖
-</button>
-
-<div id="cb-window" class="cb-window hidden" role="dialog" aria-labelledby="cb-title">
-  <div class="cb-header">
-    <div class="cb-badge">🤖</div>
-    <div class="cb-header-content">
-      <h3 class="cb-header-title" id="cb-title">Trợ lý AI</h3>
-      <p class="cb-header-subtitle">Luôn sẵn sàng hỗ trợ bạn</p>
-    </div>
-    <button id="cb-close" class="cb-close" aria-label="Đóng">✕</button>
-  </div>
-
-  <div id="cb-messages" class="cb-body"></div>
-
-  <div class="cb-inputbar">
-    <input 
-      id="cb-input" 
-      class="cb-input" 
-      type="text"
-      placeholder="Nhập tin nhắn..." 
-      autocomplete="off"
-      aria-label="Nhập tin nhắn"
-    />
-    <button id="cb-send" class="cb-send" aria-label="Gửi tin nhắn">
-      ➤
-    </button>
-  </div>
-</div>
   <script src="js/core/main.js"></script>
-  
-  <!-- AI Chatbot - Choose one: -->
-  <!-- Option 1: Simple (No API, works offline) -->
-  <!-- <script src="js/core/chatbot-simple.js"></script> -->
-  
-  <!-- Option 2: AI-powered (Smart, Natural Language) - ACTIVE -->
-  <script src="js/core/chatbot.js"></script>
 
 </body>
 </html>

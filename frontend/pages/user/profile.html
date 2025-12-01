@@ -104,79 +104,63 @@
         <!-- HERO -->
         <div class="ap-hero">
           <div class="ap-left">
-            <img loading="lazy" src="https://hoangphucphoto.com/wp-content/uploads/2023/07/anh-nhom-1.jpg"
-              alt="Avatar nhóm" class="ap-avatar" />
+            <img loading="lazy" 
+                 src="https://ui-avatars.com/api/?name=User&background=6C5CE7&color=fff&size=200"
+                 alt="Profile Avatar" 
+                 class="ap-avatar"
+                 id="profile-avatar" />
           </div>
           <div class="ap-right">
-    <h1 class="ap-name">NHÓM CỦA CHÚNG TÔI</h1>
-    <p class="ap-title">Software Engineer · Web Developer</p>
-    <p class="ap-about">
-      Tạo ra những sản phẩm web hiện đại, thân thiện, tối ưu trải nghiệm và mang lại giá trị thật cho doanh nghiệp.
-      Chúng tôi kết hợp <strong>kỹ thuật</strong> và <strong>tư duy sản phẩm</strong> để ship nhanh – chuẩn – bền.
-    </p>
+            <h1 class="ap-name" id="profile-name">Đang tải...</h1>
+            <p class="ap-title" id="profile-role">Người dùng</p>
+            <p class="ap-about" id="profile-about">
+              Thành viên của EventQR - Nền tảng quản lý sự kiện hiện đại và tiện lợi.
+            </p>
 
-    <!-- ⭐ NÚT SỬA HỒ SƠ — CHỈ THÊM DÒNG NÀY ⭐ -->
-    <button class="edit-profile-btn"><i class="fas fa-edit"></i> Sửa hồ sơ</button>
+            <button class="edit-profile-btn"><i class="fas fa-edit"></i> Sửa hồ sơ</button>
 
-    <div class="ap-meta-badges">
-      <span class="badge">⚡ Agile</span>
-      <span class="badge">🔐 Bảo mật</span>
-      <span class="badge">📈 Hiệu năng</span>
-      <span class="badge">🧪 QA</span>
-    </div>
+            <div class="ap-meta-badges">
+              <span class="badge">🎫 EventQR Member</span>
+              <span class="badge">⚡ Active User</span>
+            </div>
 
-    <div class="ap-socials" style="display:flex; gap:8px;">
-      <a href="https://www.facebook.com/share/1WBDuKs5wK/?mibextid=wwXIfr" target="_blank" rel="noopener"
-        aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-      <a href="https://github.com/your-org" target="_blank" rel="noopener" aria-label="GitHub"><i
-          class="fab fa-github"></i></a>
-      <a href="mailto:Hoviethao@email.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-    </div>
-</div>
+            <div class="ap-socials" style="display:flex; gap:8px; margin-top: 12px;">
+              <a href="#" id="profile-email-link" aria-label="Email" title="">
+                <i class="fas fa-envelope"></i>
+              </a>
+            </div>
+            <div style="margin-top: 8px; color: #6b7280; font-size: 14px;">
+              <div><i class="fas fa-envelope" style="margin-right: 6px;"></i><span id="profile-email-text">-</span></div>
+              <div style="margin-top: 4px;"><i class="fas fa-phone" style="margin-right: 6px;"></i><span id="profile-phone-text">-</span></div>
+            </div>
+          </div>
+        </div>
 
+        <!-- STATS -->
+        <div class="ap-stats">
+          <div class="stat">
+            <div class="stat-num" id="stat-events">0</div>
+            <div class="stat-label">Sự kiện đã tham gia</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="stat-tickets">0</div>
+            <div class="stat-label">Vé đang có</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="stat-checkins">0</div>
+            <div class="stat-label">Lượt check-in</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="stat-member">-</div>
+            <div class="stat-label">Thành viên từ</div>
+          </div>
+        </div>
 
-        <!-- RECENT EVENTS -->
+        <!-- PROJECTS -->
         <div class="ap-projects">
-          <h2 class="ap-h2">Sự kiện đăng ký gần đây</h2>
+          <h2 class="ap-h2">Vé của tôi</h2>
           <div class="ap-grid">
-            <article class="ap-card">
-              <div class="ap-card-cover">
-                <img loading="lazy"
-                  src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1600&auto=format&fit=crop"
-                  alt="Sơn Tùng MTP" />
-              </div>
-              <div class="ap-meta">
-                <h3>Sơn Tùng MTP</h3>
-                <p>📅 00:14 27/11/2025 · 📍 Âu Cơ<br>Không có mô tả.</p>
-                <div class="ap-tags"><span>Đã hủy</span></div>
-              </div>
-            </article>
-
-            <article class="ap-card">
-              <div class="ap-card-cover">
-                <img loading="lazy"
-                  src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1600&auto=format&fit=crop"
-                  alt="DTU_event" />
-              </div>
-              <div class="ap-meta">
-                <h3>DTU_event</h3>
-                <p>📅 18:19 27/11/2025 · 📍 Nguyễn Văn Linh<br>Không có mô tả.</p>
-                <div class="ap-tags"><span>Sắp diễn ra</span></div>
-              </div>
-            </article>
-
-            <article class="ap-card">
-              <div class="ap-card-cover">
-                <img loading="lazy"
-                  src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop"
-                  alt="Đà Nẵng Festival" />
-              </div>
-              <div class="ap-meta">
-                <h3>Đà Nẵng Festival</h3>
-                <p>📅 14:15 27/11/2025 · 📍 Quang Trung<br>Không có mô tả.</p>
-                <div class="ap-tags"><span>Đang diễn ra</span></div>
-              </div>
-            </article>
+            <!-- Tickets will be loaded dynamically -->
           </div>
         </div>
         <!-- EDIT PROFILE MODAL -->
@@ -241,16 +225,19 @@
       const userAvatarElement = document.getElementById('userAvatar');
       
       if (userNameElement) {
-        userNameElement.textContent = user.fullName || user.username || 'Người dùng';
+        userNameElement.textContent = user.name || user.fullName || user.username || 'Người dùng';
       }
       
       if (userAvatarElement) {
-        const initial = (user.fullName || user.username || 'U').charAt(0).toUpperCase();
+        const initial = (user.name || user.fullName || user.username || 'U').charAt(0).toUpperCase();
         userAvatarElement.textContent = initial;
       }
       
+      // ✅ Populate profile info
+      populateProfileInfo(user);
+      
       // Load registered events
-      await loadRegisteredEvents(user.id);
+      await loadRegisteredEvents(user.user_id);
       
       // Setup edit profile button
       setupEditProfileButton();
@@ -262,24 +249,70 @@
       setupSidebarToggle();
     });
     
+    // Populate profile information
+    function populateProfileInfo(user) {
+      console.log('📝 Populating profile info for user:', user);
+      
+      // Profile Avatar & Name
+      const profileAvatar = document.getElementById('profile-avatar');
+      const profileName = document.getElementById('profile-name');
+      const profileRole = document.getElementById('profile-role');
+      const profileEmailLink = document.getElementById('profile-email-link');
+      const profileEmailText = document.getElementById('profile-email-text');
+      const profilePhoneText = document.getElementById('profile-phone-text');
+      
+      if (!user) {
+        console.warn('⚠️ No user data provided');
+        return;
+      }
+      
+      if (profileName) {
+        profileName.textContent = user.name || user.fullName || user.username || 'Người dùng';
+        console.log('✅ Set profile name:', profileName.textContent);
+      }
+      
+      if (profileRole) {
+        const roleMap = {
+          'admin': '🔑 Quản trị viên',
+          'organizer': '👔 Người tổ chức',
+          'user': '👤 Người dùng'
+        };
+        profileRole.textContent = roleMap[user.role] || '👤 Người dùng';
+        console.log('✅ Set profile role:', profileRole.textContent);
+      }
+      
+      // Email
+      if (profileEmailLink && user.email) {
+        profileEmailLink.href = `mailto:${user.email}`;
+        profileEmailLink.title = user.email;
+      }
+      if (profileEmailText) {
+        profileEmailText.textContent = user.email || '-';
+        console.log('✅ Set email:', profileEmailText.textContent);
+      }
+      
+      // Phone
+      if (profilePhoneText) {
+        profilePhoneText.textContent = user.phone || 'Chưa cập nhật';
+        console.log('✅ Set phone:', profilePhoneText.textContent);
+      }
+      
+      // Update avatar with user initials
+      if (profileAvatar) {
+        const name = user.name || user.fullName || user.username || 'User';
+        profileAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6C5CE7&color=fff&size=200`;
+        profileAvatar.alt = name;
+        console.log('✅ Set avatar for:', name);
+      }
+    }
+    
     // Load registered events
     async function loadRegisteredEvents(userId) {
       try {
         console.log('📅 Loading registered events for user:', userId);
         
-        const userDataString = localStorage.getItem('currentUser');
-        const userData = userDataString ? JSON.parse(userDataString) : null;
-        const token = userData ? userData.token : null;
-        
-        if (!token) {
-          console.warn('⚠️ No token found');
-          showNoEvents();
-          return;
-        }
-        
-        const response = await fetch(`http://localhost:8080/api/events/user/${userId}/tickets`, {
+        const response = await fetch(`http://localhost:8080/api/user/${userId}/tickets`, {
           headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
@@ -288,18 +321,48 @@
           throw new Error('Failed to load events');
         }
         
-        const events = await response.json();
-        console.log('✅ Loaded events:', events);
+        const tickets = await response.json();
+        console.log('✅ Loaded tickets:', tickets);
         
-        displayRegisteredEvents(events);
+        // ✅ Update stats
+        updateStats(tickets);
+        
+        displayRegisteredEvents(tickets);
       } catch (error) {
         console.error('❌ Error loading events:', error);
         showNoEvents();
       }
     }
     
+    // Update statistics
+    function updateStats(tickets) {
+      // Total events
+      const statEvents = document.getElementById('stat-events');
+      if (statEvents) statEvents.textContent = tickets.length;
+      
+      // Active tickets (not cancelled)
+      const activeTickets = tickets.filter(t => !t.cancelled).length;
+      const statTickets = document.getElementById('stat-tickets');
+      if (statTickets) statTickets.textContent = activeTickets;
+      
+      // Check-ins (mock - would need real API endpoint)
+      const statCheckins = document.getElementById('stat-checkins');
+      if (statCheckins) statCheckins.textContent = '-';
+      
+      // Member since
+      const statMember = document.getElementById('stat-member');
+      const userData = JSON.parse(localStorage.getItem('currentUser'));
+      if (statMember && userData && userData.created_at) {
+        const joinDate = new Date(userData.created_at);
+        const monthYear = joinDate.toLocaleDateString('vi-VN', { month: 'short', year: 'numeric' });
+        statMember.textContent = monthYear;
+      } else if (statMember) {
+        statMember.textContent = '-';
+      }
+    }
+    
     // Display registered events
-    function displayRegisteredEvents(events) {
+    function displayRegisteredEvents(tickets) {
       const gridContainer = document.querySelector('.ap-grid');
       
       if (!gridContainer) {
@@ -307,45 +370,74 @@
         return;
       }
       
-      if (!events || events.length === 0) {
+      if (!tickets || tickets.length === 0) {
         showNoEvents();
         return;
       }
       
-      // Take only the 3 most recent events
-      const recentEvents = events.slice(0, 3);
+      // Take only the 3 most recent tickets
+      const recentTickets = tickets.slice(0, 3);
       
-      gridContainer.innerHTML = recentEvents.map(ticket => {
-        const event = ticket.event;
-        const eventDate = new Date(event.eventDate);
+      gridContainer.innerHTML = recentTickets.map(ticket => {
+        // API trả về: ticketId, eventId, eventTitle, location, imageUrl, startTime, endTime, eventStatus, cancelled
+        const startTime = new Date(ticket.startTime);
+        const endTime = new Date(ticket.endTime);
         const now = new Date();
         
         let status = '';
-        let statusClass = '';
+        let statusColor = '';
         
-        if (event.status === 'CANCELLED') {
+        // Kiểm tra status
+        if (ticket.cancelled || ticket.eventStatus === 'CANCELLED') {
           status = 'Đã hủy';
-          statusClass = 'badge-cancelled';
-        } else if (eventDate > now) {
-          status = 'Sắp diễn ra';
-          statusClass = 'badge-upcoming';
-        } else {
+          statusColor = '#EF4444';
+        } else if (endTime < now) {
           status = 'Đã kết thúc';
-          statusClass = 'badge-ended';
+          statusColor = '#6B7280';
+        } else if (startTime > now) {
+          status = 'Sắp diễn ra';
+          statusColor = '#3B82F6';
+        } else {
+          status = 'Đang diễn ra';
+          statusColor = '#10B981';
         }
         
-        const imageUrl = event.imageUrl || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop';
+        // Xử lý imageUrl giống như my-tickets.js
+        let finalImageUrl = 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop';
+        if (ticket.imageUrl) {
+          if (ticket.imageUrl.startsWith('http://') || ticket.imageUrl.startsWith('https://')) {
+            finalImageUrl = ticket.imageUrl;
+          } else if (ticket.imageUrl.startsWith('/')) {
+            finalImageUrl = 'http://localhost:8080' + ticket.imageUrl;
+          } else {
+            finalImageUrl = 'http://localhost:8080/images/' + ticket.imageUrl;
+          }
+        }
         
         return `
           <article class="ap-card">
             <div class="ap-card-cover">
-              <img loading="lazy" src="${imageUrl}" alt="${event.eventName}" />
+              <img loading="lazy" src="${finalImageUrl}" alt="${ticket.eventTitle}" />
             </div>
             <div class="ap-meta">
-              <h3>${event.eventName}</h3>
-              <p>📅 ${formatDateTime(event.eventDate)} · 📍 ${event.location}<br>
-              ${event.description || 'Không có mô tả.'}</p>
-              <div class="ap-tags"><span class="${statusClass}">${status}</span></div>
+              <h3>${ticket.eventTitle}</h3>
+              <p class="meta-line">
+                <i class="fas fa-calendar-alt"></i> ${formatDateTime(ticket.startTime)}
+              </p>
+              <p class="meta-line">
+                <i class="fas fa-map-marker-alt"></i> ${ticket.location}
+              </p>
+              <p>Vé #${ticket.ticketId}</p>
+              <div class="ap-tags">
+                <span style="
+                  background:${statusColor}20;
+                  color:${statusColor};
+                  padding:6px 12px;
+                  border-radius:12px;
+                  font-size:13px;
+                  font-weight:600;
+                ">${status}</span>
+              </div>
             </div>
           </article>
         `;
@@ -356,7 +448,9 @@
     function showNoEvents() {
       const gridContainer = document.querySelector('.ap-grid');
       if (gridContainer) {
-        gridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem;">Chưa có sự kiện nào.</p>';
+        gridContainer.innerHTML = `
+          <p style="text-align: center; color: #6b7280; padding: 2rem;">Chưa có vé nào. Hãy khám phá các sự kiện thú vị!</p>
+        `;
       }
     }
     
@@ -378,7 +472,7 @@
       
       if (editBtn && modal) {
         editBtn.addEventListener('click', () => {
-          modal.style.display = 'flex';
+          modal.classList.add('show');
         });
       }
     }
@@ -387,7 +481,7 @@
     function closeEditProfile() {
       const modal = document.getElementById('profileEditModal');
       if (modal) {
-        modal.style.display = 'none';
+        modal.classList.remove('show');
       }
     }
     
@@ -445,116 +539,7 @@
       console.log('View all notifications...');
     }
   </script>
-  
-  <style>
-    .badge-cancelled {
-      background-color: #ff4444;
-      color: white;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-    }
-    
-    .badge-upcoming {
-      background-color: #4CAF50;
-      color: white;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-    }
-    
-    .badge-ended {
-      background-color: #9E9E9E;
-      color: white;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-    }
-    
-    .edit-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-    
-    .edit-modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      max-width: 500px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    
-    .edit-modal-content h2 {
-      margin-top: 0;
-      margin-bottom: 1.5rem;
-    }
-    
-    .edit-modal-content label {
-      display: block;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-    
-    .edit-modal-content input,
-    .edit-modal-content textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-family: inherit;
-    }
-    
-    .edit-modal-content textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-    
-    .modal-actions {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-    
-    .save-btn,
-    .close-btn {
-      flex: 1;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    
-    .save-btn {
-      background: #6C5CE7;
-      color: white;
-    }
-    
-    .save-btn:hover {
-      background: #5f4fd1;
-    }
-    
-    .close-btn {
-      background: #e0e0e0;
-      color: #333;
-    }
-    
-    .close-btn:hover {
-      background: #d0d0d0;
-    }
-  </style>
+
 </body>
 
 </html>

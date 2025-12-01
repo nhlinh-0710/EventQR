@@ -32,10 +32,6 @@ public class AdminEventController {
         this.checkinRepository = checkinRepository;
     }
 
-    /**
-     * DELETE /api/admin/events/{eventId}
-     * Admin xoá event + toàn bộ dữ liệu liên quan (feedback, checkin, vé)
-     */
     @DeleteMapping("/{eventId}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long eventId) {
 
@@ -47,12 +43,12 @@ public class AdminEventController {
                     ));
         }
 
-        // Xoá dữ liệu phụ trước để tránh lỗi ràng buộc khoá ngoại
+        
         feedbackRepository.deleteByEventId(eventId);
         checkinRepository.deleteByEventId(eventId);
         eventTicketRepository.deleteByEventId(eventId);
 
-        // Cuối cùng xoá event
+        
         eventRepository.deleteById(eventId);
 
         return ResponseEntity.ok(

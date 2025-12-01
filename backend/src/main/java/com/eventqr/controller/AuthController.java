@@ -54,7 +54,7 @@ public class AuthController {
         return response;
     }
 
-    // Optional: Thêm endpoint test để kiểm tra server
+    
     @GetMapping("/test")
     public Map<String, Object> test() {
         Map<String, Object> res = new HashMap<>();

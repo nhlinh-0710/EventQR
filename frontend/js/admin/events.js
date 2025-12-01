@@ -2,6 +2,17 @@
    EVENTS PAGE JS — LOGIC KẾT NỐI API VÀO HTML MỚI
    ========================================================= */
 
+// Update user name in header
+document.addEventListener('DOMContentLoaded', function() {
+    const userData = getCurrentUser();
+    if (userData) {
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement) {
+            userNameElement.textContent = userData.name || 'Người dùng';
+        }
+    }
+});
+
 // --- CẤU HÌNH (CONSTANTS) ---
 // Tránh duplicate declaration
 if (typeof window.EVENTS_API_BASE_URL === 'undefined') {

@@ -2,6 +2,17 @@
    FEEDBACK PAGE INTERACTIONS
    ========================================== */
 (function () {
+    // Update user name in header
+    document.addEventListener("DOMContentLoaded", function() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser) {
+            const userNameElement = document.getElementById('userName');
+            if (userNameElement) {
+                userNameElement.textContent = currentUser.name || 'Người dùng';
+            }
+        }
+    });
+
     const root = document.getElementById("feedback-section");
     if (!root) return;
 

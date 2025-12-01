@@ -18,6 +18,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     console.log('👤 Current user:', currentUser);
     
+    // Update user name in header
+    if (currentUser) {
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement) {
+            userNameElement.textContent = currentUser.name || 'Người dùng';
+        }
+    }
+    
     if (!currentUser) {
         console.error('❌ Chưa đăng nhập');
         alert('Vui lòng đăng nhập để xem thống kê');

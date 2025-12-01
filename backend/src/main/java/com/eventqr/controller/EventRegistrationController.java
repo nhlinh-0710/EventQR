@@ -4,6 +4,7 @@ import com.eventqr.dto.EventRegisterRequest;
 import com.eventqr.dto.UserTicketResponse;
 import com.eventqr.model.EventTicket;
 import com.eventqr.service.EventRegistrationService;
+import com.eventqr.util.ImageUrlConverter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +49,15 @@ public class EventRegistrationController {
     @GetMapping("/user/{userId}/tickets")
     public ResponseEntity<?> getTickets(@PathVariable Long userId) {
         List<UserTicketResponse> tickets = service.getTicketsOfUser(userId);
+        
+        // Convert image URLs cho tất cả tickets
+        tickets.forEach(ticket -> {
+            String convertedUrl = ImageUrlConverter.convertToAccessibleUrl(ticket.getImageUrl());
+            if (convertedUrl != null) {
+                ticket.setImageUrl(convertedUrl);
+            }
+        });
+        
         return ResponseEntity.ok(tickets);
     }
 

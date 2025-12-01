@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `event` (
   `status` VARCHAR(50) DEFAULT 'DRAFT',
   `max_participants` INT(11),
   `organizer_id` INT(11) NOT NULL,
-  `image_url` VARCHAR(255),
+  `image_url` VARCHAR(500),  -- Tăng từ 255 lên 500 để lưu đường dẫn tuyệt đối dài
   `created_at` DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),
   `updated_at` DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`event_id`),

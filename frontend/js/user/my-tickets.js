@@ -13,6 +13,15 @@ let allTickets = [];
    DOM READY
 ---------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
+    // Update user name in header
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement) {
+            userNameElement.textContent = currentUser.name || 'Người dùng';
+        }
+    }
+    
     loadMyTickets();
     initTicketFilters();
     initQRButtons();
@@ -567,9 +576,22 @@ function shortenQR(ticketId, eventId, userId) {
    IMAGE FIX
 ===================================================== */
 function fixImagePath(path) {
+    // Default fallback image
     if (!path || path === "null") return "../../images/default-event.png";
-    if (path.startsWith("/images")) return ".." + path;
-    return path;
+    
+    // Nếu đã là full URL
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+        return path;
+    }
+    
+    // Nếu là đường dẫn tương đối bắt đầu bằng /
+    if (path.startsWith('/')) {
+        // Ghép với base URL của backend
+        return 'http://localhost:8080' + path;
+    }
+    
+    // Nếu là đường dẫn tương đối khác
+    return 'http://localhost:8080/images/' + path;
 }
 
 /* =====================================================

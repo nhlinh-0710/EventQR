@@ -4,6 +4,15 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  // Update user name in header
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (currentUser) {
+      const userNameElement = document.getElementById('userName');
+      if (userNameElement) {
+          userNameElement.textContent = currentUser.name || 'Người dùng';
+      }
+  }
+
   // =============================
   // 1. STATE
   // =============================
@@ -211,12 +220,27 @@ document.addEventListener("DOMContentLoaded", () => {
     items.forEach(ev => {
       const s = getEventStatus(ev);
 
+      // Xử lý imageUrl
+      let finalImageUrl = "/assets/img/default-event.jpg"; // Default fallback
+      if (ev.image) {
+        if (ev.image.startsWith('http://') || ev.image.startsWith('https://')) {
+          // Đã là full URL
+          finalImageUrl = ev.image;
+        } else if (ev.image.startsWith('/')) {
+          // Relative path bắt đầu bằng /, ghép với base URL của backend
+          finalImageUrl = 'http://localhost:8080' + ev.image;
+        } else {
+          // Relative path không có /, ghép với base
+          finalImageUrl = 'http://localhost:8080/images/' + ev.image;
+        }
+      }
+
       const card = document.createElement("article");
       card.className = "event-card";
 
       card.innerHTML = `
         <div class="event-cover">
-          <img src="${ev.image || "/assets/img/default-event.jpg"}" alt="${ev.title}">
+          <img src="${finalImageUrl}" alt="${ev.title}">
           <span class="event-badge">${statusLabel(s)}</span>
         </div>
 

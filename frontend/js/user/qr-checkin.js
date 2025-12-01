@@ -7,6 +7,15 @@ let currentQRPayload = null;
 
 // Khi DOM load
 document.addEventListener("DOMContentLoaded", () => {
+    // Update user name in header
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement) {
+            userNameElement.textContent = currentUser.name || 'Người dùng';
+        }
+    }
+    
     setupTabs();
     loadCheckinHistory();
     updateCheckinStats();
@@ -20,6 +29,11 @@ function setupTabs() {
     const tabs = document.querySelectorAll(".qr-tab");
     const contents = document.querySelectorAll(".qr-tab-content");
 
+    if (tabs.length === 0 || contents.length === 0) {
+        console.log("ℹ️ Không tìm thấy tabs trên trang này, bỏ qua setupTabs");
+        return;
+    }
+
     tabs.forEach(tab => {
         tab.addEventListener("click", () => {
             const name = tab.dataset.tab;
@@ -28,7 +42,10 @@ function setupTabs() {
             contents.forEach(c => c.classList.remove("active"));
 
             tab.classList.add("active");
-            document.getElementById(name + "-tab").classList.add("active");
+            const tabContent = document.getElementById(name + "-tab");
+            if (tabContent) {
+                tabContent.classList.add("active");
+            }
 
             // Rời tab Scan thì tắt camera
             if (name !== "scan") stopQRScanner();
@@ -43,6 +60,11 @@ async function startQRScanner() {
     const video = document.getElementById("qrVideo");
     const startBtn = document.getElementById("startScanBtn");
     const stopBtn = document.getElementById("stopScanBtn");
+
+    if (!video || !startBtn || !stopBtn) {
+        console.log("ℹ️ Các element QR scanner không tồn tại trên trang này");
+        return;
+    }
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -67,6 +89,13 @@ async function startQRScanner() {
 // Dừng quét
 function stopQRScanner() {
     const video = document.getElementById("qrVideo");
+    const startBtn = document.getElementById("startScanBtn");
+    const stopBtn = document.getElementById("stopScanBtn");
+
+    if (!video) {
+        console.log("ℹ️ Element qrVideo không tồn tại");
+        return;
+    }
 
     if (video.srcObject) {
         video.srcObject.getTracks().forEach(t => t.stop());
@@ -75,8 +104,8 @@ function stopQRScanner() {
     video.srcObject = null;
     video.style.display = "none";
 
-    document.getElementById("startScanBtn").style.display = "inline-flex";
-    document.getElementById("stopScanBtn").style.display = "none";
+    if (startBtn) startBtn.style.display = "inline-flex";
+    if (stopBtn) stopBtn.style.display = "none";
 
     clearInterval(qrScannerInterval);
 }
@@ -138,6 +167,10 @@ async function onQRDetected(qrString) {
 // Hiển thị khi quét thành công
 function updateScanResultSuccess(data) {
     const scanResult = document.getElementById("qrScanResult");
+    if (!scanResult) {
+        console.log("ℹ️ Element qrScanResult không tồn tại");
+        return;
+    }
     scanResult.style.display = "block";
     scanResult.innerHTML = `
         <div class="scan-success">
@@ -153,7 +186,12 @@ function updateScanResultSuccess(data) {
 // NHẬP MÃ TAY
 // =====================================================
 function processManualQRCode() {
-    const code = document.getElementById("manualQRCode").value.trim();
+    const manualQRCodeEl = document.getElementById("manualQRCode");
+    if (!manualQRCodeEl) {
+        console.log("ℹ️ Element manualQRCode không tồn tại");
+        return;
+    }
+    const code = manualQRCodeEl.value.trim();
     if (!code) return showNotification("Chưa nhập mã!", "error");
 
     fetch(`http://localhost:8080/api/checkin-by-code?code=${encodeURIComponent(code)}`)
@@ -174,14 +212,23 @@ function processManualQRCode() {
 // =====================================================
 function fillCheckinForm(data) {
     const form = document.getElementById("checkinForm");
+    const participantName = document.getElementById("participantName");
+    const participantEmail = document.getElementById("participantEmail");
+    const participantPhone = document.getElementById("participantPhone");
+    const checkinEventName = document.getElementById("checkinEventName");
+    const checkinTime = document.getElementById("checkinTime");
 
-    document.getElementById("participantName").value = data.user.name;
-    document.getElementById("participantEmail").value = data.user.email;
-    document.getElementById("participantPhone").value = data.phone || data.ticket.phone || "";
+    if (!form || !participantName || !participantEmail || !participantPhone || !checkinEventName || !checkinTime) {
+        console.log("ℹ️ Các element form check-in không tồn tại trên trang này");
+        return;
+    }
 
-    document.getElementById("checkinEventName").textContent = data.event.title;
-    document.getElementById("checkinTime").textContent =
-        new Date().toLocaleString("vi-VN");
+    participantName.value = data.user.name;
+    participantEmail.value = data.user.email;
+    participantPhone.value = data.phone || data.ticket.phone || "";
+
+    checkinEventName.textContent = data.event.title;
+    checkinTime.textContent = new Date().toLocaleString("vi-VN");
 
     form.dataset.apiData = JSON.stringify(data);
 
@@ -194,11 +241,20 @@ function fillCheckinForm(data) {
 // =====================================================
 async function confirmCheckin() {
     const form = document.getElementById("checkinForm");
+    const participantName = document.getElementById("participantName");
+    const participantEmail = document.getElementById("participantEmail");
+    const participantPhone = document.getElementById("participantPhone");
+
+    if (!form || !participantName || !participantEmail || !participantPhone) {
+        console.log("ℹ️ Các element form không tồn tại");
+        return;
+    }
+
     const data = JSON.parse(form.dataset.apiData);
 
-    const name = document.getElementById("participantName").value.trim();
-    const email = document.getElementById("participantEmail").value.trim();
-    const phone = document.getElementById("participantPhone").value.trim();
+    const name = participantName.value.trim();
+    const email = participantEmail.value.trim();
+    const phone = participantPhone.value.trim();
 
     if (!name || !email) return showNotification("Nhập đầy đủ thông tin!", "error");
 
@@ -214,9 +270,13 @@ async function confirmCheckin() {
 }
 
 function cancelCheckin() {
-    document.getElementById("checkinForm").style.display = "none";
-    document.getElementById("qrScanResult").style.display = "none";
-    document.getElementById("manualQRCode").value = "";
+    const checkinForm = document.getElementById("checkinForm");
+    const qrScanResult = document.getElementById("qrScanResult");
+    const manualQRCode = document.getElementById("manualQRCode");
+    
+    if (checkinForm) checkinForm.style.display = "none";
+    if (qrScanResult) qrScanResult.style.display = "none";
+    if (manualQRCode) manualQRCode.value = "";
 }
 
 // =====================================================
@@ -228,6 +288,13 @@ function storeCheckinRecord(record) {
 }
 
 async function loadCheckinHistory() {
+    // Kiểm tra xem element có tồn tại không (tránh lỗi khi load ở trang khác)
+    const body = document.getElementById("checkinTableBody");
+    if (!body) {
+        console.log("ℹ️ Element checkinTableBody không tồn tại trên trang này, bỏ qua loadCheckinHistory");
+        return;
+    }
+    
     // Lấy organizerId từ localStorage
     const currentUser = localStorage.getItem("currentUser");
     if (!currentUser) {
@@ -281,7 +348,6 @@ async function loadCheckinHistory() {
         console.log("📦 Dữ liệu check-in:", checkins);
         
         // Clear bảng và load lại
-        const body = document.getElementById("checkinTableBody");
         body.innerHTML = "";
         
         if (checkins.length === 0) {
@@ -377,6 +443,16 @@ Trạng thái: Đã check-in
 // THỐNG KÊ - TỪ API
 // =====================================================
 async function updateCheckinStats() {
+    // Kiểm tra xem các element có tồn tại không
+    const totalCheckinsEl = document.getElementById("totalCheckins");
+    const todayCheckinsEl = document.getElementById("todayCheckins");
+    const activeEventsEl = document.getElementById("activeEvents");
+    
+    if (!totalCheckinsEl || !todayCheckinsEl || !activeEventsEl) {
+        console.log("ℹ️ Các element thống kê không tồn tại trên trang này, bỏ qua updateCheckinStats");
+        return;
+    }
+    
     const currentUser = localStorage.getItem("currentUser");
     if (!currentUser) return;
     
@@ -392,7 +468,7 @@ async function updateCheckinStats() {
         const checkins = await response.json();
         
         // Tổng check-in
-        document.getElementById("totalCheckins").textContent = checkins.length;
+        totalCheckinsEl.textContent = checkins.length;
         
         // Check-in hôm nay
         const today = new Date().toLocaleDateString("vi-VN");
@@ -401,11 +477,11 @@ async function updateCheckinStats() {
             const checkinDate = c.checkinTime.split(" ")[0]; // Lấy phần ngày
             return checkinDate === today.split("/").reverse().join("/");
         }).length;
-        document.getElementById("todayCheckins").textContent = todayCheckins;
+        todayCheckinsEl.textContent = todayCheckins;
         
         // Số sự kiện unique
         const uniqueEvents = new Set(checkins.map(c => c.eventId));
-        document.getElementById("activeEvents").textContent = uniqueEvents.size;
+        activeEventsEl.textContent = uniqueEvents.size;
         
     } catch (error) {
         console.error("Lỗi khi cập nhật thống kê:", error);
@@ -521,11 +597,17 @@ function updateOldCheckinWithEventId(events) {
 function filterCheckinHistory() {
     const eventFilterElement = document.getElementById("historyEventFilter");
     const dateFilterElement = document.getElementById("historyDateFilter");
+    const body = document.getElementById("checkinTableBody");
+    
+    // Kiểm tra các element có tồn tại không
+    if (!eventFilterElement || !dateFilterElement || !body) {
+        console.log("ℹ️ Các element filter không tồn tại trên trang này, bỏ qua filterCheckinHistory");
+        return;
+    }
     
     const eventFilter = eventFilterElement.value;
     const dateFilter = dateFilterElement.value;
     
-    const body = document.getElementById("checkinTableBody");
     const allRows = body.querySelectorAll("tr[data-event-id]");
     
     console.log("===========================================");
@@ -587,11 +669,20 @@ function filterCheckinHistory() {
 }
 
 function resetFilters() {
-    document.getElementById("historyEventFilter").value = "";
-    document.getElementById("historyDateFilter").value = "";
+    const eventFilterElement = document.getElementById("historyEventFilter");
+    const dateFilterElement = document.getElementById("historyDateFilter");
+    const body = document.getElementById("checkinTableBody");
+    
+    // Kiểm tra các element có tồn tại không
+    if (!eventFilterElement || !dateFilterElement || !body) {
+        console.log("ℹ️ Các element filter không tồn tại trên trang này, bỏ qua resetFilters");
+        return;
+    }
+    
+    eventFilterElement.value = "";
+    dateFilterElement.value = "";
     
     // Hiển thị lại tất cả các row
-    const body = document.getElementById("checkinTableBody");
     const allRows = body.querySelectorAll("tr[data-event-id]");
     
     allRows.forEach(row => {

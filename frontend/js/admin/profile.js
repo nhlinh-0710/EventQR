@@ -3,6 +3,17 @@
 // ============================
 const PROFILE_KEY = "eventqr_profile";
 
+// Update user name in header
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement) {
+            userNameElement.textContent = currentUser.name || 'Người dùng';
+        }
+    }
+});
+
 function loadProfile() {
     const data = localStorage.getItem(PROFILE_KEY);
     return data ? JSON.parse(data) : null;

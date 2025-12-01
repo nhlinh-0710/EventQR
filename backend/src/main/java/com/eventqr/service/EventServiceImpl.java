@@ -17,6 +17,9 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private EventRepository eventRepository; 
+    
+    @Autowired
+    private FileStorageService fileStorageService; 
 
     @Override
     public Event getEventById(Long eventId) {
@@ -124,7 +127,13 @@ public class EventServiceImpl implements EventService {
 
         // 3. Xử lý File Upload (nếu có file mới)
         if (request.getEventImage() != null && !request.getEventImage().isEmpty()) {
-            // TODO: (Tùy chọn) Xóa ảnh cũ trước khi lưu ảnh mới
+            // Xóa ảnh cũ trước khi lưu ảnh mới
+            String oldImageUrl = existingEvent.getImageUrl();
+            if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
+                fileStorageService.deleteFile(oldImageUrl);
+            }
+            
+            // Lưu ảnh mới
             String newImageUrl = handleFileUpload(request.getEventImage());
             existingEvent.setImageUrl(newImageUrl);
         }
@@ -169,19 +178,19 @@ public class EventServiceImpl implements EventService {
             throw new IllegalStateException("Bạn không có quyền xóa sự kiện này");
         }
         
+        // Xóa ảnh trước khi xóa sự kiện
+        String imageUrl = event.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            fileStorageService.deleteFile(imageUrl);
+        }
+        
         eventRepository.delete(event);
     }
     
     /**
-     * PHẦN LOGIC XỬ LÝ LƯU FILE (CẦN TRIỂN KHAI CHI TIẾT)
+     * Xử lý upload file ảnh sự kiện
      */
     private String handleFileUpload(MultipartFile file) throws Exception {
-        if (file == null || file.isEmpty()) {
-            return null;
-        }
-        // TODO: Cần sử dụng thư viện IO của Java để lưu file vật lý vào thư mục cố định
-        // Ví dụ: file.transferTo(new File(UPLOAD_DIR, uniqueFileName));
-        // Tạm thời trả về tên file để demo
-        return "/images/events/" + file.getOriginalFilename(); 
+        return fileStorageService.saveFile(file);
     }
 }
