@@ -4,6 +4,8 @@ import com.eventqr.dto.DashboardStatsDTO;
 import com.eventqr.model.Event;
 import com.eventqr.repository.EventRepository;
 import com.eventqr.repository.EventTicketRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,8 @@ import java.util.List;
 @RequestMapping("/api/dashboard")
 @CrossOrigin(origins = "*")
 public class DashboardController {
+
+    private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
     
     @Autowired
     private EventRepository eventRepository;
@@ -64,7 +68,7 @@ public class DashboardController {
             return ResponseEntity.ok(stats);
             
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi lấy thống kê dashboard: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -107,7 +111,7 @@ public class DashboardController {
             return ResponseEntity.ok(recentEvents);
             
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi lấy recent events: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }

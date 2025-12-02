@@ -335,6 +335,7 @@ function renderEvents(events) {
                     <div class="actions">
                         <button class="btn btn-outline detail-btn" onclick="openDetailModal(${eventId})">Chi tiết</button>
                         <button class="btn btn-primary edit-btn" onclick="openEditModal(${eventId})">Chỉnh sửa</button>
+                        <button class="btn btn-danger delete-btn" onclick="deleteEvent(${eventId})">Xóa</button>
                     </div>
                 </div>
             </article>
@@ -541,6 +542,57 @@ async function saveEventChanges() {
     }
 }
 
+// ************************************************************
+// 5. HÀM XÓA SỰ KIỆN
+// ************************************************************
+
+/**
+ * Xóa sự kiện (global function for onclick)
+ */
+window.deleteEvent = async function(eventId) {
+    // Xác nhận trước khi xóa
+    const event = allEventsData.find(e => (e.eventId || e.id) == eventId);
+    const eventTitle = event ? (event.title || 'sự kiện này') : 'sự kiện này';
+    
+    const confirmed = confirm(`Bạn có chắc chắn muốn xóa "${eventTitle}"?\n\nHành động này không thể hoàn tác và sẽ xóa tất cả dữ liệu liên quan (feedback, check-in, vé).`);
+    
+    if (!confirmed) {
+        return;
+    }
+    
+    try {
+        console.log('🗑️ Đang xóa sự kiện:', eventId);
+        
+        // Gọi API xóa sự kiện (sử dụng admin endpoint)
+        const response = await fetch(`http://localhost:8080/api/admin/events/${eventId}`, {
+            method: 'DELETE'
+        });
+        
+        const responseText = await response.text();
+        let responseData;
+        
+        try {
+            responseData = JSON.parse(responseText);
+        } catch (e) {
+            responseData = { message: responseText || 'Lỗi không xác định' };
+        }
+        
+        if (response.ok) {
+            alert(responseData.message || 'Đã xóa sự kiện thành công!');
+            
+            // Xóa sự kiện khỏi danh sách local
+            allEventsData = allEventsData.filter(e => (e.eventId || e.id) != eventId);
+            
+            // Tải lại danh sách sự kiện
+            fetchEvents();
+        } else {
+            alert('Lỗi: ' + (responseData.message || 'Không thể xóa sự kiện'));
+        }
+    } catch (error) {
+        console.error('❌ Lỗi khi xóa sự kiện:', error);
+        alert('Có lỗi xảy ra khi kết nối server: ' + error.message);
+    }
+}
 
 // ************************************************************
 // HÀM KHỞI TẠO CHÍNH (GỌI KHI TẢI TRANG)

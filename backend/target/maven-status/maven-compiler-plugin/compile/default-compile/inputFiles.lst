@@ -1,7 +1,9 @@
+D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\controller\ChatbotController.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\dto\UserTicketResponse.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\dto\AttendeeResponse.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\util\EmailSender.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\controller\StatisticsController.java
+D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\dto\ChatbotRequest.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\util\ImageUrlConverter.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\dto\EventStatisticsDTO.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\controller\EventRegistrationController.java
@@ -9,11 +11,13 @@ D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\dto\DashboardStatsDTO.
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\service\EventNotificationScheduler.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\controller\CheckInController.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\config\CorsConfig.java
+D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\dto\ChatbotResponse.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\service\AttendeeService.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\dto\EventRequest.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\dto\CheckInHistoryResponse.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\repository\AccountRepository.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\model\Organizer.java
+D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\service\ChatbotService.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\EventQrApplication.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\model\EventTicket.java
 D:\DuyTan\NamBa\EventQR\backend\src\main\java\com\eventqr\service\FeedbackService.java

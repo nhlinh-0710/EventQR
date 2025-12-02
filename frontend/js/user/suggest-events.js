@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const data = await res.json();
 
-      // ⚠ Backend Spring Boot sẽ trả camelCase: eventId, imageUrl, startTime, endTime, category, location
+      
       events = data.map(ev => ({
         id: ev.eventId,                                // dùng eventId từ backend
         title: ev.title,
@@ -61,8 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
         image: ev.imageUrl,
         startTime: ev.startTime,
         endTime: ev.endTime,
-        status: ev.status || null,                     // QUAN TRỌNG: Lấy status từ backend
-        price: ev.price || 0,                          // nếu có field price thì xài, không thì 0
+        status: ev.status || null,                    
+        price: ev.price || 0,                          
       }));
 
       renderEvents();

@@ -1,5 +1,7 @@
 package com.eventqr.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +16,8 @@ import java.util.UUID;
 
 @Service
 public class FileStorageService {
+
+    private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
 
     @Value("${file.upload-dir:uploads/images/events}")
     private String uploadDir;
@@ -33,9 +37,9 @@ public class FileStorageService {
             // Tạo thư mục nếu chưa tồn tại
             if (!Files.exists(this.uploadPath)) {
                 Files.createDirectories(this.uploadPath);
-                System.out.println("✅ Đã tạo thư mục upload: " + this.uploadPath);
+                logger.info("✅ Đã tạo thư mục upload: {}", this.uploadPath);
             } else {
-                System.out.println("✅ Thư mục upload đã sẵn sàng: " + this.uploadPath);
+                logger.info("✅ Thư mục upload đã sẵn sàng: {}", this.uploadPath);
             }
         } catch (IOException e) {
             throw new RuntimeException("Không thể khởi tạo thư mục lưu trữ file: " + uploadDir, e);
@@ -75,7 +79,7 @@ public class FileStorageService {
 
         // Trả về đường dẫn đầy đủ của file để lưu vào database
         String savedPath = targetLocation.toString();
-        System.out.println("✅ Đã lưu file: " + savedPath);
+        logger.info("✅ Đã lưu file: {}", savedPath);
         return savedPath;
     }
 
@@ -94,13 +98,13 @@ public class FileStorageService {
             // Xóa file nếu tồn tại
             if (Files.exists(fileToDelete)) {
                 Files.delete(fileToDelete);
-                System.out.println("✅ Đã xóa file: " + filePath);
+                logger.info("✅ Đã xóa file: {}", filePath);
             } else {
-                System.out.println("⚠️ File không tồn tại: " + filePath);
+                logger.warn("⚠️ File không tồn tại: {}", filePath);
             }
         } catch (IOException e) {
             // Log error nhưng không throw exception vì xóa file không quan trọng bằng lưu file mới
-            System.err.println("❌ Không thể xóa file: " + filePath + " - " + e.getMessage());
+            logger.error("❌ Không thể xóa file: {} - {}", filePath, e.getMessage(), e);
         }
     }
 

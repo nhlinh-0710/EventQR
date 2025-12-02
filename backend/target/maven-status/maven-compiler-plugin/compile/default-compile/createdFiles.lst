@@ -13,6 +13,7 @@ com\eventqr\dto\QrCheckinPayload.class
 com\eventqr\service\FileStorageService.class
 com\eventqr\dto\AttendeeResponse.class
 com\eventqr\dto\CheckInHistoryResponse.class
+com\eventqr\service\ChatbotService$Intent.class
 com\eventqr\controller\EventRegistrationController.class
 com\eventqr\controller\AdminEventController.class
 com\eventqr\util\ImageUrlConverter.class
@@ -28,6 +29,8 @@ com\eventqr\model\Notification.class
 com\eventqr\config\WebSocketConfig.class
 com\eventqr\controller\EventController.class
 com\eventqr\config\CorsConfig.class
+com\eventqr\service\ChatbotService.class
+com\eventqr\controller\ChatbotController.class
 com\eventqr\service\EventService.class
 com\eventqr\controller\EventFeedbackController.class
 com\eventqr\dto\OrganizerFeedbackResponse.class
@@ -36,6 +39,8 @@ com\eventqr\controller\NotificationController.class
 com\eventqr\dto\DashboardStatsDTO.class
 com\eventqr\model\Feedback.class
 com\eventqr\model\Notification$NotificationStatus.class
+com\eventqr\dto\ChatbotRequest.class
+com\eventqr\dto\ChatbotResponse.class
 com\eventqr\dto\EventRegisterRequest.class
 com\eventqr\EventQrApplication.class
 com\eventqr\service\EventRegistrationService.class

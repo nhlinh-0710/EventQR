@@ -1,1 +1,4 @@
 /bin/
+
+# Application properties (contains sensitive data like API keys, passwords)
+backend/src/main/resources/application.properties

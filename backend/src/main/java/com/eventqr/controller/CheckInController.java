@@ -12,6 +12,8 @@ import com.eventqr.repository.CheckinRepository;
 import com.eventqr.repository.EventRepository;
 import com.eventqr.repository.EventTicketRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class CheckInController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CheckInController.class);
 
     private final EventTicketRepository ticketRepo;
     private final EventRepository eventRepo;
@@ -91,7 +95,7 @@ public class CheckInController {
             return ResponseEntity.badRequest().body(error(ex.getMessage()));
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("❌ Lỗi khi check-in: {}", ex.getMessage(), ex);
             return ResponseEntity.internalServerError().body(error("Lỗi hệ thống!"));
         }
     }
@@ -195,7 +199,7 @@ public ResponseEntity<?> checkInByCode(@RequestParam("code") String code) {
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi lấy lịch sử check-in: {}", e.getMessage(), e);
             return ResponseEntity.badRequest().body(error("Lỗi khi lấy lịch sử check-in: " + e.getMessage()));
         }
     }

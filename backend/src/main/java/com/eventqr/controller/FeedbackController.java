@@ -5,6 +5,8 @@ import com.eventqr.dto.FeedbackRequest;
 import com.eventqr.dto.FeedbackReplyRequest;
 import com.eventqr.dto.FeedbackResponse;
 import com.eventqr.service.FeedbackService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/api/feedback")
 @CrossOrigin(origins = "*")
 public class FeedbackController {
+
+    private static final Logger logger = LoggerFactory.getLogger(FeedbackController.class);
 
     private final FeedbackService feedbackService;
 
@@ -124,13 +128,12 @@ public class FeedbackController {
     @GetMapping("/organizer/{organizerId}")
     public ResponseEntity<?> getFeedbacksByOrganizer(@PathVariable("organizerId") Long organizerId) {
         try {
-            System.out.println("🔍 [FeedbackController] Nhận request cho organizer: " + organizerId);
+            logger.debug("🔍 [FeedbackController] Nhận request cho organizer: {}", organizerId);
             List<FeedbackResponse> feedbacks = feedbackService.getFeedbacksByOrganizerId(organizerId);
-            System.out.println("✅ [FeedbackController] Trả về " + feedbacks.size() + " feedback");
+            logger.debug("✅ [FeedbackController] Trả về {} feedback", feedbacks.size());
             return ResponseEntity.ok(feedbacks);
         } catch (Exception e) {
-            System.err.println("❌ [FeedbackController] Lỗi: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("❌ [FeedbackController] Lỗi: {}", e.getMessage(), e);
             return ResponseEntity.badRequest().body(
                 Map.of("success", false, "message", e.getMessage())
             );
@@ -270,7 +273,7 @@ public class FeedbackController {
             return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("❌ [FeedbackController] Lỗi khi tạo PDF: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }

@@ -3,6 +3,8 @@ package com.eventqr.controller;
 import com.eventqr.dto.FeedbackRequest;
 import com.eventqr.dto.FeedbackResponse;
 import com.eventqr.service.FeedbackService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import java.util.Map;
 @RequestMapping("/api/event")
 @CrossOrigin(origins = "*")
 public class EventFeedbackController {
+
+    private static final Logger logger = LoggerFactory.getLogger(EventFeedbackController.class);
 
     private final FeedbackService feedbackService;
 
@@ -88,7 +92,7 @@ public class EventFeedbackController {
                 Map.of("success", false, "message", e.getMessage())
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi tạo feedback: {}", e.getMessage(), e);
             // Lỗi 500: Internal Server Error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 Map.of("success", false, "message", "Lỗi server: " + e.getMessage())

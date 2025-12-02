@@ -6,6 +6,8 @@ import com.eventqr.model.Event;
 import com.eventqr.model.EventTicket;
 import com.eventqr.repository.EventRepository;
 import com.eventqr.repository.EventTicketRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,8 @@ import java.util.*;
 
 @Service
 public class EventRegistrationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(EventRegistrationService.class);
 
     private final EventTicketRepository eventTicketRepo;
     private final EventRepository eventRepo;
@@ -46,7 +50,7 @@ public class EventRegistrationService {
         // Tạo đối tượng vé
         EventTicket ticket = new EventTicket();
         ticket.setEventId(req.getEventId());
-        ticket.setUserId(req.getUserId());       // Long
+        ticket.setUserId(req.getUserId());       
         ticket.setName(req.getName());
         ticket.setEmail(req.getEmail());
         ticket.setPhone(req.getPhone());
@@ -66,7 +70,7 @@ public class EventRegistrationService {
             );
         } catch (Exception e) {
             // Log lỗi nhưng không throw để không ảnh hưởng đến quá trình đăng ký
-            System.err.println("Lỗi khi gửi thông báo: " + e.getMessage());
+            logger.error("Lỗi khi gửi thông báo: {}", e.getMessage(), e);
         }
 
         return savedTicket;
@@ -83,7 +87,7 @@ public class EventRegistrationService {
         List<EventTicket> list = eventTicketRepo.findByUserId(userId);
         
         // Debug log
-        System.out.println("📋 Found " + list.size() + " tickets for user " + userId);
+        logger.debug("📋 Found {} tickets for user {}", list.size(), userId);
 
         List<Long> eventIds = list.stream()
                 .map(EventTicket::getEventId)
@@ -110,10 +114,8 @@ public class EventRegistrationService {
             Boolean cancelled = t.getCancelled() != null ? t.getCancelled() : false;
             
             // Debug log
-            System.out.println("📋 Creating UserTicketResponse:");
-            System.out.println("   - Ticket ID: " + t.getTicketId());
-            System.out.println("   - Event Status: " + eventStatus);
-            System.out.println("   - Ticket Cancelled: " + cancelled);
+            logger.debug("📋 Creating UserTicketResponse: Ticket ID: {}, Event Status: {}, Ticket Cancelled: {}", 
+                t.getTicketId(), eventStatus, cancelled);
 
             UserTicketResponse response = new UserTicketResponse(
                     t.getTicketId(),
@@ -132,8 +134,8 @@ public class EventRegistrationService {
             response.setPhone(t.getPhone());
 
             // Verify fields are set
-            System.out.println("   - Response eventStatus: " + response.getEventStatus());
-            System.out.println("   - Response cancelled: " + response.getCancelled());
+            logger.debug("   - Response eventStatus: {}, cancelled: {}", 
+                response.getEventStatus(), response.getCancelled());
             
             output.add(response);
         }

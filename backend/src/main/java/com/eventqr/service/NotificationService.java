@@ -2,6 +2,8 @@ package com.eventqr.service;
 
 import com.eventqr.model.Notification;
 import com.eventqr.repository.NotificationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ import java.util.Map;
 
 @Service
 public class NotificationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     private final NotificationRepository notificationRepository;
     private final SimpMessagingTemplate messagingTemplate;
@@ -72,11 +76,10 @@ public class NotificationService {
             String destination = "/topic/organizer/" + organizerId;
             messagingTemplate.convertAndSend(destination, notificationData);
             
-            System.out.println("✅ Đã gửi thông báo WebSocket tới: " + destination);
+            logger.info("✅ Đã gửi thông báo WebSocket tới: {}", destination);
         } catch (Exception e) {
             // Log lỗi nhưng không throw để không ảnh hưởng đến quá trình đăng ký
-            System.err.println("❌ Lỗi khi gửi thông báo WebSocket: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi gửi thông báo WebSocket: {}", e.getMessage(), e);
         }
     }
     // LINH
@@ -178,11 +181,10 @@ public class NotificationService {
             String destination = "/topic/organizer/" + organizerId;
             messagingTemplate.convertAndSend(destination, notificationData);
             
-            System.out.println("✅ Đã gửi thông báo feedback WebSocket tới: " + destination);
+            logger.info("✅ Đã gửi thông báo feedback WebSocket tới: {}", destination);
         } catch (Exception e) {
             // Log lỗi nhưng không throw để không ảnh hưởng đến quá trình feedback
-            System.err.println("❌ Lỗi khi gửi thông báo feedback WebSocket: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi gửi thông báo feedback WebSocket: {}", e.getMessage(), e);
         }
     }
 
@@ -236,11 +238,10 @@ public class NotificationService {
             String destination = "/topic/user/" + userId;
             messagingTemplate.convertAndSend(destination, notificationData);
             
-            System.out.println("✅ Đã gửi thông báo feedback reply WebSocket tới: " + destination);
+            logger.info("✅ Đã gửi thông báo feedback reply WebSocket tới: {}", destination);
         } catch (Exception e) {
             // Log lỗi nhưng không throw để không ảnh hưởng đến quá trình reply
-            System.err.println("❌ Lỗi khi gửi thông báo feedback reply WebSocket: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi gửi thông báo feedback reply WebSocket: {}", e.getMessage(), e);
         }
     }
 
@@ -269,7 +270,7 @@ public class NotificationService {
 
             // Kiểm tra xem đã gửi thông báo này chưa (tránh duplicate)
             if (notificationRepository.existsByUserIdAndEventIdAndTitle(userId, eventId, title)) {
-                System.out.println("⚠️ Đã gửi thông báo sự kiện sắp bắt đầu cho user " + userId + " về event " + eventId);
+                logger.warn("⚠️ Đã gửi thông báo sự kiện sắp bắt đầu cho user {} về event {}", userId, eventId);
                 return;
             }
 
@@ -300,11 +301,10 @@ public class NotificationService {
             String destination = "/topic/user/" + userId;
             messagingTemplate.convertAndSend(destination, notificationData);
             
-            System.out.println("✅ Đã gửi thông báo sự kiện sắp bắt đầu WebSocket tới: " + destination);
+            logger.info("✅ Đã gửi thông báo sự kiện sắp bắt đầu WebSocket tới: {}", destination);
         } catch (Exception e) {
             // Log lỗi nhưng không throw
-            System.err.println("❌ Lỗi khi gửi thông báo sự kiện sắp bắt đầu WebSocket: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi gửi thông báo sự kiện sắp bắt đầu WebSocket: {}", e.getMessage(), e);
         }
     }
 
@@ -329,7 +329,7 @@ public class NotificationService {
 
             // Kiểm tra xem đã gửi thông báo này chưa (tránh duplicate)
             if (notificationRepository.existsByUserIdAndEventIdAndTitle(userId, eventId, title)) {
-                System.out.println("⚠️ Đã gửi thông báo sự kiện đã kết thúc cho user " + userId + " về event " + eventId);
+                logger.warn("⚠️ Đã gửi thông báo sự kiện đã kết thúc cho user {} về event {}", userId, eventId);
                 return;
             }
 
@@ -360,11 +360,10 @@ public class NotificationService {
             String destination = "/topic/user/" + userId;
             messagingTemplate.convertAndSend(destination, notificationData);
             
-            System.out.println("✅ Đã gửi thông báo sự kiện đã kết thúc WebSocket tới: " + destination);
+            logger.info("✅ Đã gửi thông báo sự kiện đã kết thúc WebSocket tới: {}", destination);
         } catch (Exception e) {
             // Log lỗi nhưng không throw
-            System.err.println("❌ Lỗi khi gửi thông báo sự kiện đã kết thúc WebSocket: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi gửi thông báo sự kiện đã kết thúc WebSocket: {}", e.getMessage(), e);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.eventqr.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,8 @@ import java.nio.file.Paths;
 @CrossOrigin(origins = "*")
 public class ImageController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
+
     /**
      * Endpoint để lấy ảnh theo đường dẫn đầy đủ
      * URL: http://localhost:8080/api/images/view?path=D:/EventQR_Images/uuid.jpg
@@ -33,7 +37,7 @@ public class ImageController {
             
             // Kiểm tra file có tồn tại không
             if (!Files.exists(filePath) || !Files.isReadable(filePath)) {
-                System.err.println("❌ File không tồn tại hoặc không đọc được: " + path);
+                logger.warn("❌ File không tồn tại hoặc không đọc được: {}", path);
                 return ResponseEntity.notFound().build();
             }
             
@@ -54,10 +58,10 @@ public class ImageController {
                     .body(resource);
                     
         } catch (MalformedURLException e) {
-            System.err.println("❌ Đường dẫn file không hợp lệ: " + path);
+            logger.error("❌ Đường dẫn file không hợp lệ: {}", path, e);
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi đọc file: " + e.getMessage());
+            logger.error("❌ Lỗi khi đọc file: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

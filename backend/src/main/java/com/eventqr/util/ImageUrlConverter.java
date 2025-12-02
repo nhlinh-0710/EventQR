@@ -1,5 +1,8 @@
 package com.eventqr.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -7,6 +10,8 @@ import java.net.URLEncoder;
  * Utility class để convert đường dẫn file thành URL có thể truy cập được qua API
  */
 public class ImageUrlConverter {
+
+    private static final Logger logger = LoggerFactory.getLogger(ImageUrlConverter.class);
 
     /**
      * Convert đường dẫn file thành URL có thể truy cập được qua API
@@ -35,7 +40,7 @@ public class ImageUrlConverter {
             String encodedPath = URLEncoder.encode(imageUrl, "UTF-8");
             return "/api/images/view?path=" + encodedPath;
         } catch (UnsupportedEncodingException e) {
-            System.err.println("❌ Lỗi khi encode image URL: " + e.getMessage());
+            logger.error("❌ Lỗi khi encode image URL: {}", e.getMessage(), e);
             return null;
         }
     }

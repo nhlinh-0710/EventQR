@@ -2,6 +2,8 @@ package com.eventqr.service;
 
 import com.eventqr.model.Account;
 import com.eventqr.repository.AccountRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,8 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
     private AccountRepository accountRepo;
@@ -28,7 +32,7 @@ public class AuthService {
         }
         
         // Debug log to see what role is being set
-        System.out.println("Registering user with role: " + account.getRole());
+        logger.info("Registering user with role: {}", account.getRole());
         
         account.setCreated_at(new Timestamp(System.currentTimeMillis()));
 

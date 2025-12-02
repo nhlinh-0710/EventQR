@@ -5,8 +5,6 @@ import com.eventqr.model.Event;
 import com.eventqr.model.EventTicket;
 import com.eventqr.repository.EventRepository;
 import com.eventqr.repository.EventTicketRepository;
-import com.eventqr.repository.CheckinRepository;
-import com.eventqr.repository.FeedbackRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +23,12 @@ public class StatisticsService {
 
     private final EventRepository eventRepository;
     private final EventTicketRepository eventTicketRepository;
-    private final CheckinRepository checkinRepository;
-    private final FeedbackRepository feedbackRepository;
 
     @Autowired
     public StatisticsService(EventRepository eventRepository,
-                            EventTicketRepository eventTicketRepository,
-                            CheckinRepository checkinRepository,
-                            FeedbackRepository feedbackRepository) {
+                            EventTicketRepository eventTicketRepository) {
         this.eventRepository = eventRepository;
         this.eventTicketRepository = eventTicketRepository;
-        this.checkinRepository = checkinRepository;
-        this.feedbackRepository = feedbackRepository;
     }
 
     /**
