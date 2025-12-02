@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // LOAD STATISTICS
 // ==========================================
 
+// LINH
 async function loadStatistics(organizerId) {
     try {
         showLoading();
@@ -117,6 +118,7 @@ async function loadStatistics(organizerId) {
         showError(errorMessage);
     }
 }
+// LINH
 
 // ==========================================
 // DISPLAY OVERVIEW STATS

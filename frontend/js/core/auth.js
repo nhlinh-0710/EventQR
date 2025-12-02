@@ -1,5 +1,6 @@
 // Authentication utilities for all pages
 
+// LINH
 /**
  * Check if user is authenticated
  * If not, redirect to home page
@@ -152,3 +153,4 @@ if (typeof module !== 'undefined' && module.exports) {
         initAuth
     };
 }
+// LINH

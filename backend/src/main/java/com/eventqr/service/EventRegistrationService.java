@@ -30,6 +30,7 @@ public class EventRegistrationService {
     // ==========================
     // ĐĂNG KÝ SỰ KIỆN
     // ==========================
+    // LINH
     @Transactional
     public EventTicket register(EventRegisterRequest req) {
 
@@ -70,6 +71,7 @@ public class EventRegistrationService {
 
         return savedTicket;
     }
+    // LINH
 
     // ==========================
     // LẤY DANH SÁCH VÉ CỦA USER

@@ -47,6 +47,7 @@ public class CheckInController {
         this.mapper = mapper;
     }
 
+    // LINH
     @GetMapping("/checkin")
     public ResponseEntity<?> checkIn(@RequestParam("payload") String payloadBase64) {
 
@@ -94,6 +95,7 @@ public class CheckInController {
             return ResponseEntity.internalServerError().body(error("Lỗi hệ thống!"));
         }
     }
+    // LINH
 
     private Map<String, Object> error(String msg) {
         Map<String, Object> m = new HashMap<>();
@@ -101,6 +103,7 @@ public class CheckInController {
         m.put("message", msg);
         return m;
     }
+    // LINH
     @GetMapping("/checkin-by-code")
 public ResponseEntity<?> checkInByCode(@RequestParam("code") String code) {
     try {
@@ -148,6 +151,7 @@ public ResponseEntity<?> checkInByCode(@RequestParam("code") String code) {
         return ResponseEntity.badRequest().body(error(e.getMessage()));
     }
 }
+    // LINH
 
     /**
      * GET /api/checkin-history?organizerId={id}

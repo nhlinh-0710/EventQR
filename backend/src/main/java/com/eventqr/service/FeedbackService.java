@@ -177,6 +177,7 @@ public class FeedbackService {
      * 4. Organizer không được đánh giá sự kiện của chính họ
      * 5. Gửi notification cho organizer khi có feedback mới
      */
+    // LINH
     @Transactional
     public FeedbackResponse submitFeedback(FeedbackRequest request) {
         logger.info("📝 Bắt đầu submit feedback: eventId={}, userId={}, rating={}", 
@@ -318,6 +319,7 @@ public class FeedbackService {
         logger.info("✅ Submit feedback thành công: feedbackId={}", saved.getFeedbackId());
         return response;
     }
+    // LINH
 
     /**
      * Lấy feedback của một sự kiện
@@ -482,6 +484,7 @@ public class FeedbackService {
      * Organizer reply feedback
      * Kiểm tra organizer có quyền reply (phải là chủ sở hữu sự kiện)
      */
+    // LINH
     @Transactional
     public FeedbackResponse replyFeedback(Long feedbackId, Long organizerId, String reply) {
         logger.info("💬 Organizer {} đang reply feedback {}", organizerId, feedbackId);
@@ -541,5 +544,6 @@ public class FeedbackService {
         logger.info("✅ Đã reply feedback thành công");
         return response;
     }
+    // LINH
 }
 

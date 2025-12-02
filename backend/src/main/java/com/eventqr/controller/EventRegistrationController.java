@@ -25,6 +25,7 @@ public class EventRegistrationController {
     // ==========================
     // POST /api/events/register
     // ==========================
+    // LINH
     @PostMapping("/events/register")
     public ResponseEntity<?> register(@RequestBody EventRegisterRequest req) {
         try {
@@ -42,6 +43,7 @@ public class EventRegistrationController {
             ));
         }
     }
+    // LINH
 
     // ==========================
     // GET /api/user/{userId}/tickets

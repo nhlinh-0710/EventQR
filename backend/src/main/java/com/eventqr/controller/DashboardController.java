@@ -26,6 +26,7 @@ public class DashboardController {
      * GET /api/dashboard/statistics
      * Lấy thống kê tổng quan cho dashboard
      */
+    // LINH
     @GetMapping("/statistics")
     public ResponseEntity<DashboardStatsDTO> getDashboardStatistics(
             @RequestParam(required = false) Long organizerId) {
@@ -67,6 +68,7 @@ public class DashboardController {
             return ResponseEntity.internalServerError().build();
         }
     }
+    // LINH
     
     /**
      * GET /api/dashboard/recent-events

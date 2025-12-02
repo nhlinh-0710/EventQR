@@ -59,6 +59,7 @@ public class FeedbackController {
      * POST /api/feedback
      * Submit feedback cho sự kiện (endpoint legacy - giữ lại để backward compatibility)
      */
+    // LINH
     @PostMapping
     public ResponseEntity<?> submitFeedback(@RequestBody FeedbackRequest request) {
         try {
@@ -82,6 +83,7 @@ public class FeedbackController {
             );
         }
     }
+    // LINH
 
     /**
      * GET /api/feedback/event/{eventId}
@@ -139,6 +141,7 @@ public class FeedbackController {
      * POST /api/feedback/{feedbackId}/reply
      * Organizer reply feedback
      */
+    // LINH
     @PostMapping("/{feedbackId}/reply")
     public ResponseEntity<?> replyFeedback(
             @PathVariable Long feedbackId,
@@ -171,6 +174,7 @@ public class FeedbackController {
             );
         }
     }
+    // LINH
 
     /**
      * GET /api/feedback/test

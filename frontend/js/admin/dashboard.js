@@ -562,6 +562,7 @@ window.addEventListener('popstate', function() {
 /**
  * Load dashboard statistics from API
  */
+// LINH
 async function loadDashboardStatistics() {
     try {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -621,6 +622,7 @@ function updateDashboardStats(stats) {
         revenueElement.textContent = formatRevenue(stats.totalRevenue || 0);
     }
 }
+// LINH
 
 /**
  * Load recent events from API

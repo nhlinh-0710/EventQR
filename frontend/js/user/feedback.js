@@ -205,6 +205,7 @@
     }
 
     // Submit
+    // LINH
     if (submitBtn) {
         submitBtn.addEventListener("click", async () => {
             // Validate
@@ -278,6 +279,7 @@
             }
         });
     }
+    // LINH
 
     // A11y: Enter để gửi nếu đang focus submit
     submitBtn?.addEventListener("keydown", (e) => {

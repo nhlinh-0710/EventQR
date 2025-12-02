@@ -42,6 +42,7 @@ public class StatisticsService {
     /**
      * Lấy thống kê tổng quan cho organizer
      */
+    // LINH
     @Transactional(readOnly = true)
     public EventStatisticsDTO getOrganizerStatistics(Long organizerId) {
         logger.info("📊 Lấy thống kê cho organizer: {}", organizerId);
@@ -107,6 +108,7 @@ public class StatisticsService {
 
         return stats;
     }
+    // LINH
 
     /**
      * Tính thống kê theo chuỗi thời gian (6 tháng gần nhất)

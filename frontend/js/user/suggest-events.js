@@ -366,6 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
  // =============================
 // SUBMIT FORM ĐĂNG KÝ
 // =============================
+// LINH
 window.submitRegisterForm = async function () {
     const user = JSON.parse(localStorage.getItem("currentUser"));
     if (!user) {
@@ -425,6 +426,7 @@ window.submitRegisterForm = async function () {
         alert("Lỗi kết nối đến server!");
     }
 };
+// LINH
 
 
   // =============================

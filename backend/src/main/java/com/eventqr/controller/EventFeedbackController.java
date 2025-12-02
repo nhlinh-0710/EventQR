@@ -38,6 +38,7 @@ public class EventFeedbackController {
      * - Kiểm tra user đã đánh giá trước đó chưa
      * - Lưu đánh giá mới vào DB
      */
+    // LINH
     @PostMapping("/{eventId}/feedback")
     public ResponseEntity<?> submitFeedbackForEvent(
             @PathVariable Long eventId,
@@ -94,5 +95,6 @@ public class EventFeedbackController {
             );
         }
     }
+    // LINH
 }
 

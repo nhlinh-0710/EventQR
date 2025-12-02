@@ -14,6 +14,7 @@ public class AuthService {
     @Autowired
     private AccountRepository accountRepo;
 
+    // LINH
     public boolean register(Account account) {
         if (accountRepo.findByEmail(account.getEmail()).isPresent()) {
             return false; // Email đã tồn tại
@@ -39,4 +40,5 @@ public class AuthService {
         return accountRepo.findByEmail(email)
                 .filter(u -> u.getPassword().equals(password));
     }
+    // LINH
 }

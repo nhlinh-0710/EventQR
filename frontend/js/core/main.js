@@ -131,15 +131,15 @@ link.addEventListener('click', function(e) {
 });
 
 // -----------------------------
-//  🔗 API endpoint — chỉ sửa CHỖ NÀY nếu cần
+//  🔗 API endpoint — 
 // -----------------------------
 const API_BASE = "http://localhost:8080/api/auth"; 
-// ⚠️ Đảm bảo backend của bạn đang chạy tại localhost:8080
-// Nếu backend báo “Started Application on port 8081” thì sửa thành 8081
+
 
 // -----------------------------
 //  LOGIN
 // -----------------------------
+// LINH
 async function handleLogin() {
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
@@ -261,6 +261,7 @@ const confirmPassword = document.getElementById('confirmPassword').value.trim();
         console.error('❌ Lỗi kết nối:', err);
     }
 }
+// LINH
 
 // -----------------------------
 //  Helper functions

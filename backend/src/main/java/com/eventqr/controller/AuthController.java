@@ -17,6 +17,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    // LINH
     @PostMapping("/register")
     public Map<String, Object> register(@RequestBody Account account) {
         Map<String, Object> response = new HashMap<>();
@@ -53,6 +54,7 @@ public class AuthController {
 
         return response;
     }
+    // LINH
 
     
     @GetMapping("/test")

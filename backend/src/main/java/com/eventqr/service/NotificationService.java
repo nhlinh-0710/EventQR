@@ -32,6 +32,7 @@ public class NotificationService {
      * @param eventTitle Tên sự kiện
      * @param userName Tên user đăng ký
      */
+    // LINH
     @Transactional
     public void sendToOrganizer(Long organizerId, Long eventId, String eventTitle, String userName) {
         try {
@@ -78,6 +79,7 @@ public class NotificationService {
             e.printStackTrace();
         }
     }
+    // LINH
 
     /**
      * Lấy danh sách thông báo của user
