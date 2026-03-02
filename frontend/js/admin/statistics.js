@@ -2,7 +2,12 @@
 // STATISTICS PAGE LOGIC
 // ==========================================
 
-const API_BASE_URL = 'http://localhost:8080/api';
+// Tránh duplicate declaration
+if (typeof window.API_BASE_URL === 'undefined') {
+    window.API_BASE_URL = 'http://localhost:8080/api';
+}
+// Dùng window.API_BASE_URL trực tiếp hoặc kiểm tra trước khi khai báo
+const STATS_API_BASE_URL = window.API_BASE_URL;
 
 let timeSeriesChartInstance = null;
 let eventStatsChartInstance = null;
@@ -58,9 +63,9 @@ async function loadStatistics(organizerId) {
         showLoading();
         
         console.log('🔍 Fetching statistics for organizer:', organizerId);
-        console.log('🌐 API URL:', `${API_BASE_URL}/statistics/organizer/${organizerId}`);
+        console.log('🌐 API URL:', `${STATS_API_BASE_URL}/statistics/organizer/${organizerId}`);
         
-        const response = await fetch(`${API_BASE_URL}/statistics/organizer/${organizerId}`);
+        const response = await fetch(`${STATS_API_BASE_URL}/statistics/organizer/${organizerId}`);
         
         console.log('📡 Response status:', response.status);
         console.log('📡 Response ok:', response.ok);

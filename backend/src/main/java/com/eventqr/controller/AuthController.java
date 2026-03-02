@@ -54,6 +54,23 @@ public class AuthController {
 
         return response;
     }
+
+    @PostMapping("/forgot")
+    public Map<String, Object> forgotPassword(@RequestBody Map<String, String> payload) {
+        Map<String, Object> response = new HashMap<>();
+        String email = payload.getOrDefault("email", "").trim();
+
+        if (email.isEmpty()) {
+            response.put("success", false);
+            response.put("message", "Vui lòng nhập email hợp lệ");
+            return response;
+        }
+
+        // TODO: tích hợp gửi email reset password thực tế.
+        response.put("success", true);
+        response.put("message", "Yêu cầu đã được ghi nhận. Vui lòng kiểm tra email.");
+        return response;
+    }
     // LINH
 
     

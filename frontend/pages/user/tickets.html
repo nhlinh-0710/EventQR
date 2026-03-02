@@ -451,6 +451,13 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+    <script src="../../js/core/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const userData = initAuth('user');
+            if (!userData) return;
+        });
+    </script>
     <script src="../../js/core/websocket.js"></script>
     <script src="../../js/core/notifications.js"></script>
     <script src="../../js/user/simple-qr.js"></script>
@@ -459,12 +466,8 @@
     <script src="../../js/admin/feedback.js" defer></script>
     <script src="../../js/user/suggest-events.js"></script>
     <script src="../../js/user/my-tickets.js"></script>
-    <script src="../../js/user/my-events.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-</body>
-
-</html>
 </body>
 
 </html>

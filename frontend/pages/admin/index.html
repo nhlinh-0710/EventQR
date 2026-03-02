@@ -254,7 +254,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const ctx = document.getElementById('areaChart').getContext('2d');
+            const areaChartElement = document.getElementById('areaChart');
+            if (!areaChartElement) {
+                console.log('Chart element not found, skipping chart initialization');
+                return;
+            }
+            const ctx = areaChartElement.getContext('2d');
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -320,9 +325,6 @@
     <script src="../../js/admin/notifications.js"></script>
     <script src="../../js/core/chatbot.js"></script>
     
-</body>
-
-</html>
 </body>
 
 </html>

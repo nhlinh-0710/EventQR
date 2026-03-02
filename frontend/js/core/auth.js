@@ -114,6 +114,13 @@ function logout() {
 }
 
 /**
+ * Backward-compatible logout handler used by inline HTML onclick.
+ */
+function handleLogout() {
+    logout();
+}
+
+/**
  * Check if user has specific role
  * @param {string} role - 'organizer' or 'user'
  * @returns {boolean}
@@ -149,8 +156,13 @@ if (typeof module !== 'undefined' && module.exports) {
         redirectToDashboard,
         getCurrentUser,
         logout,
+        handleLogout,
         hasRole,
         initAuth
     };
+}
+
+if (typeof window !== 'undefined') {
+    window.handleLogout = handleLogout;
 }
 // LINH

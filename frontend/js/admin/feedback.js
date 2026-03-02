@@ -3,7 +3,12 @@
    ========================================================= */
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:8080/api';
+// Tránh duplicate declaration
+if (typeof window.FEEDBACK_API_BASE_URL === 'undefined') {
+    window.FEEDBACK_API_BASE_URL = 'http://localhost:8080/api';
+}
+// Dùng tên biến riêng để tránh xung đột với các file khác
+const FEEDBACK_API_BASE_URL = window.FEEDBACK_API_BASE_URL;
 let allFeedbacks = [];
 let currentSelectedFeedback = null;
 let currentOrganizerId = null;
@@ -98,7 +103,7 @@ window.loadFeedbacks = async function() {
     container.innerHTML = '<p style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin"></i> Đang tải feedback...</p>';
     
     try {
-        const url = `${API_BASE_URL}/feedback/organizer/${currentOrganizerId}`;
+        const url = `${FEEDBACK_API_BASE_URL}/feedback/organizer/${currentOrganizerId}`;
         console.log('📡 Đang gọi API:', url);
         
         const response = await fetch(url);
@@ -362,7 +367,7 @@ window.submitReply = async function() {
     }
     
     try {
-        const url = `${API_BASE_URL}/feedback/${currentSelectedFeedback.feedbackId}/reply`;
+        const url = `${FEEDBACK_API_BASE_URL}/feedback/${currentSelectedFeedback.feedbackId}/reply`;
         console.log('📡 Đang gửi reply:', url);
         
         const response = await fetch(url, {

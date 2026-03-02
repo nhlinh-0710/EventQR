@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
 if (typeof window.EVENTS_API_BASE_URL === 'undefined') {
     window.EVENTS_API_BASE_URL = 'http://localhost:8080/api/events';
 }
-const API_BASE_URL = window.EVENTS_API_BASE_URL;
+// Dùng tên biến riêng để tránh xung đột với các file khác
+const EVENTS_API_BASE_URL = window.EVENTS_API_BASE_URL;
 // Đường dẫn cơ sở để ghép với tên file ảnh (ví dụ: my_event.jpg)
 const IMAGE_BASE_URL = 'http://localhost:8080/images/'; 
 // Ảnh mặc định nếu không có ảnh hoặc lỗi
@@ -89,10 +90,10 @@ async function fetchEvents() {
         }
 
         console.log('📡 Đang gọi API với organizerId:', organizerId);
-        console.log('📡 API_BASE_URL:', API_BASE_URL);
+        console.log('📡 EVENTS_API_BASE_URL:', EVENTS_API_BASE_URL);
 
         // Gọi API /api/events/my-events với organizerId
-        const url = `${API_BASE_URL}/my-events?organizerId=${organizerId}`;
+        const url = `${EVENTS_API_BASE_URL}/my-events?organizerId=${organizerId}`;
         console.log('🔗 URL:', url);
         
         const response = await fetch(url).catch(err => {
@@ -513,7 +514,7 @@ async function saveEventChanges() {
     formData.append('description', document.getElementById('edit-desc').value);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/${id}?organizerId=${organizerId}`, {
+        const response = await fetch(`${EVENTS_API_BASE_URL}/${id}?organizerId=${organizerId}`, {
             method: 'PUT',
             headers: {
                 'X-Organizer-Id': organizerId.toString()
